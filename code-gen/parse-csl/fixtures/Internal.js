@@ -1,5 +1,7 @@
 import * as csl from "@mlabs-haskell/cardano-serialization-lib-gc";
 
+const clone = x => x.constructor.from_bytes(x.to_bytes());
+
 export const _toBytes = x => x.to_bytes();
 export const _fromBytes = key => nothing => just => bytes => {
   try {
@@ -12,7 +14,7 @@ export const _fromBytes = key => nothing => just => bytes => {
 export const _packListContainer = containerClass => elems => {
   const container = csl[containerClass].new();
   for (let elem of elems) {
-    container.add(elem);
+    container.add(clone(elem));
   }
   return container;
 };
@@ -29,7 +31,7 @@ export const _unpackListContainer = container => {
 export const _packMapContainer = containerClass => elems => {
   const container = csl[containerClass].new();
   for (let elem of elems) {
-    container.insert(elem.key, elem.value);
+    container.insert(clone(elem.key), clone(elem.value));
   }
   return container;
 };
