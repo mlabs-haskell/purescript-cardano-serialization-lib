@@ -1,6 +1,13 @@
 import * as csl from "@mlabs-haskell/cardano-serialization-lib-gc";
 
-const clone = x => x.constructor.from_bytes(x.to_bytes());
+const clone = x => {
+  if (typeof x.to_bytes === 'function' &&
+      typeof x.constructor.from_bytes === 'function') {
+    return x.constructor.from_bytes(x.to_bytes());
+  } else {
+    return x;
+  }
+};
 
 export const _toBytes = x => x.to_bytes();
 export const _fromBytes = key => nothing => just => bytes => {
