@@ -60,4 +60,4 @@ export const _cslFromJson = className => nothing => just => json => {
   }
 };
 
-export const _cslToJson = x => x.to_json();
+export const _cslToJson = x => JSON.parse(x.to_json());
