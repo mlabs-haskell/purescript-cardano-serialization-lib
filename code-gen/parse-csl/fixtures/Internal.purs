@@ -68,7 +68,17 @@ packMapContainer
   => IsCsl c
   => Array (k /\ v)
   -> c
-packMapContainer = map toKeyValues >>> _packMapContainer (className (Proxy :: Proxy c))
+packMapContainer = map toKeyValues >>> _packMapContainer false (className (Proxy :: Proxy c))
+  where
+  toKeyValues (Tuple key value) = { key, value }
+
+packMapContainerWithClone
+  :: forall c k v
+  .  IsMapContainer c k v
+  => IsCsl c
+  => Array (k /\ v)
+  -> c
+packMapContainerWithClone = map toKeyValues >>> _packMapContainer true (className (Proxy :: Proxy c))
   where
   toKeyValues (Tuple key value) = { key, value }
 
@@ -104,7 +114,8 @@ unpackMapContainerToMapWith mapKey mapValue container =
 
 foreign import _packMapContainer
   :: forall c k v
-  .  String
+  .  Boolean
+  -> String
   -> Array { key :: k, value :: v }
   -> c
 

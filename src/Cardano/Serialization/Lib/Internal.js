@@ -38,10 +38,14 @@ export const _unpackListContainer = container => {
   return res;
 };
 
-export const _packMapContainer = containerClass => elems => {
+export const _packMapContainer = withClone => containerClass => elems => {
   const container = csl[containerClass].new();
   for (let elem of elems) {
-    container.insert(elem.key, elem.value);
+    if (withClone) {
+      container.insert(clone(elem.key), clone(elem.value));
+    } else {
+      container.insert(elem.key, elem.value);
+    }
   }
   return container;
 };
