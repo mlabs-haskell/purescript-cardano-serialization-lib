@@ -49,12 +49,15 @@ class IsCsl a <= IsJson (a :: Type)
 class IsListContainer (c :: Type) (e :: Type) | c -> e
 
 packListContainer :: forall c e. IsCsl c => IsListContainer c e => Array e -> c
-packListContainer = _packListContainer (className (Proxy :: Proxy c))
+packListContainer = _packListContainer false (className (Proxy :: Proxy c))
+
+packListContainerWithClone :: forall c e. IsCsl c => IsListContainer c e => Array e -> c
+packListContainerWithClone = _packListContainer true (className (Proxy :: Proxy c))
 
 unpackListContainer  :: forall c e. IsListContainer c e => c -> Array e
 unpackListContainer = _unpackListContainer
 
-foreign import _packListContainer :: forall c e. String -> Array e -> c
+foreign import _packListContainer :: forall c e. Boolean -> String -> Array e -> c
 foreign import _unpackListContainer :: forall c e. c -> Array e
 
 class IsMapContainer (c :: Type) (k :: Type) (v :: Type) | c -> k, c -> v

@@ -4,7 +4,8 @@ const clone = x => {
   // hotpatch for this 'use after free' in CSL:
   // https://github.com/Emurgo/cardano-serialization-lib/blob/4a35ef11fd5c4931626c03025fe6f67743a6bdf9/rust/src/lib.rs#L3548
   // mint_assets is not cloned, is borrowed and freed, despite that there are pointers to it in the JS world
-  if (x.constructor === csl.MintAssets || x.constructor === csl.BigNum) {
+  if (typeof x.to_bytes === 'function' &&
+      typeof x.constructor.from_bytes === 'function') {
     return x.constructor.from_bytes(x.to_bytes());
   } else {
     return x;
@@ -20,10 +21,10 @@ export const _fromBytes = key => nothing => just => bytes => {
   }
 };
 
-export const _packListContainer = containerClass => elems => {
+export const _packListContainer = withClone => containerClass => elems => {
   const container = csl[containerClass].new();
   for (let elem of elems) {
-    container.add(clone(elem));
+    container.add(withClone ? clone(elem) : elem);
   }
   return container;
 };
@@ -40,7 +41,7 @@ export const _unpackListContainer = container => {
 export const _packMapContainer = containerClass => elems => {
   const container = csl[containerClass].new();
   for (let elem of elems) {
-    container.insert(clone(elem.key), clone(elem.value));
+    container.insert(elem.key, elem.value);
   }
   return container;
 };
