@@ -4,7 +4,7 @@ const clone = x => {
   // hotpatch for this 'use after free' in CSL:
   // https://github.com/Emurgo/cardano-serialization-lib/blob/4a35ef11fd5c4931626c03025fe6f67743a6bdf9/rust/src/lib.rs#L3548
   // mint_assets is not cloned, is borrowed and freed, despite that there are pointers to it in the JS world
-  if (x.constructor === csl.MintAssets) {
+  if (x.constructor === csl.MintAssets || x.constructor === csl.BigNum) {
     return x.constructor.from_bytes(x.to_bytes());
   } else {
     return x;
