@@ -1,6 +1,6 @@
 "use strict";
 
-import * as CSL from "@emurgo/cardano-serialization-lib-nodejs";
+import * as CSL from "@mlabs-haskell/cardano-serialization-lib-gc";
 
 // Pass in a function and its list of arguments, that is expected to fail on evaluation, wraps in Either
 function errorableToPurs(f, ...vars) {
@@ -885,3 +885,4 @@ export const hashScriptData = redeemers => cost_models => datums => CSL.hash_scr
 export const minAdaForOutput = output => data_cost => CSL.min_ada_for_output(output, data_cost);
 export const minFee = tx => linear_fee => CSL.min_fee(tx, linear_fee);
 export const minScriptFee = tx => ex_unit_prices => CSL.min_script_fee(tx, ex_unit_prices);
+
