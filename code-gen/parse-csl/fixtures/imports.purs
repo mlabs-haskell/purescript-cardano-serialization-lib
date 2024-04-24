@@ -1,6 +1,18 @@
 import Prelude
 
 import Cardano.Serialization.Lib.Internal
+  ( class IsBytes
+  , class IsCsl
+  , class IsJson
+  , class IsListContainer
+  , class IsMapContainer
+  , cslFromAeson
+  , cslFromAesonViaBytes
+  , cslToAeson
+  , cslToAesonViaBytes
+  , showViaBytes
+  , showViaJson
+  )
 import Cardano.Serialization.Lib.Internal
   ( class IsBytes
   , class IsCsl
@@ -18,25 +30,11 @@ import Cardano.Serialization.Lib.Internal
   , cslFromAesonViaBytes
   , cslToAesonViaBytes
   ) as X
-import Effect
-import Data.Nullable
-import Aeson (Aeson, class DecodeAeson, encodeAeson, decodeAeson, class EncodeAeson, jsonToAeson, stringifyAeson)
+import Effect (Effect)
+import Data.Nullable (Nullable)
+import Aeson (class DecodeAeson, class EncodeAeson)
 import Data.ByteArray (ByteArray)
-import Data.Argonaut (Json, JsonDecodeError(TypeMismatch), jsonParser)
-import Data.Bifunctor (lmap)
-import Data.Either (Either(Left, Right), note)
-import Data.Map (Map)
-import Data.Map as Map
-import Data.Maybe (Maybe(Nothing, Just))
-import Data.Tuple (Tuple(Tuple))
-import Type.Proxy (Proxy(Proxy))
-
--- Utils for type conversions
-type ForeignErrorable a =
-  (String -> Either String a) -> (a -> Either String a) -> Either String a
-
-runForeignErrorable :: forall (a :: Type). ForeignErrorable a -> Either String a
-runForeignErrorable f = f Left Right
+import Data.Maybe (Maybe)
 
 class IsStr a where
   fromStr :: String -> Maybe a

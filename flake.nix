@@ -92,7 +92,7 @@
               strictComp ? true
               # Warnings from `purs` to silence during compilation, independent of `strictComp`
               # Controls `--censor-codes` purescript-psa flag
-            , censorCodes ? [ "UserDefinedWarning" ]
+            , censorCodes ? [ "UserDefinedWarning" "ScopeShadowing" ]
             , pursDependencies ? buildPursDependencies {
                 inherit strictComp censorCodes;
               }
@@ -128,7 +128,8 @@
                 psa ${pkgs.lib.optionalString strictComp "--strict" } \
                   --censor-lib \
                   --is-lib=.spago ".spago/*/*/src/**/*.purs" \
-                  --censor-codes=${builtins.concatStringsSep "," censorCodes} "./src/**/*.purs" \
+                  --censor-codes=${builtins.concatStringsSep "," censorCodes} "./src/src/**/*.purs" \
+                  "./src/test/**/*.purs" \
                   -gsourcemaps,js
               '';
               # We also need to copy all of `src` here, since compiled modules in `output`

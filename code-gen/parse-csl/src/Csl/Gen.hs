@@ -36,8 +36,7 @@ exportListPurs funs cls =
 
     extraExport :: [String]
     extraExport =
-      [ "ForeignErrorable"
-      , "module X"
+      [ "module X"
       ]
 
 classMethods :: Class -> [String]
