@@ -21,6 +21,9 @@ getClasses
   . toClassParts
   <$> readFile file
 
+getEnums :: IO [CslEnum]
+getEnums = enums <$> readFile file
+
 unneededClasses :: [String]
 unneededClasses =
   [ -- builder classes, not used by `ps-cardano-types`

@@ -183,6 +183,7 @@
             default = pkgs.mkShell {
               buildInputs = with pkgs; [
                 nixpkgs-fmt
+                haskellPackages.stack
                 easy-ps.purs
                 easy-ps.purs-tidy
                 easy-ps.spago

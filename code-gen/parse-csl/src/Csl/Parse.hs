@@ -3,7 +3,7 @@ module Csl.Parse where
 import           Control.Monad   (guard)
 import           Csl.Types
 import           Data.List       as L
-import           Data.List.Extra (trim)
+import           Data.List.Extra (breakOn, trim)
 import           Data.List.Split (splitOn)
 import           Data.Maybe      (mapMaybe)
 
@@ -58,11 +58,27 @@ parseMethods str = toMethod <$> funBody str
 
     rmStaticPrefix x = x { fun'name = drop 7 $ fun'name x }
 
+toEnumParts :: String -> [String]
+toEnumParts = tail . splitOn enumPrefix
+
+enums :: String -> [CslEnum]
+enums = mapMaybe parseEnum . toEnumParts
+
+parseEnum :: String -> Maybe CslEnum
+parseEnum str = do 
+  (name, rest1) <- split2 ": {|" str
+  (cases, _) <- split2 "|}" rest1 
+  pure $ CslEnum (trim name) (parseEnumCases cases)  
+
+parseEnumCases :: String -> [String]
+parseEnumCases = map (fst . breakOn ":") . tail . splitOn "+"
+
 ----------------------------------------------------------------------------
 -- const
 
 classPrefix = "declare export class "
 funPrefix = "declare export function "
+enumPrefix = "declare export var "
 
 -- | Taken from github repo  <github:emurgo:cardano-serialization-lib/rust/pkg/cardano_serialization_lib.js.flow>
 file = "data/cardano_serialization_lib.js.flow"

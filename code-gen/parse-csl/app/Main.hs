@@ -14,15 +14,18 @@ main = do
   jsInternalLib <- readFile "./fixtures/Internal.js"
   funs <- getFuns
   classes <- getClasses
+  enums <- getEnums
   print funs
   -- print classes
+  print enums
   let
     nonCommonFuns = filter (not . isCommon) funs
     funsJsCode = unlines $ funJs <$> nonCommonFuns
     funsPursCode = unlines $ funPurs <$> nonCommonFuns
     classesPursCode = unlines $ classPurs <$> classes
     classesJsCode = unlines $ classJs <$> classes
-    exportsPursCode = exportListPurs nonCommonFuns classes
+    enumsPursCode = unlines $ enumPurs <$> enums
+    exportsPursCode = exportListPurs nonCommonFuns classes enums
   createDirectoryIfMissing True $ takeDirectory $ exportPath <> "/"
   createDirectoryIfMissing True $ takeDirectory $ exportPath <> "/Lib/"
   writeFile (exportPath <> "Lib.purs") $ unlines
@@ -35,6 +38,9 @@ main = do
     , "-- classes"
     , ""
     , classesPursCode
+    , "-- enums"
+    , ""
+    , enumsPursCode
     ]
   writeFile (exportPath <> "Lib.js") $ unlines
     [ jsLibHeader

@@ -3,6 +3,7 @@ module Csl.Gen
   , classJs
   , classPurs
   , funPurs
+  , enumPurs
   , isCommon
   , funJs
   , getPureness
@@ -21,16 +22,18 @@ import Data.Maybe (mapMaybe, listToMaybe, catMaybes)
 import Data.Text qualified as T (pack, unpack, replace)
 import Data.Text (Text)
 import Data.Text.Manipulate qualified as T (toCamel, upperHead, lowerHead, toTitle)
-import Data.List.Extra (trim)
+import Data.List.Extra (dropPrefix, trim)
 import Csl.Types
 
-exportListPurs :: [Fun] -> [Class] -> String
-exportListPurs funs cls =
+exportListPurs :: [Fun] -> [Class] -> [CslEnum] -> String
+exportListPurs funs cls enums =
   L.intercalate "\n  , " $
   extraExport ++
   (classMethods =<< cls) ++
   (toName . fun'name <$> funs) ++
-  (fromType =<< classTypes cls)
+  (fromType =<< classTypes cls) ++
+  (enum'name <$> enums) ++
+  ((\x -> enumName x <> "(..)") <$> enums)
   where
     fromType ty = [ty]
 
@@ -253,21 +256,19 @@ isCommon (Fun "get" _ _) = True
 isCommon (Fun "keys" _ _) = True
 isCommon (Fun _ _ _) = False
 
+intro :: String -> String
+intro str = unlines [ replicate 80 '-', "-- " <> str ]
+
 classPurs :: Class -> String
 classPurs cls@(Class name _ms) = mappend "\n" $
   L.intercalate "\n\n" $ fmap trim
-    [ intro
+    [ intro $ toTitle name
     , typePurs name
     , methodDefs
     , instances
     ]
   where
     filteredMethods = filterMethods cls
-
-    intro = unlines
-      [ replicate 85 '-'
-      , "-- " <> toTitle name
-      ]
 
     methodDefs = unlines $ fmap toDef $ filteredMethods
       where
@@ -374,7 +375,7 @@ toTypePrefix :: String -> String
 toTypePrefix = lowerHead . subst . upperHead . toCamel
 
 toType :: String -> String
-toType = subst . upperHead . toCamel
+toType = dropPrefix "ValuesTypeof" . subst . upperHead . toCamel
 
 toName :: String -> String
 toName = lowerHead . substFirst . subst . toCamel
@@ -558,3 +559,40 @@ isCommonThrowingMethod method = Set.member method froms
       , "from_json"
       , "from_str"
       ]
+
+enumName :: CslEnum -> String
+enumName e = enum'name e <> "Values"
+
+enumPurs :: CslEnum -> String
+enumPurs enum@(CslEnum nameForeign cases) =
+  unlines
+    [ intro nameForeign
+    , enumForeign
+    , ""
+    , enumNative
+    ]
+  where
+    name :: String
+    name = enumName enum
+
+    fixConstr :: String -> String
+    fixConstr constr = nameForeign <> "_" <> constr
+
+    enumForeign :: String
+    enumForeign =
+      unwords
+        [ "foreign import data"
+        , nameForeign
+        , ":: Type"
+        ]
+
+    enumNative :: String
+    enumNative =
+      unlines $
+        [ "data " <> name
+        , "  = " <> L.intercalate "\n  | " (map fixConstr cases)
+        , ""
+        , "derive instance Generic " <> name <> " _"
+        , "instance IsCslEnum " <> name <> " " <> nameForeign
+        , "instance Show " <> name <> " where show = genericShow"
+        ]

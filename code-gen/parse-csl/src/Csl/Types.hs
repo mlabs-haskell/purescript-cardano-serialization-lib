@@ -28,4 +28,8 @@ data Method = Method
   }
   deriving (Show)
 
-
+data CslEnum = CslEnum
+  { enum'name :: String
+  , enum'cases :: [String]
+  }
+  deriving (Show)

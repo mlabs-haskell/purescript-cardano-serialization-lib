@@ -16,14 +16,18 @@ to generate this file without the comments in this block.
   , "argonaut"
   , "bifunctors"
   , "bytearrays"
+  , "console"
   , "effect"
   , "either"
+  , "enums"
   , "maybe"
   , "nullable"
   , "ordered-collections"
+  , "partial"
   , "prelude"
   , "profunctor"
   , "tuples"
+  , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

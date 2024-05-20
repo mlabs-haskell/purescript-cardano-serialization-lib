@@ -1,4 +1,4 @@
-.PHONY: build test run watch serve format check-format
+.PHONY: build test run watch serve format check-format code-gen copy
 
 esbuild-cmd := "esbuild \
 			./output/Main/index.js \
@@ -28,6 +28,9 @@ format:
 
 check-format:
 	purs-tidy check "src/**/*.purs"
+
+code-gen:
+	cd code-gen/parse-csl && make run
 
 copy:
 	cp code-gen/parse-csl/output/Lib.js src/Cardano/Serialization/Lib.js

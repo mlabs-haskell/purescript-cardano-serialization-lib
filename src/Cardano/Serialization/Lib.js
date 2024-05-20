@@ -13,9 +13,21 @@ function errorableToPurs(f, ...vars) {
  }
 
 // Address
+export const address_kind = self => self.kind.bind(self)();
+export const address_paymentCred = self => self.payment_cred.bind(self)();
+export const address_isMalformed = self => self.is_malformed.bind(self)();
 export const address_toBech32 = self => prefix => self.to_bech32.bind(self)(prefix);
 export const address_fromBech32 = bech_str => errorableToPurs(CSL.Address.from_bech32, bech_str);
 export const address_networkId = self => self.network_id.bind(self)();
+
+// Anchor
+export const anchor_url = self => self.url.bind(self)();
+export const anchor_anchorDataHash = self => self.anchor_data_hash.bind(self)();
+export const anchor_new = anchor_url => anchor_data_hash => CSL.Anchor.new(anchor_url, anchor_data_hash);
+
+// AnchorDataHash
+export const anchorDataHash_toBech32 = self => prefix => self.to_bech32.bind(self)(prefix);
+export const anchorDataHash_fromBech32 = bech_str => errorableToPurs(CSL.AnchorDataHash.from_bech32, bech_str);
 
 // AssetName
 export const assetName_new = name => CSL.AssetName.new(name);
@@ -90,12 +102,12 @@ export const bip32PrivateKey_fromBip39Entropy = entropy => password => CSL.Bip32
 export const bip32PrivateKey_chaincode = self => self.chaincode.bind(self)();
 
 // Bip32PublicKey
-export const bip32PublicKey_derive = self => index => self.derive.bind(self)(index);
-export const bip32PublicKey_toRawKey = self => self.to_raw_key.bind(self)();
-export const bip32PublicKey_asBytes = self => self.as_bytes.bind(self)();
-export const bip32PublicKey_fromBech32 = bech32_str => errorableToPurs(CSL.Bip32PublicKey.from_bech32, bech32_str);
-export const bip32PublicKey_toBech32 = self => self.to_bech32.bind(self)();
 export const bip32PublicKey_chaincode = self => self.chaincode.bind(self)();
+export const bip32PublicKey_toBech32 = self => self.to_bech32.bind(self)();
+export const bip32PublicKey_fromBech32 = bech32_str => errorableToPurs(CSL.Bip32PublicKey.from_bech32, bech32_str);
+export const bip32PublicKey_asBytes = self => self.as_bytes.bind(self)();
+export const bip32PublicKey_toRawKey = self => self.to_raw_key.bind(self)();
+export const bip32PublicKey_derive = self => index => self.derive.bind(self)(index);
 
 // BlockHash
 export const blockHash_toBech32 = self => prefix => self.to_bech32.bind(self)(prefix);
@@ -130,6 +142,16 @@ export const certificate_newPoolRegistration = pool_registration => CSL.Certific
 export const certificate_newPoolRetirement = pool_retirement => CSL.Certificate.new_pool_retirement(pool_retirement);
 export const certificate_newGenesisKeyDelegation = genesis_key_delegation => CSL.Certificate.new_genesis_key_delegation(genesis_key_delegation);
 export const certificate_newMoveInstantaneousRewardsCert = move_instantaneous_rewards_cert => CSL.Certificate.new_move_instantaneous_rewards_cert(move_instantaneous_rewards_cert);
+export const certificate_newCommitteeHotAuth = committee_hot_auth => CSL.Certificate.new_committee_hot_auth(committee_hot_auth);
+export const certificate_newCommitteeColdResign = committee_cold_resign => CSL.Certificate.new_committee_cold_resign(committee_cold_resign);
+export const certificate_newDrepDeregistration = drep_deregistration => CSL.Certificate.new_drep_deregistration(drep_deregistration);
+export const certificate_newDrepRegistration = drep_registration => CSL.Certificate.new_drep_registration(drep_registration);
+export const certificate_newDrepUpdate = drep_update => CSL.Certificate.new_drep_update(drep_update);
+export const certificate_newStakeAndVoteDelegation = stake_and_vote_delegation => CSL.Certificate.new_stake_and_vote_delegation(stake_and_vote_delegation);
+export const certificate_newStakeRegistrationAndDelegation = stake_registration_and_delegation => CSL.Certificate.new_stake_registration_and_delegation(stake_registration_and_delegation);
+export const certificate_newStakeVoteRegistrationAndDelegation = stake_vote_registration_and_delegation => CSL.Certificate.new_stake_vote_registration_and_delegation(stake_vote_registration_and_delegation);
+export const certificate_newVoteDelegation = vote_delegation => CSL.Certificate.new_vote_delegation(vote_delegation);
+export const certificate_newVoteRegistrationAndDelegation = vote_registration_and_delegation => CSL.Certificate.new_vote_registration_and_delegation(vote_registration_and_delegation);
 export const certificate_kind = self => self.kind.bind(self)();
 export const certificate_asStakeRegistration = self => self.as_stake_registration.bind(self)();
 export const certificate_asStakeDeregistration = self => self.as_stake_deregistration.bind(self)();
@@ -138,9 +160,64 @@ export const certificate_asPoolRegistration = self => self.as_pool_registration.
 export const certificate_asPoolRetirement = self => self.as_pool_retirement.bind(self)();
 export const certificate_asGenesisKeyDelegation = self => self.as_genesis_key_delegation.bind(self)();
 export const certificate_asMoveInstantaneousRewardsCert = self => self.as_move_instantaneous_rewards_cert.bind(self)();
+export const certificate_asCommitteeHotAuth = self => self.as_committee_hot_auth.bind(self)();
+export const certificate_asCommitteeColdResign = self => self.as_committee_cold_resign.bind(self)();
+export const certificate_asDrepDeregistration = self => self.as_drep_deregistration.bind(self)();
+export const certificate_asDrepRegistration = self => self.as_drep_registration.bind(self)();
+export const certificate_asDrepUpdate = self => self.as_drep_update.bind(self)();
+export const certificate_asStakeAndVoteDelegation = self => self.as_stake_and_vote_delegation.bind(self)();
+export const certificate_asStakeRegistrationAndDelegation = self => self.as_stake_registration_and_delegation.bind(self)();
+export const certificate_asStakeVoteRegistrationAndDelegation = self => self.as_stake_vote_registration_and_delegation.bind(self)();
+export const certificate_asVoteDelegation = self => self.as_vote_delegation.bind(self)();
+export const certificate_asVoteRegistrationAndDelegation = self => self.as_vote_registration_and_delegation.bind(self)();
+export const certificate_hasRequiredScriptWitness = self => self.has_required_script_witness.bind(self)();
 
 // Certificates
 export const certificates_new = () => CSL.Certificates.new();
+
+// CertificatesBuilder
+export const certificatesBuilder_new = CSL.CertificatesBuilder.new();
+export const certificatesBuilder_addWithPlutusWitness = self => cert => witness => errorableToPurs(self.add_with_plutus_witness.bind(self), cert, witness);
+export const certificatesBuilder_addWithNativeScript = self => cert => native_script_source => errorableToPurs(self.add_with_native_script.bind(self), cert, native_script_source);
+export const certificatesBuilder_getPlutusWitnesses = self => self.get_plutus_witnesses.bind(self)();
+export const certificatesBuilder_getRefInputs = self => self.get_ref_inputs.bind(self)();
+export const certificatesBuilder_getNativeScripts = self => self.get_native_scripts.bind(self)();
+export const certificatesBuilder_getCertificatesRefund = self => pool_deposit => key_deposit => self.get_certificates_refund.bind(self)(pool_deposit, key_deposit);
+export const certificatesBuilder_getCertificatesDeposit = self => pool_deposit => key_deposit => self.get_certificates_deposit.bind(self)(pool_deposit, key_deposit);
+export const certificatesBuilder_hasPlutusScripts = self => self.has_plutus_scripts.bind(self)();
+export const certificatesBuilder_build = self => self.build.bind(self)();
+
+// ChangeConfig
+export const changeConfig_new = address => CSL.ChangeConfig.new(address);
+export const changeConfig_changeAddress = self => address => self.change_address.bind(self)(address);
+export const changeConfig_changePlutusData = self => plutus_data => self.change_plutus_data.bind(self)(plutus_data);
+export const changeConfig_changeScriptRef = self => script_ref => self.change_script_ref.bind(self)(script_ref);
+
+// Committee
+export const committee_new = quorum_threshold => CSL.Committee.new(quorum_threshold);
+export const committee_membersKeys = self => self.members_keys.bind(self)();
+export const committee_quorumThreshold = self => self.quorum_threshold.bind(self)();
+export const committee_addMember = self => committee_cold_credential => epoch => errorableToPurs(self.add_member.bind(self), committee_cold_credential, epoch);
+export const committee_getMemberEpoch = self => committee_cold_credential => self.get_member_epoch.bind(self)(committee_cold_credential);
+
+// CommitteeColdResign
+export const committeeColdResign_committeeColdKey = self => self.committee_cold_key.bind(self)();
+export const committeeColdResign_anchor = self => self.anchor.bind(self)();
+export const committeeColdResign_new = committee_cold_key => CSL.CommitteeColdResign.new(committee_cold_key);
+export const committeeColdResign_newWithAnchor = committee_cold_key => anchor => CSL.CommitteeColdResign.new_with_anchor(committee_cold_key, anchor);
+export const committeeColdResign_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// CommitteeHotAuth
+export const committeeHotAuth_committeeColdKey = self => self.committee_cold_key.bind(self)();
+export const committeeHotAuth_committeeHotKey = self => self.committee_hot_key.bind(self)();
+export const committeeHotAuth_new = committee_cold_key => committee_hot_key => CSL.CommitteeHotAuth.new(committee_cold_key, committee_hot_key);
+export const committeeHotAuth_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// Constitution
+export const constitution_anchor = self => self.anchor.bind(self)();
+export const constitution_scriptHash = self => self.script_hash.bind(self)();
+export const constitution_new = anchor => CSL.Constitution.new(anchor);
+export const constitution_newWithScriptHash = anchor => script_hash => CSL.Constitution.new_with_script_hash(anchor, script_hash);
 
 // ConstrPlutusData
 export const constrPlutusData_alternative = self => self.alternative.bind(self)();
@@ -164,6 +241,17 @@ export const costModel_len = self => () => self.len.bind(self)();
 export const costmdls_new = () => CSL.Costmdls.new();
 export const costmdls_retainLanguageVersions = self => languages => self.retain_language_versions.bind(self)(languages);
 
+// Credential
+export const credential_fromKeyhash = hash => CSL.Credential.from_keyhash(hash);
+export const credential_fromScripthash = hash => CSL.Credential.from_scripthash(hash);
+export const credential_toKeyhash = self => self.to_keyhash.bind(self)();
+export const credential_toScripthash = self => self.to_scripthash.bind(self)();
+export const credential_kind = self => self.kind.bind(self)();
+export const credential_hasScriptHash = self => self.has_script_hash.bind(self)();
+
+// Credentials
+export const credentials_new = CSL.Credentials.new();
+
 // DNSRecordAorAAAA
 export const dnsRecordAorAAAA_new = dns_name => CSL.DNSRecordAorAAAA.new(dns_name);
 export const dnsRecordAorAAAA_record = self => self.record.bind(self)();
@@ -172,8 +260,16 @@ export const dnsRecordAorAAAA_record = self => self.record.bind(self)();
 export const dnsRecordSRV_new = dns_name => CSL.DNSRecordSRV.new(dns_name);
 export const dnsRecordSRV_record = self => self.record.bind(self)();
 
+// DRep
+export const dRep_newKeyHash = key_hash => CSL.DRep.new_key_hash(key_hash);
+export const dRep_newScriptHash = script_hash => CSL.DRep.new_script_hash(script_hash);
+export const dRep_newAlwaysAbstain = CSL.DRep.new_always_abstain();
+export const dRep_newAlwaysNoConfidence = CSL.DRep.new_always_no_confidence();
+export const dRep_kind = self => self.kind.bind(self)();
+export const dRep_toKeyHash = self => self.to_key_hash.bind(self)();
+export const dRep_toScriptHash = self => self.to_script_hash.bind(self)();
+
 // DataCost
-export const dataCost_newCoinsPerWord = coins_per_word => CSL.DataCost.new_coins_per_word(coins_per_word);
 export const dataCost_newCoinsPerByte = coins_per_byte => CSL.DataCost.new_coins_per_byte(coins_per_byte);
 export const dataCost_coinsPerByte = self => self.coins_per_byte.bind(self)();
 
@@ -185,12 +281,58 @@ export const dataHash_fromBech32 = bech_str => errorableToPurs(CSL.DataHash.from
 export const datumSource_new = datum => CSL.DatumSource.new(datum);
 export const datumSource_newRefInput = input => CSL.DatumSource.new_ref_input(input);
 
+// DrepDeregistration
+export const drepDeregistration_votingCredential = self => self.voting_credential.bind(self)();
+export const drepDeregistration_coin = self => self.coin.bind(self)();
+export const drepDeregistration_new = voting_credential => coin => CSL.DrepDeregistration.new(voting_credential, coin);
+export const drepDeregistration_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// DrepRegistration
+export const drepRegistration_votingCredential = self => self.voting_credential.bind(self)();
+export const drepRegistration_coin = self => self.coin.bind(self)();
+export const drepRegistration_anchor = self => self.anchor.bind(self)();
+export const drepRegistration_new = voting_credential => coin => CSL.DrepRegistration.new(voting_credential, coin);
+export const drepRegistration_newWithAnchor = voting_credential => coin => anchor => CSL.DrepRegistration.new_with_anchor(voting_credential, coin, anchor);
+export const drepRegistration_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// DrepUpdate
+export const drepUpdate_votingCredential = self => self.voting_credential.bind(self)();
+export const drepUpdate_anchor = self => self.anchor.bind(self)();
+export const drepUpdate_new = voting_credential => CSL.DrepUpdate.new(voting_credential);
+export const drepUpdate_newWithAnchor = voting_credential => anchor => CSL.DrepUpdate.new_with_anchor(voting_credential, anchor);
+export const drepUpdate_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// DrepVotingThresholds
+export const drepVotingThresholds_new = motion_no_confidence => committee_normal => committee_no_confidence => update_constitution => hard_fork_initiation => pp_network_group => pp_economic_group => pp_technical_group => pp_governance_group => treasury_withdrawal => CSL.DrepVotingThresholds.new(motion_no_confidence, committee_normal, committee_no_confidence, update_constitution, hard_fork_initiation, pp_network_group, pp_economic_group, pp_technical_group, pp_governance_group, treasury_withdrawal);
+export const drepVotingThresholds_newDefault = CSL.DrepVotingThresholds.new_default();
+export const drepVotingThresholds_setMotionNoConfidence = self => motion_no_confidence => () => self.set_motion_no_confidence.bind(self)(motion_no_confidence);
+export const drepVotingThresholds_setCommitteeNormal = self => committee_normal => () => self.set_committee_normal.bind(self)(committee_normal);
+export const drepVotingThresholds_setCommitteeNoConfidence = self => committee_no_confidence => () => self.set_committee_no_confidence.bind(self)(committee_no_confidence);
+export const drepVotingThresholds_setUpdateConstitution = self => update_constitution => () => self.set_update_constitution.bind(self)(update_constitution);
+export const drepVotingThresholds_setHardForkInitiation = self => hard_fork_initiation => () => self.set_hard_fork_initiation.bind(self)(hard_fork_initiation);
+export const drepVotingThresholds_setPpNetworkGroup = self => pp_network_group => () => self.set_pp_network_group.bind(self)(pp_network_group);
+export const drepVotingThresholds_setPpEconomicGroup = self => pp_economic_group => () => self.set_pp_economic_group.bind(self)(pp_economic_group);
+export const drepVotingThresholds_setPpTechnicalGroup = self => pp_technical_group => () => self.set_pp_technical_group.bind(self)(pp_technical_group);
+export const drepVotingThresholds_setPpGovernanceGroup = self => pp_governance_group => () => self.set_pp_governance_group.bind(self)(pp_governance_group);
+export const drepVotingThresholds_setTreasuryWithdrawal = self => treasury_withdrawal => () => self.set_treasury_withdrawal.bind(self)(treasury_withdrawal);
+export const drepVotingThresholds_motionNoConfidence = self => self.motion_no_confidence.bind(self)();
+export const drepVotingThresholds_committeeNormal = self => self.committee_normal.bind(self)();
+export const drepVotingThresholds_committeeNoConfidence = self => self.committee_no_confidence.bind(self)();
+export const drepVotingThresholds_updateConstitution = self => self.update_constitution.bind(self)();
+export const drepVotingThresholds_hardForkInitiation = self => self.hard_fork_initiation.bind(self)();
+export const drepVotingThresholds_ppNetworkGroup = self => self.pp_network_group.bind(self)();
+export const drepVotingThresholds_ppEconomicGroup = self => self.pp_economic_group.bind(self)();
+export const drepVotingThresholds_ppTechnicalGroup = self => self.pp_technical_group.bind(self)();
+export const drepVotingThresholds_ppGovernanceGroup = self => self.pp_governance_group.bind(self)();
+export const drepVotingThresholds_treasuryWithdrawal = self => self.treasury_withdrawal.bind(self)();
+
 // Ed25519KeyHash
 export const ed25519KeyHash_toBech32 = self => prefix => self.to_bech32.bind(self)(prefix);
 export const ed25519KeyHash_fromBech32 = bech_str => errorableToPurs(CSL.Ed25519KeyHash.from_bech32, bech_str);
 
 // Ed25519KeyHashes
 export const ed25519KeyHashes_new = CSL.Ed25519KeyHashes.new();
+export const ed25519KeyHashes_contains = self => elem => self.contains.bind(self)(elem);
 export const ed25519KeyHashes_toOption = self => self.to_option.bind(self)();
 
 // Ed25519Signature
@@ -233,13 +375,39 @@ export const genesisKeyDelegation_genesisDelegateHash = self => self.genesis_del
 export const genesisKeyDelegation_vrfKeyhash = self => self.vrf_keyhash.bind(self)();
 export const genesisKeyDelegation_new = genesishash => genesis_delegate_hash => vrf_keyhash => CSL.GenesisKeyDelegation.new(genesishash, genesis_delegate_hash, vrf_keyhash);
 
-// InputWithScriptWitness
-export const inputWithScriptWitness_newWithNativeScriptWitness = input => witness => CSL.InputWithScriptWitness.new_with_native_script_witness(input, witness);
-export const inputWithScriptWitness_newWithPlutusWitness = input => witness => CSL.InputWithScriptWitness.new_with_plutus_witness(input, witness);
-export const inputWithScriptWitness_input = self => self.input.bind(self)();
+// GovernanceAction
+export const governanceAction_newParameterChangeAction = parameter_change_action => CSL.GovernanceAction.new_parameter_change_action(parameter_change_action);
+export const governanceAction_newHardForkInitiationAction = hard_fork_initiation_action => CSL.GovernanceAction.new_hard_fork_initiation_action(hard_fork_initiation_action);
+export const governanceAction_newTreasuryWithdrawalsAction = treasury_withdrawals_action => CSL.GovernanceAction.new_treasury_withdrawals_action(treasury_withdrawals_action);
+export const governanceAction_newNoConfidenceAction = no_confidence_action => CSL.GovernanceAction.new_no_confidence_action(no_confidence_action);
+export const governanceAction_newNewCommitteeAction = new_committee_action => CSL.GovernanceAction.new_new_committee_action(new_committee_action);
+export const governanceAction_newNewConstitutionAction = new_constitution_action => CSL.GovernanceAction.new_new_constitution_action(new_constitution_action);
+export const governanceAction_newInfoAction = info_action => CSL.GovernanceAction.new_info_action(info_action);
+export const governanceAction_kind = self => self.kind.bind(self)();
+export const governanceAction_asParameterChangeAction = self => self.as_parameter_change_action.bind(self)();
+export const governanceAction_asHardForkInitiationAction = self => self.as_hard_fork_initiation_action.bind(self)();
+export const governanceAction_asTreasuryWithdrawalsAction = self => self.as_treasury_withdrawals_action.bind(self)();
+export const governanceAction_asNoConfidenceAction = self => self.as_no_confidence_action.bind(self)();
+export const governanceAction_asNewCommitteeAction = self => self.as_new_committee_action.bind(self)();
+export const governanceAction_asNewConstitutionAction = self => self.as_new_constitution_action.bind(self)();
+export const governanceAction_asInfoAction = self => self.as_info_action.bind(self)();
 
-// InputsWithScriptWitness
-export const inputsWithScriptWitness_new = CSL.InputsWithScriptWitness.new();
+// GovernanceActionId
+export const governanceActionId_transactionId = self => self.transaction_id.bind(self)();
+export const governanceActionId_index = self => self.index.bind(self)();
+export const governanceActionId_new = transaction_id => index => CSL.GovernanceActionId.new(transaction_id, index);
+
+// GovernanceActionIds
+export const governanceActionIds_new = CSL.GovernanceActionIds.new();
+
+// HardForkInitiationAction
+export const hardForkInitiationAction_govActionId = self => self.gov_action_id.bind(self)();
+export const hardForkInitiationAction_protocolVersion = self => self.protocol_version.bind(self)();
+export const hardForkInitiationAction_new = protocol_version => CSL.HardForkInitiationAction.new(protocol_version);
+export const hardForkInitiationAction_newWithActionId = gov_action_id => protocol_version => CSL.HardForkInitiationAction.new_with_action_id(gov_action_id, protocol_version);
+
+// InfoAction
+export const infoAction_new = CSL.InfoAction.new();
 
 // Int
 export const int_new = x => CSL.Int.new(x);
@@ -271,6 +439,7 @@ export const kesvKey_fromBech32 = bech_str => errorableToPurs(CSL.KESVKey.from_b
 // Language
 export const language_newPlutusV1 = CSL.Language.new_plutus_v1();
 export const language_newPlutusV2 = CSL.Language.new_plutus_v2();
+export const language_newPlutusV3 = CSL.Language.new_plutus_v3();
 export const language_kind = self => self.kind.bind(self)();
 
 // Languages
@@ -289,6 +458,11 @@ export const linearFee_new = coefficient => constant => CSL.LinearFee.new(coeffi
 // MIRToStakeCredentials
 export const mirToStakeCredentials_new = () => CSL.MIRToStakeCredentials.new();
 
+// MalformedAddress
+export const malformedAddress_originalBytes = self => self.original_bytes.bind(self)();
+export const malformedAddress_toAddress = self => self.to_address.bind(self)();
+export const malformedAddress_fromAddress = addr => CSL.MalformedAddress.from_address(addr);
+
 // MetadataList
 export const metadataList_new = () => CSL.MetadataList.new();
 
@@ -303,7 +477,6 @@ export const metadataMap_has = self => key => () => self.has.bind(self)(key);
 // Mint
 export const mint_new = () => CSL.Mint.new();
 export const mint_newFromEntry = key => value => () => CSL.Mint.new_from_entry(key, value);
-export const mint_getAll = self => key => self.get_all.bind(self)(key);
 export const mint_asPositiveMultiasset = self => () => self.as_positive_multiasset.bind(self)();
 export const mint_asNegativeMultiasset = self => () => self.as_negative_multiasset.bind(self)();
 
@@ -316,6 +489,7 @@ export const mintWitness_newNativeScript = native_script => CSL.MintWitness.new_
 export const mintWitness_newPlutusScript = plutus_script => redeemer => CSL.MintWitness.new_plutus_script(plutus_script, redeemer);
 
 // MintsAssets
+export const mintsAssets_new = CSL.MintsAssets.new();
 
 // MoveInstantaneousReward
 export const moveInstantaneousReward_newToOtherPot = pot => amount => CSL.MoveInstantaneousReward.new_to_other_pot(pot, amount);
@@ -356,6 +530,11 @@ export const nativeScript_asTimelockStart = self => self.as_timelock_start.bind(
 export const nativeScript_asTimelockExpiry = self => self.as_timelock_expiry.bind(self)();
 export const nativeScript_getRequiredSigners = self => self.get_required_signers.bind(self)();
 
+// NativeScriptSource
+export const nativeScriptSource_new = script => CSL.NativeScriptSource.new(script);
+export const nativeScriptSource_newRefInput = script_hash => input => CSL.NativeScriptSource.new_ref_input(script_hash, input);
+export const nativeScriptSource_setRequiredSigners = self => key_hashes => () => self.set_required_signers.bind(self)(key_hashes);
+
 // NativeScripts
 export const nativeScripts_new = () => CSL.NativeScripts.new();
 
@@ -370,8 +549,19 @@ export const networkInfo_networkId = self => self.network_id.bind(self)();
 export const networkInfo_protocolMagic = self => self.protocol_magic.bind(self)();
 export const networkInfo_testnetPreview = CSL.NetworkInfo.testnet_preview();
 export const networkInfo_testnetPreprod = CSL.NetworkInfo.testnet_preprod();
-export const networkInfo_testnet = CSL.NetworkInfo.testnet();
 export const networkInfo_mainnet = CSL.NetworkInfo.mainnet();
+
+// NewConstitutionAction
+export const newConstitutionAction_govActionId = self => self.gov_action_id.bind(self)();
+export const newConstitutionAction_constitution = self => self.constitution.bind(self)();
+export const newConstitutionAction_new = constitution => CSL.NewConstitutionAction.new(constitution);
+export const newConstitutionAction_newWithActionId = gov_action_id => constitution => CSL.NewConstitutionAction.new_with_action_id(gov_action_id, constitution);
+export const newConstitutionAction_hasScriptHash = self => self.has_script_hash.bind(self)();
+
+// NoConfidenceAction
+export const noConfidenceAction_govActionId = self => self.gov_action_id.bind(self)();
+export const noConfidenceAction_new = CSL.NoConfidenceAction.new();
+export const noConfidenceAction_newWithActionId = gov_action_id => CSL.NoConfidenceAction.new_with_action_id(gov_action_id);
 
 // Nonce
 export const nonce_newIdentity = CSL.Nonce.new_identity();
@@ -390,6 +580,15 @@ export const outputDatum_newDataHash = data_hash => CSL.OutputDatum.new_data_has
 export const outputDatum_newData = data => CSL.OutputDatum.new_data(data);
 export const outputDatum_dataHash = self => self.data_hash.bind(self)();
 export const outputDatum_data = self => self.data.bind(self)();
+
+// ParameterChangeAction
+export const parameterChangeAction_govActionId = self => self.gov_action_id.bind(self)();
+export const parameterChangeAction_protocolParamUpdates = self => self.protocol_param_updates.bind(self)();
+export const parameterChangeAction_policyHash = self => self.policy_hash.bind(self)();
+export const parameterChangeAction_new = protocol_param_updates => CSL.ParameterChangeAction.new(protocol_param_updates);
+export const parameterChangeAction_newWithActionId = gov_action_id => protocol_param_updates => CSL.ParameterChangeAction.new_with_action_id(gov_action_id, protocol_param_updates);
+export const parameterChangeAction_newWithPolicyHash = protocol_param_updates => policy_hash => CSL.ParameterChangeAction.new_with_policy_hash(protocol_param_updates, policy_hash);
+export const parameterChangeAction_newWithPolicyHashAndActionId = gov_action_id => protocol_param_updates => policy_hash => CSL.ParameterChangeAction.new_with_policy_hash_and_action_id(gov_action_id, protocol_param_updates, policy_hash);
 
 // PlutusData
 export const plutusData_newConstrPlutusData = constr_plutus_data => CSL.PlutusData.new_constr_plutus_data(constr_plutus_data);
@@ -416,9 +615,11 @@ export const plutusMap_new = () => CSL.PlutusMap.new();
 // PlutusScript
 export const plutusScript_new = bytes => CSL.PlutusScript.new(bytes);
 export const plutusScript_newV2 = bytes => CSL.PlutusScript.new_v2(bytes);
+export const plutusScript_newV3 = bytes => CSL.PlutusScript.new_v3(bytes);
 export const plutusScript_newWithVersion = bytes => language => CSL.PlutusScript.new_with_version(bytes, language);
 export const plutusScript_bytes = self => self.bytes.bind(self)();
 export const plutusScript_fromBytesV2 = bytes => CSL.PlutusScript.from_bytes_v2(bytes);
+export const plutusScript_fromBytesV3 = bytes => CSL.PlutusScript.from_bytes_v3(bytes);
 export const plutusScript_fromBytesWithVersion = bytes => language => CSL.PlutusScript.from_bytes_with_version(bytes, language);
 export const plutusScript_fromHexWithVersion = hex_str => language => CSL.PlutusScript.from_hex_with_version(hex_str, language);
 export const plutusScript_hash = self => self.hash.bind(self)();
@@ -426,8 +627,9 @@ export const plutusScript_languageVersion = self => self.language_version.bind(s
 
 // PlutusScriptSource
 export const plutusScriptSource_new = script => CSL.PlutusScriptSource.new(script);
-export const plutusScriptSource_newRefInput = script_hash => input => CSL.PlutusScriptSource.new_ref_input(script_hash, input);
-export const plutusScriptSource_newRefInputWithLangVer = script_hash => input => lang_ver => CSL.PlutusScriptSource.new_ref_input_with_lang_ver(script_hash, input, lang_ver);
+export const plutusScriptSource_newRefInput = script_hash => input => lang_ver => script_size => CSL.PlutusScriptSource.new_ref_input(script_hash, input, lang_ver, script_size);
+export const plutusScriptSource_setRequiredSigners = self => key_hashes => () => self.set_required_signers.bind(self)(key_hashes);
+export const plutusScriptSource_getRefScriptSize = self => self.get_ref_script_size.bind(self)();
 
 // PlutusScripts
 export const plutusScripts_new = () => CSL.PlutusScripts.new();
@@ -491,19 +693,26 @@ export const poolRetirement_poolKeyhash = self => self.pool_keyhash.bind(self)()
 export const poolRetirement_epoch = self => self.epoch.bind(self)();
 export const poolRetirement_new = pool_keyhash => epoch => CSL.PoolRetirement.new(pool_keyhash, epoch);
 
+// PoolVotingThresholds
+export const poolVotingThresholds_new = motion_no_confidence => committee_normal => committee_no_confidence => hard_fork_initiation => security_relevant_threshold => CSL.PoolVotingThresholds.new(motion_no_confidence, committee_normal, committee_no_confidence, hard_fork_initiation, security_relevant_threshold);
+export const poolVotingThresholds_motionNoConfidence = self => self.motion_no_confidence.bind(self)();
+export const poolVotingThresholds_committeeNormal = self => self.committee_normal.bind(self)();
+export const poolVotingThresholds_committeeNoConfidence = self => self.committee_no_confidence.bind(self)();
+export const poolVotingThresholds_hardForkInitiation = self => self.hard_fork_initiation.bind(self)();
+
 // PrivateKey
 export const privateKey_free = self => errorableToPurs(self.free.bind(self), );
-export const privateKey_toPublic = self => self.to_public.bind(self)();
-export const privateKey_generateEd25519 = () => CSL.PrivateKey.generate_ed25519();
-export const privateKey_generateEd25519extended = () => CSL.PrivateKey.generate_ed25519extended();
-export const privateKey_fromBech32 = bech32_str => errorableToPurs(CSL.PrivateKey.from_bech32, bech32_str);
-export const privateKey_toBech32 = self => self.to_bech32.bind(self)();
-export const privateKey_asBytes = self => self.as_bytes.bind(self)();
-export const privateKey_fromExtendedBytes = bytes => errorableToPurs(CSL.PrivateKey.from_extended_bytes, bytes);
-export const privateKey_fromNormalBytes = bytes => errorableToPurs(CSL.PrivateKey.from_normal_bytes, bytes);
-export const privateKey_sign = self => message => self.sign.bind(self)(message);
-export const privateKey_toHex = self => self.to_hex.bind(self)();
 export const privateKey_fromHex = hex_str => errorableToPurs(CSL.PrivateKey.from_hex, hex_str);
+export const privateKey_toHex = self => self.to_hex.bind(self)();
+export const privateKey_sign = self => message => self.sign.bind(self)(message);
+export const privateKey_fromNormalBytes = bytes => errorableToPurs(CSL.PrivateKey.from_normal_bytes, bytes);
+export const privateKey_fromExtendedBytes = bytes => errorableToPurs(CSL.PrivateKey.from_extended_bytes, bytes);
+export const privateKey_asBytes = self => self.as_bytes.bind(self)();
+export const privateKey_toBech32 = self => self.to_bech32.bind(self)();
+export const privateKey_fromBech32 = bech32_str => errorableToPurs(CSL.PrivateKey.from_bech32, bech32_str);
+export const privateKey_generateEd25519extended = () => CSL.PrivateKey.generate_ed25519extended();
+export const privateKey_generateEd25519 = () => CSL.PrivateKey.generate_ed25519();
+export const privateKey_toPublic = self => self.to_public.bind(self)();
 
 // ProposedProtocolParameterUpdates
 export const proposedProtocolParameterUpdates_new = () => CSL.ProposedProtocolParameterUpdates.new();
@@ -555,6 +764,24 @@ export const protocolParamUpdate_setCollateralPercentage = self => collateral_pe
 export const protocolParamUpdate_collateralPercentage = self => self.collateral_percentage.bind(self)();
 export const protocolParamUpdate_setMaxCollateralInputs = self => max_collateral_inputs => () => self.set_max_collateral_inputs.bind(self)(max_collateral_inputs);
 export const protocolParamUpdate_maxCollateralInputs = self => self.max_collateral_inputs.bind(self)();
+export const protocolParamUpdate_setPoolVotingThresholds = self => pool_voting_thresholds => () => self.set_pool_voting_thresholds.bind(self)(pool_voting_thresholds);
+export const protocolParamUpdate_poolVotingThresholds = self => self.pool_voting_thresholds.bind(self)();
+export const protocolParamUpdate_setDrepVotingThresholds = self => drep_voting_thresholds => () => self.set_drep_voting_thresholds.bind(self)(drep_voting_thresholds);
+export const protocolParamUpdate_drepVotingThresholds = self => self.drep_voting_thresholds.bind(self)();
+export const protocolParamUpdate_setMinCommitteeSize = self => min_committee_size => () => self.set_min_committee_size.bind(self)(min_committee_size);
+export const protocolParamUpdate_minCommitteeSize = self => self.min_committee_size.bind(self)();
+export const protocolParamUpdate_setCommitteeTermLimit = self => committee_term_limit => () => self.set_committee_term_limit.bind(self)(committee_term_limit);
+export const protocolParamUpdate_committeeTermLimit = self => self.committee_term_limit.bind(self)();
+export const protocolParamUpdate_setGovernanceActionValidityPeriod = self => governance_action_validity_period => () => self.set_governance_action_validity_period.bind(self)(governance_action_validity_period);
+export const protocolParamUpdate_governanceActionValidityPeriod = self => self.governance_action_validity_period.bind(self)();
+export const protocolParamUpdate_setGovernanceActionDeposit = self => governance_action_deposit => () => self.set_governance_action_deposit.bind(self)(governance_action_deposit);
+export const protocolParamUpdate_governanceActionDeposit = self => self.governance_action_deposit.bind(self)();
+export const protocolParamUpdate_setDrepDeposit = self => drep_deposit => () => self.set_drep_deposit.bind(self)(drep_deposit);
+export const protocolParamUpdate_drepDeposit = self => self.drep_deposit.bind(self)();
+export const protocolParamUpdate_setDrepInactivityPeriod = self => drep_inactivity_period => () => self.set_drep_inactivity_period.bind(self)(drep_inactivity_period);
+export const protocolParamUpdate_drepInactivityPeriod = self => self.drep_inactivity_period.bind(self)();
+export const protocolParamUpdate_setRefScriptCoinsPerByte = self => ref_script_coins_per_byte => () => self.set_ref_script_coins_per_byte.bind(self)(ref_script_coins_per_byte);
+export const protocolParamUpdate_refScriptCoinsPerByte = self => self.ref_script_coins_per_byte.bind(self)();
 export const protocolParamUpdate_new = CSL.ProtocolParamUpdate.new();
 
 // ProtocolVersion
@@ -564,14 +791,14 @@ export const protocolVersion_new = major => minor => CSL.ProtocolVersion.new(maj
 
 // PublicKey
 export const publicKey_free = self => errorableToPurs(self.free.bind(self), );
-export const publicKey_fromBech32 = bech32_str => errorableToPurs(CSL.PublicKey.from_bech32, bech32_str);
-export const publicKey_toBech32 = self => self.to_bech32.bind(self)();
-export const publicKey_asBytes = self => self.as_bytes.bind(self)();
-export const publicKey_fromBytes = bytes => errorableToPurs(CSL.PublicKey.from_bytes, bytes);
-export const publicKey_verify = self => data => signature => self.verify.bind(self)(data, signature);
-export const publicKey_hash = self => self.hash.bind(self)();
-export const publicKey_toHex = self => self.to_hex.bind(self)();
 export const publicKey_fromHex = hex_str => errorableToPurs(CSL.PublicKey.from_hex, hex_str);
+export const publicKey_toHex = self => self.to_hex.bind(self)();
+export const publicKey_hash = self => self.hash.bind(self)();
+export const publicKey_verify = self => data => signature => self.verify.bind(self)(data, signature);
+export const publicKey_fromBytes = bytes => errorableToPurs(CSL.PublicKey.from_bytes, bytes);
+export const publicKey_asBytes = self => self.as_bytes.bind(self)();
+export const publicKey_toBech32 = self => self.to_bech32.bind(self)();
+export const publicKey_fromBech32 = bech32_str => errorableToPurs(CSL.PublicKey.from_bech32, bech32_str);
 
 // Redeemer
 export const redeemer_tag = self => self.tag.bind(self)();
@@ -585,6 +812,8 @@ export const redeemerTag_newSpend = CSL.RedeemerTag.new_spend();
 export const redeemerTag_newMint = CSL.RedeemerTag.new_mint();
 export const redeemerTag_newCert = CSL.RedeemerTag.new_cert();
 export const redeemerTag_newReward = CSL.RedeemerTag.new_reward();
+export const redeemerTag_newVote = CSL.RedeemerTag.new_vote();
+export const redeemerTag_newVotingProposal = CSL.RedeemerTag.new_voting_proposal();
 export const redeemerTag_kind = self => self.kind.bind(self)();
 
 // Redeemers
@@ -659,28 +888,47 @@ export const singleHostName_port = self => self.port.bind(self)();
 export const singleHostName_dnsName = self => self.dns_name.bind(self)();
 export const singleHostName_new = port => dns_name => CSL.SingleHostName.new(port, dns_name);
 
-// StakeCredential
-export const stakeCredential_fromKeyhash = hash => CSL.StakeCredential.from_keyhash(hash);
-export const stakeCredential_fromScripthash = hash => CSL.StakeCredential.from_scripthash(hash);
-export const stakeCredential_toKeyhash = self => self.to_keyhash.bind(self)();
-export const stakeCredential_toScripthash = self => self.to_scripthash.bind(self)();
-export const stakeCredential_kind = self => self.kind.bind(self)();
-
-// StakeCredentials
-export const stakeCredentials_new = () => CSL.StakeCredentials.new();
+// StakeAndVoteDelegation
+export const stakeAndVoteDelegation_stakeCredential = self => self.stake_credential.bind(self)();
+export const stakeAndVoteDelegation_poolKeyhash = self => self.pool_keyhash.bind(self)();
+export const stakeAndVoteDelegation_drep = self => self.drep.bind(self)();
+export const stakeAndVoteDelegation_new = stake_credential => pool_keyhash => drep => CSL.StakeAndVoteDelegation.new(stake_credential, pool_keyhash, drep);
+export const stakeAndVoteDelegation_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
 
 // StakeDelegation
 export const stakeDelegation_stakeCredential = self => self.stake_credential.bind(self)();
 export const stakeDelegation_poolKeyhash = self => self.pool_keyhash.bind(self)();
 export const stakeDelegation_new = stake_credential => pool_keyhash => CSL.StakeDelegation.new(stake_credential, pool_keyhash);
+export const stakeDelegation_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
 
 // StakeDeregistration
 export const stakeDeregistration_stakeCredential = self => self.stake_credential.bind(self)();
+export const stakeDeregistration_coin = self => self.coin.bind(self)();
 export const stakeDeregistration_new = stake_credential => CSL.StakeDeregistration.new(stake_credential);
+export const stakeDeregistration_newWithCoin = stake_credential => coin => CSL.StakeDeregistration.new_with_coin(stake_credential, coin);
+export const stakeDeregistration_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
 
 // StakeRegistration
 export const stakeRegistration_stakeCredential = self => self.stake_credential.bind(self)();
+export const stakeRegistration_coin = self => self.coin.bind(self)();
 export const stakeRegistration_new = stake_credential => CSL.StakeRegistration.new(stake_credential);
+export const stakeRegistration_newWithCoin = stake_credential => coin => CSL.StakeRegistration.new_with_coin(stake_credential, coin);
+export const stakeRegistration_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// StakeRegistrationAndDelegation
+export const stakeRegistrationAndDelegation_stakeCredential = self => self.stake_credential.bind(self)();
+export const stakeRegistrationAndDelegation_poolKeyhash = self => self.pool_keyhash.bind(self)();
+export const stakeRegistrationAndDelegation_coin = self => self.coin.bind(self)();
+export const stakeRegistrationAndDelegation_new = stake_credential => pool_keyhash => coin => CSL.StakeRegistrationAndDelegation.new(stake_credential, pool_keyhash, coin);
+export const stakeRegistrationAndDelegation_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// StakeVoteRegistrationAndDelegation
+export const stakeVoteRegistrationAndDelegation_stakeCredential = self => self.stake_credential.bind(self)();
+export const stakeVoteRegistrationAndDelegation_poolKeyhash = self => self.pool_keyhash.bind(self)();
+export const stakeVoteRegistrationAndDelegation_drep = self => self.drep.bind(self)();
+export const stakeVoteRegistrationAndDelegation_coin = self => self.coin.bind(self)();
+export const stakeVoteRegistrationAndDelegation_new = stake_credential => pool_keyhash => drep => coin => CSL.StakeVoteRegistrationAndDelegation.new(stake_credential, pool_keyhash, drep, coin);
+export const stakeVoteRegistrationAndDelegation_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
 
 // TimelockExpiry
 export const timelockExpiry_slot = self => self.slot.bind(self)();
@@ -728,7 +976,6 @@ export const transactionBody_validityStartIntervalBignum = self => self.validity
 export const transactionBody_validityStartInterval = self => self.validity_start_interval.bind(self)();
 export const transactionBody_setMint = self => mint => () => self.set_mint.bind(self)(mint);
 export const transactionBody_mint = self => self.mint.bind(self)();
-export const transactionBody_multiassets = self => self.multiassets.bind(self)();
 export const transactionBody_setReferenceInputs = self => reference_inputs => () => self.set_reference_inputs.bind(self)(reference_inputs);
 export const transactionBody_referenceInputs = self => self.reference_inputs.bind(self)();
 export const transactionBody_setScriptDataHash = self => script_data_hash => () => self.set_script_data_hash.bind(self)(script_data_hash);
@@ -743,6 +990,14 @@ export const transactionBody_setCollateralReturn = self => collateral_return => 
 export const transactionBody_collateralReturn = self => self.collateral_return.bind(self)();
 export const transactionBody_setTotalCollateral = self => total_collateral => () => self.set_total_collateral.bind(self)(total_collateral);
 export const transactionBody_totalCollateral = self => self.total_collateral.bind(self)();
+export const transactionBody_setVotingProcedures = self => voting_procedures => () => self.set_voting_procedures.bind(self)(voting_procedures);
+export const transactionBody_votingProcedures = self => self.voting_procedures.bind(self)();
+export const transactionBody_setVotingProposals = self => voting_proposals => () => self.set_voting_proposals.bind(self)(voting_proposals);
+export const transactionBody_votingProposals = self => self.voting_proposals.bind(self)();
+export const transactionBody_setDonation = self => donation => () => self.set_donation.bind(self)(donation);
+export const transactionBody_donation = self => self.donation.bind(self)();
+export const transactionBody_setCurrentTreasuryValue = self => current_treasury_value => () => self.set_current_treasury_value.bind(self)(current_treasury_value);
+export const transactionBody_currentTreasuryValue = self => self.current_treasury_value.bind(self)();
 export const transactionBody_new = inputs => outputs => fee => ttl => CSL.TransactionBody.new(inputs, outputs, fee, ttl);
 export const transactionBody_newTxBody = inputs => outputs => fee => CSL.TransactionBody.new_tx_body(inputs, outputs, fee);
 
@@ -816,6 +1071,15 @@ export const transactionWitnessSet_setRedeemers = self => redeemers => () => sel
 export const transactionWitnessSet_redeemers = self => self.redeemers.bind(self)();
 export const transactionWitnessSet_new = () => CSL.TransactionWitnessSet.new();
 
+// TreasuryWithdrawals
+export const treasuryWithdrawals_new = CSL.TreasuryWithdrawals.new();
+
+// TreasuryWithdrawalsAction
+export const treasuryWithdrawalsAction_withdrawals = self => self.withdrawals.bind(self)();
+export const treasuryWithdrawalsAction_policyHash = self => self.policy_hash.bind(self)();
+export const treasuryWithdrawalsAction_new = withdrawals => CSL.TreasuryWithdrawalsAction.new(withdrawals);
+export const treasuryWithdrawalsAction_newWithPolicyHash = withdrawals => policy_hash => CSL.TreasuryWithdrawalsAction.new_with_policy_hash(withdrawals, policy_hash);
+
 // URL
 export const url_new = url => CSL.URL.new(url);
 export const url_url = self => self.url.bind(self)();
@@ -829,6 +1093,13 @@ export const unitInterval_new = numerator => denominator => CSL.UnitInterval.new
 export const update_proposedProtocolParameterUpdates = self => self.proposed_protocol_parameter_updates.bind(self)();
 export const update_epoch = self => self.epoch.bind(self)();
 export const update_new = proposed_protocol_parameter_updates => epoch => CSL.Update.new(proposed_protocol_parameter_updates, epoch);
+
+// UpdateCommitteeAction
+export const updateCommitteeAction_govActionId = self => self.gov_action_id.bind(self)();
+export const updateCommitteeAction_committee = self => self.committee.bind(self)();
+export const updateCommitteeAction_membersToRemove = self => self.members_to_remove.bind(self)();
+export const updateCommitteeAction_new = committee => members_to_remove => CSL.UpdateCommitteeAction.new(committee, members_to_remove);
+export const updateCommitteeAction_newWithActionId = gov_action_id => committee => members_to_remove => CSL.UpdateCommitteeAction.new_with_action_id(gov_action_id, committee, members_to_remove);
 
 // VRFCert
 export const vrfCert_output = self => self.output.bind(self)();
@@ -873,8 +1144,85 @@ export const vkeywitness_signature = self => self.signature.bind(self)();
 // Vkeywitnesses
 export const vkeywitnesses_new = () => CSL.Vkeywitnesses.new();
 
+// VoteDelegation
+export const voteDelegation_stakeCredential = self => self.stake_credential.bind(self)();
+export const voteDelegation_drep = self => self.drep.bind(self)();
+export const voteDelegation_new = stake_credential => drep => CSL.VoteDelegation.new(stake_credential, drep);
+export const voteDelegation_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// VoteRegistrationAndDelegation
+export const voteRegistrationAndDelegation_stakeCredential = self => self.stake_credential.bind(self)();
+export const voteRegistrationAndDelegation_drep = self => self.drep.bind(self)();
+export const voteRegistrationAndDelegation_coin = self => self.coin.bind(self)();
+export const voteRegistrationAndDelegation_new = stake_credential => drep => coin => CSL.VoteRegistrationAndDelegation.new(stake_credential, drep, coin);
+export const voteRegistrationAndDelegation_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+
+// Voter
+export const voter_newConstitutionalCommitteeHotKey = cred => CSL.Voter.new_constitutional_committee_hot_key(cred);
+export const voter_newDrep = cred => CSL.Voter.new_drep(cred);
+export const voter_newStakingPool = key_hash => CSL.Voter.new_staking_pool(key_hash);
+export const voter_kind = self => self.kind.bind(self)();
+export const voter_toConstitutionalCommitteeHotCred = self => self.to_constitutional_committee_hot_cred.bind(self)();
+export const voter_toDrepCred = self => self.to_drep_cred.bind(self)();
+export const voter_toStakingPoolKeyHash = self => self.to_staking_pool_key_hash.bind(self)();
+export const voter_hasScriptCredentials = self => self.has_script_credentials.bind(self)();
+export const voter_toKeyHash = self => self.to_key_hash.bind(self)();
+
+// Voters
+export const voters_new = CSL.Voters.new();
+
+// VotingBuilder
+export const votingBuilder_new = CSL.VotingBuilder.new();
+export const votingBuilder_addWithPlutusWitness = self => voter => gov_action_id => voting_procedure => witness => errorableToPurs(self.add_with_plutus_witness.bind(self), voter, gov_action_id, voting_procedure, witness);
+export const votingBuilder_addWithNativeScript = self => voter => gov_action_id => voting_procedure => native_script_source => errorableToPurs(self.add_with_native_script.bind(self), voter, gov_action_id, voting_procedure, native_script_source);
+export const votingBuilder_getPlutusWitnesses = self => self.get_plutus_witnesses.bind(self)();
+export const votingBuilder_getRefInputs = self => self.get_ref_inputs.bind(self)();
+export const votingBuilder_getNativeScripts = self => self.get_native_scripts.bind(self)();
+export const votingBuilder_hasPlutusScripts = self => self.has_plutus_scripts.bind(self)();
+export const votingBuilder_build = self => self.build.bind(self)();
+
+// VotingProcedure
+export const votingProcedure_new = vote => CSL.VotingProcedure.new(vote);
+export const votingProcedure_newWithAnchor = vote => anchor => CSL.VotingProcedure.new_with_anchor(vote, anchor);
+export const votingProcedure_voteKind = self => self.vote_kind.bind(self)();
+export const votingProcedure_anchor = self => self.anchor.bind(self)();
+
+// VotingProcedures
+export const votingProcedures_new = CSL.VotingProcedures.new();
+export const votingProcedures_getVoters = self => self.get_voters.bind(self)();
+export const votingProcedures_getGovernanceActionIdsByVoter = self => voter => self.get_governance_action_ids_by_voter.bind(self)(voter);
+
+// VotingProposal
+export const votingProposal_governanceAction = self => self.governance_action.bind(self)();
+export const votingProposal_anchor = self => self.anchor.bind(self)();
+export const votingProposal_rewardAccount = self => self.reward_account.bind(self)();
+export const votingProposal_deposit = self => self.deposit.bind(self)();
+export const votingProposal_new = governance_action => anchor => reward_account => deposit => CSL.VotingProposal.new(governance_action, anchor, reward_account, deposit);
+
+// VotingProposalBuilder
+export const votingProposalBuilder_new = CSL.VotingProposalBuilder.new();
+export const votingProposalBuilder_addWithPlutusWitness = self => proposal => witness => errorableToPurs(self.add_with_plutus_witness.bind(self), proposal, witness);
+export const votingProposalBuilder_getPlutusWitnesses = self => self.get_plutus_witnesses.bind(self)();
+export const votingProposalBuilder_getRefInputs = self => self.get_ref_inputs.bind(self)();
+export const votingProposalBuilder_hasPlutusScripts = self => self.has_plutus_scripts.bind(self)();
+export const votingProposalBuilder_build = self => self.build.bind(self)();
+
+// VotingProposals
+export const votingProposals_new = CSL.VotingProposals.new();
+
 // Withdrawals
 export const withdrawals_new = () => CSL.Withdrawals.new();
+
+// WithdrawalsBuilder
+export const withdrawalsBuilder_new = CSL.WithdrawalsBuilder.new();
+export const withdrawalsBuilder_addWithPlutusWitness = self => address => coin => witness => errorableToPurs(self.add_with_plutus_witness.bind(self), address, coin, witness);
+export const withdrawalsBuilder_addWithNativeScript = self => address => coin => native_script_source => errorableToPurs(self.add_with_native_script.bind(self), address, coin, native_script_source);
+export const withdrawalsBuilder_getPlutusWitnesses = self => self.get_plutus_witnesses.bind(self)();
+export const withdrawalsBuilder_getRefInputs = self => self.get_ref_inputs.bind(self)();
+export const withdrawalsBuilder_getNativeScripts = self => self.get_native_scripts.bind(self)();
+export const withdrawalsBuilder_getTotalWithdrawals = self => self.get_total_withdrawals.bind(self)();
+export const withdrawalsBuilder_hasPlutusScripts = self => self.has_plutus_scripts.bind(self)();
+export const withdrawalsBuilder_build = self => self.build.bind(self)();
 
 
 export const makeVkeyWitness = tx_body_hash => sk => CSL.make_vkey_witness(tx_body_hash, sk);

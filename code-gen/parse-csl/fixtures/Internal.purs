@@ -7,13 +7,17 @@ import Data.Argonaut (Json, JsonDecodeError(TypeMismatch), jsonParser, stringify
 import Data.Bifunctor (lmap)
 import Data.ByteArray (ByteArray)
 import Data.Either (Either, note)
+import Data.Enum.Generic (class GenericBoundedEnum, genericFromEnum, genericToEnum)
+import Data.Generic.Rep (class Generic)
 import Data.Map (Map)
 import Data.Map as Map
-import Data.Maybe (Maybe(Nothing, Just))
+import Data.Maybe (Maybe(Nothing, Just), fromJust)
 import Data.Profunctor.Strong ((***))
 import Data.Tuple (Tuple(Tuple))
 import Data.Tuple.Nested (type (/\), (/\))
+import Partial.Unsafe (unsafePartial)
 import Type.Proxy (Proxy(Proxy))
+import Unsafe.Coerce (unsafeCoerce)
 
 -- all types
 
@@ -43,6 +47,16 @@ foreign import _fromBytes
 -- json
 
 class IsCsl a <= IsJson (a :: Type)
+
+-- enums
+
+class IsCslEnum e f | e -> f, f -> e
+
+toCslEnum :: forall e f rep. IsCslEnum e f => Generic e rep => GenericBoundedEnum rep => e -> f
+toCslEnum = unsafeCoerce <<< genericFromEnum
+
+fromCslEnum :: forall e f rep. IsCslEnum e f => Generic e rep => GenericBoundedEnum rep => f -> e
+fromCslEnum = unsafePartial fromJust <<< genericToEnum <<< unsafeCoerce
 
 -- containers
 
