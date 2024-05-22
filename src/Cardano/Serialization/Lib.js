@@ -236,7 +236,7 @@ export const changeConfig_changeScriptRef = self => script_ref =>
   self.change_script_ref.bind(self)(script_ref);
 
 // Committee
-export const committee_new = quorum_threshold => CSL.Committee.new(quorum_threshold);
+export const committee_new = quorum_threshold => () => CSL.Committee.new(quorum_threshold);
 export const committee_membersKeys = self => self.members_keys.bind(self)();
 export const committee_quorumThreshold = self => self.quorum_threshold.bind(self)();
 export const committee_addMember = self => committee_cold_credential => epoch => () =>

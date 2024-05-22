@@ -1621,7 +1621,7 @@ instance IsCsl ChangeConfig where
 
 foreign import data Committee :: Type
 
-foreign import committee_new :: UnitInterval -> Committee
+foreign import committee_new :: UnitInterval -> Effect Committee
 foreign import committee_membersKeys :: Committee -> Credentials
 foreign import committee_quorumThreshold :: Committee -> UnitInterval
 foreign import committee_addMember :: Committee -> Credential -> Number -> Effect Unit

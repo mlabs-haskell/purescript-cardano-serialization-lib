@@ -530,6 +530,7 @@ mutating =
     , inClass "PrivateKey" ["generate_ed25519", "generate_ed25519extended"]
     , keys "ProposedProtocolParameterUpdates"
     , keys "Withdrawals"
+    , inClass "Committee" ["new"]
     ] ++ map (list . fst) listTypes
   where
     inClass name ms = Set.fromList $ fmap (name, ) ms
