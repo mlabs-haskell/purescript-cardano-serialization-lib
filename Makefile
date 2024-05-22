@@ -1,6 +1,5 @@
 .PHONY: build test run watch serve format check-format code-gen copy
 
-ps-sources := $(shell fd --no-ignore-parent -epurs)
 nix-sources := $(shell fd --no-ignore-parent -enix --exclude='spago*')
 js-sources := $(shell fd --no-ignore-parent -ejs -ecjs)
 
