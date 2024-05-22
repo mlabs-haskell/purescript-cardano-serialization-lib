@@ -1,8 +1,10 @@
 "use strict";
 
+// eslint-disable-next-line no-unused-vars
 import * as CSL from "@mlabs-haskell/cardano-serialization-lib-gc";
 
 // Pass in a function and its list of arguments, that is expected to fail on evaluation, wraps in Either
+// eslint-disable-next-line no-unused-vars
 function errorableToPurs(f, ...vars) {
   try {
     return f(...vars);
@@ -224,26 +226,6 @@ export const certificate_hasRequiredScriptWitness = self =>
 // Certificates
 export const certificates_new = () => CSL.Certificates.new();
 
-// CertificatesBuilder
-export const certificatesBuilder_new = CSL.CertificatesBuilder.new();
-export const certificatesBuilder_addWithPlutusWitness = self => cert => witness =>
-  errorableToPurs(self.add_with_plutus_witness.bind(self), cert, witness);
-export const certificatesBuilder_addWithNativeScript = self => cert => native_script_source =>
-  errorableToPurs(self.add_with_native_script.bind(self), cert, native_script_source);
-export const certificatesBuilder_getPlutusWitnesses = self =>
-  self.get_plutus_witnesses.bind(self)();
-export const certificatesBuilder_getRefInputs = self => self.get_ref_inputs.bind(self)();
-export const certificatesBuilder_getNativeScripts = self =>
-  self.get_native_scripts.bind(self)();
-export const certificatesBuilder_getCertificatesRefund = self => pool_deposit => key_deposit =>
-  self.get_certificates_refund.bind(self)(pool_deposit, key_deposit);
-export const certificatesBuilder_getCertificatesDeposit =
-  self => pool_deposit => key_deposit =>
-    self.get_certificates_deposit.bind(self)(pool_deposit, key_deposit);
-export const certificatesBuilder_hasPlutusScripts = self =>
-  self.has_plutus_scripts.bind(self)();
-export const certificatesBuilder_build = self => self.build.bind(self)();
-
 // ChangeConfig
 export const changeConfig_new = address => CSL.ChangeConfig.new(address);
 export const changeConfig_changeAddress = self => address =>
@@ -257,8 +239,8 @@ export const changeConfig_changeScriptRef = self => script_ref =>
 export const committee_new = quorum_threshold => CSL.Committee.new(quorum_threshold);
 export const committee_membersKeys = self => self.members_keys.bind(self)();
 export const committee_quorumThreshold = self => self.quorum_threshold.bind(self)();
-export const committee_addMember = self => committee_cold_credential => epoch =>
-  errorableToPurs(self.add_member.bind(self), committee_cold_credential, epoch);
+export const committee_addMember = self => committee_cold_credential => epoch => () =>
+  self.add_member.bind(self)(committee_cold_credential, epoch);
 export const committee_getMemberEpoch = self => committee_cold_credential =>
   self.get_member_epoch.bind(self)(committee_cold_credential);
 
@@ -1569,32 +1551,6 @@ export const voter_toKeyHash = self => self.to_key_hash.bind(self)();
 // Voters
 export const voters_new = CSL.Voters.new();
 
-// VotingBuilder
-export const votingBuilder_new = CSL.VotingBuilder.new();
-export const votingBuilder_addWithPlutusWitness =
-  self => voter => gov_action_id => voting_procedure => witness =>
-    errorableToPurs(
-      self.add_with_plutus_witness.bind(self),
-      voter,
-      gov_action_id,
-      voting_procedure,
-      witness
-    );
-export const votingBuilder_addWithNativeScript =
-  self => voter => gov_action_id => voting_procedure => native_script_source =>
-    errorableToPurs(
-      self.add_with_native_script.bind(self),
-      voter,
-      gov_action_id,
-      voting_procedure,
-      native_script_source
-    );
-export const votingBuilder_getPlutusWitnesses = self => self.get_plutus_witnesses.bind(self)();
-export const votingBuilder_getRefInputs = self => self.get_ref_inputs.bind(self)();
-export const votingBuilder_getNativeScripts = self => self.get_native_scripts.bind(self)();
-export const votingBuilder_hasPlutusScripts = self => self.has_plutus_scripts.bind(self)();
-export const votingBuilder_build = self => self.build.bind(self)();
-
 // VotingProcedure
 export const votingProcedure_new = vote => CSL.VotingProcedure.new(vote);
 export const votingProcedure_newWithAnchor = vote => anchor =>
@@ -1616,45 +1572,11 @@ export const votingProposal_deposit = self => self.deposit.bind(self)();
 export const votingProposal_new = governance_action => anchor => reward_account => deposit =>
   CSL.VotingProposal.new(governance_action, anchor, reward_account, deposit);
 
-// VotingProposalBuilder
-export const votingProposalBuilder_new = CSL.VotingProposalBuilder.new();
-export const votingProposalBuilder_addWithPlutusWitness = self => proposal => witness =>
-  errorableToPurs(self.add_with_plutus_witness.bind(self), proposal, witness);
-export const votingProposalBuilder_getPlutusWitnesses = self =>
-  self.get_plutus_witnesses.bind(self)();
-export const votingProposalBuilder_getRefInputs = self => self.get_ref_inputs.bind(self)();
-export const votingProposalBuilder_hasPlutusScripts = self =>
-  self.has_plutus_scripts.bind(self)();
-export const votingProposalBuilder_build = self => self.build.bind(self)();
-
 // VotingProposals
 export const votingProposals_new = CSL.VotingProposals.new();
 
 // Withdrawals
 export const withdrawals_new = () => CSL.Withdrawals.new();
-
-// WithdrawalsBuilder
-export const withdrawalsBuilder_new = CSL.WithdrawalsBuilder.new();
-export const withdrawalsBuilder_addWithPlutusWitness = self => address => coin => witness =>
-  errorableToPurs(self.add_with_plutus_witness.bind(self), address, coin, witness);
-export const withdrawalsBuilder_addWithNativeScript =
-  self => address => coin => native_script_source =>
-    errorableToPurs(
-      self.add_with_native_script.bind(self),
-      address,
-      coin,
-      native_script_source
-    );
-export const withdrawalsBuilder_getPlutusWitnesses = self =>
-  self.get_plutus_witnesses.bind(self)();
-export const withdrawalsBuilder_getRefInputs = self => self.get_ref_inputs.bind(self)();
-export const withdrawalsBuilder_getNativeScripts = self =>
-  self.get_native_scripts.bind(self)();
-export const withdrawalsBuilder_getTotalWithdrawals = self =>
-  self.get_total_withdrawals.bind(self)();
-export const withdrawalsBuilder_hasPlutusScripts = self =>
-  self.has_plutus_scripts.bind(self)();
-export const withdrawalsBuilder_build = self => self.build.bind(self)();
 
 export const makeVkeyWitness = tx_body_hash => sk => CSL.make_vkey_witness(tx_body_hash, sk);
 export const hashAuxiliaryData = auxiliary_data => CSL.hash_auxiliary_data(auxiliary_data);

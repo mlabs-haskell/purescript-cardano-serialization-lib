@@ -436,7 +436,7 @@ data Pureness = Pure | Mutating | Throwing
 getPureness :: String -> Fun -> Pureness
 getPureness className Fun{..}
   | isConvertor fun'name = Pure
-  | take 4 fun'name == "set_" = Mutating
+  | take 4 fun'name `elem` [ "set_", "add_" ] = Mutating
   | fun'res == "void" = Throwing
   | isMutating && not isThrowing = Mutating
   | not isMutating && not isThrowing = Pure

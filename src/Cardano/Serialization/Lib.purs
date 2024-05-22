@@ -125,16 +125,6 @@ module Cardano.Serialization.Lib
   , certificate_asVoteRegistrationAndDelegation
   , certificate_hasRequiredScriptWitness
   , certificates_new
-  , certificatesBuilder_new
-  , certificatesBuilder_addWithPlutusWitness
-  , certificatesBuilder_addWithNativeScript
-  , certificatesBuilder_getPlutusWitnesses
-  , certificatesBuilder_getRefInputs
-  , certificatesBuilder_getNativeScripts
-  , certificatesBuilder_getCertificatesRefund
-  , certificatesBuilder_getCertificatesDeposit
-  , certificatesBuilder_hasPlutusScripts
-  , certificatesBuilder_build
   , changeConfig_new
   , changeConfig_changeAddress
   , changeConfig_changePlutusData
@@ -827,14 +817,6 @@ module Cardano.Serialization.Lib
   , voter_hasScriptCredentials
   , voter_toKeyHash
   , voters_new
-  , votingBuilder_new
-  , votingBuilder_addWithPlutusWitness
-  , votingBuilder_addWithNativeScript
-  , votingBuilder_getPlutusWitnesses
-  , votingBuilder_getRefInputs
-  , votingBuilder_getNativeScripts
-  , votingBuilder_hasPlutusScripts
-  , votingBuilder_build
   , votingProcedure_new
   , votingProcedure_newWithAnchor
   , votingProcedure_voteKind
@@ -847,23 +829,8 @@ module Cardano.Serialization.Lib
   , votingProposal_rewardAccount
   , votingProposal_deposit
   , votingProposal_new
-  , votingProposalBuilder_new
-  , votingProposalBuilder_addWithPlutusWitness
-  , votingProposalBuilder_getPlutusWitnesses
-  , votingProposalBuilder_getRefInputs
-  , votingProposalBuilder_hasPlutusScripts
-  , votingProposalBuilder_build
   , votingProposals_new
   , withdrawals_new
-  , withdrawalsBuilder_new
-  , withdrawalsBuilder_addWithPlutusWitness
-  , withdrawalsBuilder_addWithNativeScript
-  , withdrawalsBuilder_getPlutusWitnesses
-  , withdrawalsBuilder_getRefInputs
-  , withdrawalsBuilder_getNativeScripts
-  , withdrawalsBuilder_getTotalWithdrawals
-  , withdrawalsBuilder_hasPlutusScripts
-  , withdrawalsBuilder_build
   , makeVkeyWitness
   , hashAuxiliaryData
   , hashTransaction
@@ -891,7 +858,6 @@ module Cardano.Serialization.Lib
   , ByronAddress
   , Certificate
   , Certificates
-  , CertificatesBuilder
   , ChangeConfig
   , Committee
   , CommitteeColdResign
@@ -1038,14 +1004,11 @@ module Cardano.Serialization.Lib
   , VoteRegistrationAndDelegation
   , Voter
   , Voters
-  , VotingBuilder
   , VotingProcedure
   , VotingProcedures
   , VotingProposal
-  , VotingProposalBuilder
   , VotingProposals
   , Withdrawals
-  , WithdrawalsBuilder
   , VoteKind
   , ScriptSchema
   , CredKind
@@ -1641,25 +1604,6 @@ instance Show Certificates where
 instance IsListContainer Certificates Certificate
 
 --------------------------------------------------------------------------------
--- Certificates builder
-
-foreign import data CertificatesBuilder :: Type
-
-foreign import certificatesBuilder_new :: CertificatesBuilder
-foreign import certificatesBuilder_addWithPlutusWitness :: CertificatesBuilder -> Certificate -> PlutusWitness -> Nullable Unit
-foreign import certificatesBuilder_addWithNativeScript :: CertificatesBuilder -> Certificate -> NativeScriptSource -> Nullable Unit
-foreign import certificatesBuilder_getPlutusWitnesses :: CertificatesBuilder -> PlutusWitnesses
-foreign import certificatesBuilder_getRefInputs :: CertificatesBuilder -> TransactionInputs
-foreign import certificatesBuilder_getNativeScripts :: CertificatesBuilder -> NativeScripts
-foreign import certificatesBuilder_getCertificatesRefund :: CertificatesBuilder -> BigNum -> BigNum -> Value
-foreign import certificatesBuilder_getCertificatesDeposit :: CertificatesBuilder -> BigNum -> BigNum -> BigNum
-foreign import certificatesBuilder_hasPlutusScripts :: CertificatesBuilder -> Boolean
-foreign import certificatesBuilder_build :: CertificatesBuilder -> Certificates
-
-instance IsCsl CertificatesBuilder where
-  className _ = "CertificatesBuilder"
-
---------------------------------------------------------------------------------
 -- Change config
 
 foreign import data ChangeConfig :: Type
@@ -1680,7 +1624,7 @@ foreign import data Committee :: Type
 foreign import committee_new :: UnitInterval -> Committee
 foreign import committee_membersKeys :: Committee -> Credentials
 foreign import committee_quorumThreshold :: Committee -> UnitInterval
-foreign import committee_addMember :: Committee -> Credential -> Number -> Nullable Unit
+foreign import committee_addMember :: Committee -> Credential -> Number -> Effect Unit
 foreign import committee_getMemberEpoch :: Committee -> Credential -> Nullable Number
 
 instance IsCsl Committee where
@@ -5032,23 +4976,6 @@ instance Show Voters where
 instance IsListContainer Voters Voter
 
 --------------------------------------------------------------------------------
--- Voting builder
-
-foreign import data VotingBuilder :: Type
-
-foreign import votingBuilder_new :: VotingBuilder
-foreign import votingBuilder_addWithPlutusWitness :: VotingBuilder -> Voter -> GovernanceActionId -> VotingProcedure -> PlutusWitness -> Nullable Unit
-foreign import votingBuilder_addWithNativeScript :: VotingBuilder -> Voter -> GovernanceActionId -> VotingProcedure -> NativeScriptSource -> Nullable Unit
-foreign import votingBuilder_getPlutusWitnesses :: VotingBuilder -> PlutusWitnesses
-foreign import votingBuilder_getRefInputs :: VotingBuilder -> TransactionInputs
-foreign import votingBuilder_getNativeScripts :: VotingBuilder -> NativeScripts
-foreign import votingBuilder_hasPlutusScripts :: VotingBuilder -> Boolean
-foreign import votingBuilder_build :: VotingBuilder -> VotingProcedures
-
-instance IsCsl VotingBuilder where
-  className _ = "VotingBuilder"
-
---------------------------------------------------------------------------------
 -- Voting procedure
 
 foreign import data VotingProcedure :: Type
@@ -5121,21 +5048,6 @@ instance Show VotingProposal where
   show = showViaJson
 
 --------------------------------------------------------------------------------
--- Voting proposal builder
-
-foreign import data VotingProposalBuilder :: Type
-
-foreign import votingProposalBuilder_new :: VotingProposalBuilder
-foreign import votingProposalBuilder_addWithPlutusWitness :: VotingProposalBuilder -> VotingProposal -> PlutusWitness -> Nullable Unit
-foreign import votingProposalBuilder_getPlutusWitnesses :: VotingProposalBuilder -> PlutusWitnesses
-foreign import votingProposalBuilder_getRefInputs :: VotingProposalBuilder -> TransactionInputs
-foreign import votingProposalBuilder_hasPlutusScripts :: VotingProposalBuilder -> Boolean
-foreign import votingProposalBuilder_build :: VotingProposalBuilder -> VotingProposals
-
-instance IsCsl VotingProposalBuilder where
-  className _ = "VotingProposalBuilder"
-
---------------------------------------------------------------------------------
 -- Voting proposals
 
 foreign import data VotingProposals :: Type
@@ -5180,24 +5092,6 @@ instance Show Withdrawals where
   show = showViaJson
 
 instance IsMapContainer Withdrawals RewardAddress BigNum
-
---------------------------------------------------------------------------------
--- Withdrawals builder
-
-foreign import data WithdrawalsBuilder :: Type
-
-foreign import withdrawalsBuilder_new :: WithdrawalsBuilder
-foreign import withdrawalsBuilder_addWithPlutusWitness :: WithdrawalsBuilder -> RewardAddress -> BigNum -> PlutusWitness -> Nullable Unit
-foreign import withdrawalsBuilder_addWithNativeScript :: WithdrawalsBuilder -> RewardAddress -> BigNum -> NativeScriptSource -> Nullable Unit
-foreign import withdrawalsBuilder_getPlutusWitnesses :: WithdrawalsBuilder -> PlutusWitnesses
-foreign import withdrawalsBuilder_getRefInputs :: WithdrawalsBuilder -> TransactionInputs
-foreign import withdrawalsBuilder_getNativeScripts :: WithdrawalsBuilder -> NativeScripts
-foreign import withdrawalsBuilder_getTotalWithdrawals :: WithdrawalsBuilder -> Value
-foreign import withdrawalsBuilder_hasPlutusScripts :: WithdrawalsBuilder -> Boolean
-foreign import withdrawalsBuilder_build :: WithdrawalsBuilder -> Withdrawals
-
-instance IsCsl WithdrawalsBuilder where
-  className _ = "WithdrawalsBuilder"
 
 -- enums
 

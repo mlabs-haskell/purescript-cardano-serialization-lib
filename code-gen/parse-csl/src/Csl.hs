@@ -27,7 +27,8 @@ getEnums = enums <$> readFile file
 unneededClasses :: [String]
 unneededClasses =
   [ -- builder classes, not used by `ps-cardano-types`
-    "TransactionBuilder"
+    "CertificatesBuilder"
+  , "TransactionBuilder"
   , "TransactionBuilderConfigBuilder"
   , "TransactionBuilderConfig"
   , "TransactionOutputAmountBuilder"
@@ -35,6 +36,9 @@ unneededClasses =
   , "TxBuilderConstants"
   , "TxInputsBuilder"
   , "MintBuilder"
+  , "VotingBuilder"
+  , "VotingProposalBuilder"
+  , "WithdrawalsBuilder"
   -- block data, not needed for `ps-cardano-types`
   , "Block"
   , "Header"
