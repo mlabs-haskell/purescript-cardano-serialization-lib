@@ -1,5 +1,6 @@
 .PHONY: build test run watch serve format check-format code-gen copy
 
+js-sources := $(shell fd --no-ignore-parent -ejs -ecjs)
 esbuild-cmd := "esbuild \
 			./output/Main/index.js \
 			--bundle \
@@ -24,7 +25,8 @@ serve: run
 	(cd demo && npm run build && npm run serve)
 
 format:
-	purs-tidy format-in-place "src/**/*.purs"
+	@purs-tidy format-in-place "src/**/*.purs"
+	@prettier -w ${js-sources}
 
 check-format:
 	purs-tidy check "src/**/*.purs"
