@@ -50,7 +50,7 @@ class IsCsl a <= IsJson (a :: Type)
 
 -- enums
 
-class IsCslEnum e f | e -> f, f -> e
+class IsCslEnum (e :: Type) (f :: Type) | e -> f, f -> e
 
 toCslEnum :: forall e f rep. IsCslEnum e f => Generic e rep => GenericBoundedEnum rep => e -> f
 toCslEnum = unsafeCoerce <<< genericFromEnum
