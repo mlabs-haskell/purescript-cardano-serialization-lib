@@ -17,8 +17,9 @@ import Data.Set (Set)
 import Data.Set qualified as Set
 import Data.Functor ((<&>))
 import Data.List qualified as L (intercalate, sort, nub, null, foldl', isPrefixOf, isSuffixOf)
+import Data.List.Extra qualified as L (stripSuffix)
 import Data.List.Split (splitOn)
-import Data.Maybe (mapMaybe, listToMaybe, catMaybes)
+import Data.Maybe (fromMaybe, mapMaybe, listToMaybe, catMaybes)
 import Data.Text qualified as T (pack, unpack, replace)
 import Data.Text (Text)
 import Data.Text.Manipulate qualified as T (toCamel, upperHead, lowerHead, toTitle)
@@ -134,16 +135,25 @@ isListContainer (Class _ methods) = do
     getElement (Method _ (Fun "add" [Arg _ elemType] _)) = Just elemType
     getElement _ = Nothing
 
-isMapContainer :: Class -> Maybe (String, String)
+isMapContainer :: Class -> Maybe (String, String, Bool)
 isMapContainer (Class _ methods) = do
   guard $ all (`elem` methodNames) [ "insert", "get", "len", "keys" ]
-  listToMaybe $ mapMaybe getKeyValue methods
+  let kv = mapMaybe getKeyValue methods
+      isMultiMap = length (L.nub $ snd <$> kv) > 1 
+  (keyType, valueType) <- listToMaybe kv
+  pure (keyType, valueType, isMultiMap)
   where
     methodNames = fun'name . method'fun <$> methods
+
     getKeyValue :: Method -> Maybe (String, String)
-    getKeyValue (Method _ (Fun "insert" [Arg _ keyType, Arg _ valueType] _)) =
-      Just (keyType, valueType)
-    getKeyValue _ = Nothing
+    getKeyValue method =
+      case method of
+        Method _ (Fun "insert" [Arg _ keyType, Arg _ valueType] _) ->
+          Just (keyType, valueType)
+        Method _ (Fun "get" [Arg _ keyType] valueType) ->
+          Just (keyType, fromMaybe valueType $ L.stripSuffix " | void" valueType)
+        _ ->
+          Nothing
 
 -- process standalone functions
 funJs :: Fun -> String
@@ -228,8 +238,9 @@ containerInstances cls@(Class name _) =
   catMaybes
   [ isListContainer cls <&> \elemType ->
     "instance IsListContainer " <> unwords [ name, elemType ]
-  , isMapContainer cls <&> \(keyType, valueType) ->
-      "instance IsMapContainer " <> unwords [ name, keyType, valueType ]
+  , isMapContainer cls <&> \(keyType, valueType, isMultiMap) ->
+      (if isMultiMap then "instance IsMultiMapContainer " else "instance IsMapContainer ")
+        <> unwords [ name, keyType, valueType ]
   ]
   where
     notEmptyList :: [a] -> Maybe [a]

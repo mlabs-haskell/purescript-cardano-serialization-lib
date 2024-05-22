@@ -50,7 +50,7 @@ class IsCsl a <= IsJson (a :: Type)
 
 -- enums
 
-class IsCslEnum e f | e -> f, f -> e
+class IsCslEnum (e :: Type) (f :: Type) | e -> f, f -> e
 
 toCslEnum :: forall e f rep. IsCslEnum e f => Generic e rep => GenericBoundedEnum rep => e -> f
 toCslEnum = unsafeCoerce <<< genericFromEnum
@@ -73,6 +73,59 @@ unpackListContainer = _unpackListContainer
 
 foreign import _packListContainer :: forall c e. Boolean -> String -> Array e -> c
 foreign import _unpackListContainer :: forall c e. c -> Array e
+
+class IsMultiMapContainer (c :: Type) (k :: Type) (v :: Type) | c -> k, c -> v
+
+packMultiMapContainer
+  :: forall c k v
+   . IsMultiMapContainer c k v
+  => IsCsl c
+  => Array (k /\ v)
+  -> c
+packMultiMapContainer = map toKeyValues >>> _packMapContainer false (className (Proxy :: Proxy c))
+  where
+  toKeyValues (Tuple key value) = { key, value }
+
+packMultiMapContainerWithClone
+  :: forall c k v
+   . IsMultiMapContainer c k v
+  => IsCsl c
+  => Array (k /\ v)
+  -> c
+packMultiMapContainerWithClone = map toKeyValues >>> _packMapContainer true (className (Proxy :: Proxy c))
+  where
+  toKeyValues (Tuple key value) = { key, value }
+
+packMultiMapContainerFromMap
+  :: forall c k v
+   . IsMultiMapContainer c k v
+  => IsCsl c
+  => IsCsl k
+  => IsCsl v
+  => Map k v
+  -> c
+packMultiMapContainerFromMap = packMultiMapContainer <<< Map.toUnfoldable
+
+unpackMultiMapContainer
+  :: forall c k v
+   . IsMultiMapContainer c k v
+  => c
+  -> Array (k /\ (Array v))
+unpackMultiMapContainer = _unpackMultiMapContainer >>> map fromKV
+  where
+  fromKV { key, value } = key /\ value
+
+unpackMultiMapContainerToMapWith
+  :: forall c k v k1 v1
+   . IsMultiMapContainer c k v
+  => Ord k1
+  => (k -> k1)
+  -> (Array v -> v1)
+  -> c
+  -> Map k1 v1
+unpackMultiMapContainerToMapWith mapKey mapValue container =
+  unpackMultiMapContainer container
+    # map (mapKey *** mapValue) >>> Map.fromFoldable
 
 class IsMapContainer (c :: Type) (k :: Type) (v :: Type) | c -> k, c -> v
 
@@ -138,6 +191,11 @@ foreign import _unpackMapContainer
   :: forall c k v
    . c
   -> Array { key :: k, value :: v }
+
+foreign import _unpackMultiMapContainer
+  :: forall c k v
+   . c
+  -> Array { key :: k, value :: Array v }
 
 -- Aeson
 

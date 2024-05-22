@@ -58,6 +58,15 @@ export const _unpackMapContainer = container => {
   return res;
 };
 
+export const _unpackMultiMapContainer = container => {
+  const keys = _unpackListContainer(container.keys());
+  const res = [];
+  for (let key of keys) {
+    res.push({ key, value: _unpackListContainer(container.get(key)) });
+  }
+  return res;
+};
+
 export const _cslFromJson = className => nothing => just => json => {
   try {
     return just(csl[className].from_json(json));

@@ -1064,6 +1064,7 @@ import Cardano.Serialization.Lib.Internal
   , class IsJson
   , class IsListContainer
   , class IsMapContainer
+  , class IsMultiMapContainer
   , cslFromAeson
   , cslFromAesonViaBytes
   , cslToAeson
@@ -1081,8 +1082,12 @@ import Cardano.Serialization.Lib.Internal
   , packListContainer
   , packMapContainer
   , packMapContainerFromMap
+  , packMultiMapContainer
+  , packMultiMapContainerFromMap
   , unpackMapContainerToMapWith
   , unpackMapContainer
+  , unpackMultiMapContainer
+  , unpackMultiMapContainerToMapWith
   , unpackListContainer
   , cslFromAeson
   , cslToAeson
@@ -2705,7 +2710,7 @@ instance DecodeAeson Mint where
 instance Show Mint where
   show = showViaJson
 
-instance IsMapContainer Mint ScriptHash MintAssets
+instance IsMultiMapContainer Mint ScriptHash MintAssets
 
 --------------------------------------------------------------------------------
 -- Mint assets
