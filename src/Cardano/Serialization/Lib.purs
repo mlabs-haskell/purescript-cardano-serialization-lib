@@ -1091,6 +1091,7 @@ module Cardano.Serialization.Lib
   , TransactionMetadatumKindValues(..)
   , PlutusDataKindValues(..)
   ) where
+
 import Prelude
 
 import Cardano.Serialization.Lib.Internal
@@ -1129,7 +1130,7 @@ import Cardano.Serialization.Lib.Internal
   ) as X
 import Aeson (class DecodeAeson, class EncodeAeson)
 import Data.ByteArray (ByteArray)
-import Data.Generic.Rep (class Generic) 
+import Data.Generic.Rep (class Generic)
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable)
 import Data.Show.Generic (genericShow)
@@ -1138,7 +1139,6 @@ import Effect (Effect)
 class IsStr a where
   fromStr :: String -> Maybe a
   toStr :: a -> String
-
 
 -- functions
 -- | Make vkey witness
@@ -1173,10 +1173,7 @@ foreign import minFee :: Transaction -> LinearFee -> BigNum
 -- > minScriptFee tx exUnitPrices
 foreign import minScriptFee :: Transaction -> ExUnitPrices -> BigNum
 
-
-
 -- classes
-
 
 --------------------------------------------------------------------------------
 -- Address
@@ -1192,11 +1189,17 @@ foreign import address_networkId :: Address -> Number
 
 instance IsCsl Address where
   className _ = "Address"
+
 instance IsBytes Address
 instance IsJson Address
-instance EncodeAeson Address where encodeAeson = cslToAeson
-instance DecodeAeson Address where decodeAeson = cslFromAeson
-instance Show Address where show = showViaJson
+instance EncodeAeson Address where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Address where
+  decodeAeson = cslFromAeson
+
+instance Show Address where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Anchor
@@ -1209,11 +1212,17 @@ foreign import anchor_new :: URL -> AnchorDataHash -> Anchor
 
 instance IsCsl Anchor where
   className _ = "Anchor"
+
 instance IsBytes Anchor
 instance IsJson Anchor
-instance EncodeAeson Anchor where encodeAeson = cslToAeson
-instance DecodeAeson Anchor where decodeAeson = cslFromAeson
-instance Show Anchor where show = showViaJson
+instance EncodeAeson Anchor where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Anchor where
+  decodeAeson = cslFromAeson
+
+instance Show Anchor where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Anchor data hash
@@ -1225,10 +1234,16 @@ foreign import anchorDataHash_fromBech32 :: String -> Nullable AnchorDataHash
 
 instance IsCsl AnchorDataHash where
   className _ = "AnchorDataHash"
+
 instance IsBytes AnchorDataHash
-instance EncodeAeson AnchorDataHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson AnchorDataHash where decodeAeson = cslFromAesonViaBytes
-instance Show AnchorDataHash where show = showViaBytes
+instance EncodeAeson AnchorDataHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson AnchorDataHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show AnchorDataHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Asset name
@@ -1240,11 +1255,17 @@ foreign import assetName_name :: AssetName -> ByteArray
 
 instance IsCsl AssetName where
   className _ = "AssetName"
+
 instance IsBytes AssetName
 instance IsJson AssetName
-instance EncodeAeson AssetName where encodeAeson = cslToAeson
-instance DecodeAeson AssetName where decodeAeson = cslFromAeson
-instance Show AssetName where show = showViaJson
+instance EncodeAeson AssetName where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson AssetName where
+  decodeAeson = cslFromAeson
+
+instance Show AssetName where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Asset names
@@ -1255,11 +1276,17 @@ foreign import assetNames_new :: Effect AssetNames
 
 instance IsCsl AssetNames where
   className _ = "AssetNames"
+
 instance IsBytes AssetNames
 instance IsJson AssetNames
-instance EncodeAeson AssetNames where encodeAeson = cslToAeson
-instance DecodeAeson AssetNames where decodeAeson = cslFromAeson
-instance Show AssetNames where show = showViaJson
+instance EncodeAeson AssetNames where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson AssetNames where
+  decodeAeson = cslFromAeson
+
+instance Show AssetNames where
+  show = showViaJson
 
 instance IsListContainer AssetNames AssetName
 
@@ -1272,11 +1299,17 @@ foreign import assets_new :: Effect Assets
 
 instance IsCsl Assets where
   className _ = "Assets"
+
 instance IsBytes Assets
 instance IsJson Assets
-instance EncodeAeson Assets where encodeAeson = cslToAeson
-instance DecodeAeson Assets where decodeAeson = cslFromAeson
-instance Show Assets where show = showViaJson
+instance EncodeAeson Assets where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Assets where
+  decodeAeson = cslFromAeson
+
+instance Show Assets where
+  show = showViaJson
 
 instance IsMapContainer Assets AssetName BigNum
 
@@ -1297,11 +1330,17 @@ foreign import auxiliaryData_setPreferAlonzoFormat :: AuxiliaryData -> Boolean -
 
 instance IsCsl AuxiliaryData where
   className _ = "AuxiliaryData"
+
 instance IsBytes AuxiliaryData
 instance IsJson AuxiliaryData
-instance EncodeAeson AuxiliaryData where encodeAeson = cslToAeson
-instance DecodeAeson AuxiliaryData where decodeAeson = cslFromAeson
-instance Show AuxiliaryData where show = showViaJson
+instance EncodeAeson AuxiliaryData where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson AuxiliaryData where
+  decodeAeson = cslFromAeson
+
+instance Show AuxiliaryData where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Auxiliary data hash
@@ -1313,10 +1352,16 @@ foreign import auxiliaryDataHash_fromBech32 :: String -> Nullable AuxiliaryDataH
 
 instance IsCsl AuxiliaryDataHash where
   className _ = "AuxiliaryDataHash"
+
 instance IsBytes AuxiliaryDataHash
-instance EncodeAeson AuxiliaryDataHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson AuxiliaryDataHash where decodeAeson = cslFromAesonViaBytes
-instance Show AuxiliaryDataHash where show = showViaBytes
+instance EncodeAeson AuxiliaryDataHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson AuxiliaryDataHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show AuxiliaryDataHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Base address
@@ -1349,11 +1394,17 @@ foreign import bigInt_divCeil :: BigInt -> BigInt -> BigInt
 
 instance IsCsl BigInt where
   className _ = "BigInt"
+
 instance IsBytes BigInt
 instance IsJson BigInt
-instance EncodeAeson BigInt where encodeAeson = cslToAeson
-instance DecodeAeson BigInt where decodeAeson = cslFromAeson
-instance Show BigInt where show = showViaJson
+instance EncodeAeson BigInt where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson BigInt where
+  decodeAeson = cslFromAeson
+
+instance Show BigInt where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Big num
@@ -1377,11 +1428,17 @@ foreign import bigNum_max :: BigNum -> BigNum -> BigNum
 
 instance IsCsl BigNum where
   className _ = "BigNum"
+
 instance IsBytes BigNum
 instance IsJson BigNum
-instance EncodeAeson BigNum where encodeAeson = cslToAeson
-instance DecodeAeson BigNum where decodeAeson = cslFromAeson
-instance Show BigNum where show = showViaJson
+instance EncodeAeson BigNum where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson BigNum where
+  decodeAeson = cslFromAeson
+
+instance Show BigNum where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Bip32 private key
@@ -1428,10 +1485,16 @@ foreign import blockHash_fromBech32 :: String -> Nullable BlockHash
 
 instance IsCsl BlockHash where
   className _ = "BlockHash"
+
 instance IsBytes BlockHash
-instance EncodeAeson BlockHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson BlockHash where decodeAeson = cslFromAesonViaBytes
-instance Show BlockHash where show = showViaBytes
+instance EncodeAeson BlockHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson BlockHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show BlockHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Bootstrap witness
@@ -1446,11 +1509,17 @@ foreign import bootstrapWitness_new :: Vkey -> Ed25519Signature -> ByteArray -> 
 
 instance IsCsl BootstrapWitness where
   className _ = "BootstrapWitness"
+
 instance IsBytes BootstrapWitness
 instance IsJson BootstrapWitness
-instance EncodeAeson BootstrapWitness where encodeAeson = cslToAeson
-instance DecodeAeson BootstrapWitness where decodeAeson = cslFromAeson
-instance Show BootstrapWitness where show = showViaJson
+instance EncodeAeson BootstrapWitness where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson BootstrapWitness where
+  decodeAeson = cslFromAeson
+
+instance Show BootstrapWitness where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Bootstrap witnesses
@@ -1481,10 +1550,16 @@ foreign import byronAddress_fromAddress :: Address -> Nullable ByronAddress
 
 instance IsCsl ByronAddress where
   className _ = "ByronAddress"
+
 instance IsBytes ByronAddress
-instance EncodeAeson ByronAddress where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson ByronAddress where decodeAeson = cslFromAesonViaBytes
-instance Show ByronAddress where show = showViaBytes
+instance EncodeAeson ByronAddress where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson ByronAddress where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show ByronAddress where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Certificate
@@ -1530,11 +1605,17 @@ foreign import certificate_hasRequiredScriptWitness :: Certificate -> Boolean
 
 instance IsCsl Certificate where
   className _ = "Certificate"
+
 instance IsBytes Certificate
 instance IsJson Certificate
-instance EncodeAeson Certificate where encodeAeson = cslToAeson
-instance DecodeAeson Certificate where decodeAeson = cslFromAeson
-instance Show Certificate where show = showViaJson
+instance EncodeAeson Certificate where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Certificate where
+  decodeAeson = cslFromAeson
+
+instance Show Certificate where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Certificates
@@ -1545,11 +1626,17 @@ foreign import certificates_new :: Effect Certificates
 
 instance IsCsl Certificates where
   className _ = "Certificates"
+
 instance IsBytes Certificates
 instance IsJson Certificates
-instance EncodeAeson Certificates where encodeAeson = cslToAeson
-instance DecodeAeson Certificates where decodeAeson = cslFromAeson
-instance Show Certificates where show = showViaJson
+instance EncodeAeson Certificates where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Certificates where
+  decodeAeson = cslFromAeson
+
+instance Show Certificates where
+  show = showViaJson
 
 instance IsListContainer Certificates Certificate
 
@@ -1598,11 +1685,17 @@ foreign import committee_getMemberEpoch :: Committee -> Credential -> Nullable N
 
 instance IsCsl Committee where
   className _ = "Committee"
+
 instance IsBytes Committee
 instance IsJson Committee
-instance EncodeAeson Committee where encodeAeson = cslToAeson
-instance DecodeAeson Committee where decodeAeson = cslFromAeson
-instance Show Committee where show = showViaJson
+instance EncodeAeson Committee where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Committee where
+  decodeAeson = cslFromAeson
+
+instance Show Committee where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Committee cold resign
@@ -1617,11 +1710,17 @@ foreign import committeeColdResign_hasScriptCredentials :: CommitteeColdResign -
 
 instance IsCsl CommitteeColdResign where
   className _ = "CommitteeColdResign"
+
 instance IsBytes CommitteeColdResign
 instance IsJson CommitteeColdResign
-instance EncodeAeson CommitteeColdResign where encodeAeson = cslToAeson
-instance DecodeAeson CommitteeColdResign where decodeAeson = cslFromAeson
-instance Show CommitteeColdResign where show = showViaJson
+instance EncodeAeson CommitteeColdResign where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson CommitteeColdResign where
+  decodeAeson = cslFromAeson
+
+instance Show CommitteeColdResign where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Committee hot auth
@@ -1635,11 +1734,17 @@ foreign import committeeHotAuth_hasScriptCredentials :: CommitteeHotAuth -> Bool
 
 instance IsCsl CommitteeHotAuth where
   className _ = "CommitteeHotAuth"
+
 instance IsBytes CommitteeHotAuth
 instance IsJson CommitteeHotAuth
-instance EncodeAeson CommitteeHotAuth where encodeAeson = cslToAeson
-instance DecodeAeson CommitteeHotAuth where decodeAeson = cslFromAeson
-instance Show CommitteeHotAuth where show = showViaJson
+instance EncodeAeson CommitteeHotAuth where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson CommitteeHotAuth where
+  decodeAeson = cslFromAeson
+
+instance Show CommitteeHotAuth where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Constitution
@@ -1653,11 +1758,17 @@ foreign import constitution_newWithScriptHash :: Anchor -> ScriptHash -> Constit
 
 instance IsCsl Constitution where
   className _ = "Constitution"
+
 instance IsBytes Constitution
 instance IsJson Constitution
-instance EncodeAeson Constitution where encodeAeson = cslToAeson
-instance DecodeAeson Constitution where decodeAeson = cslFromAeson
-instance Show Constitution where show = showViaJson
+instance EncodeAeson Constitution where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Constitution where
+  decodeAeson = cslFromAeson
+
+instance Show Constitution where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Constr plutus data
@@ -1670,10 +1781,16 @@ foreign import constrPlutusData_new :: BigNum -> PlutusList -> ConstrPlutusData
 
 instance IsCsl ConstrPlutusData where
   className _ = "ConstrPlutusData"
+
 instance IsBytes ConstrPlutusData
-instance EncodeAeson ConstrPlutusData where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson ConstrPlutusData where decodeAeson = cslFromAesonViaBytes
-instance Show ConstrPlutusData where show = showViaBytes
+instance EncodeAeson ConstrPlutusData where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson ConstrPlutusData where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show ConstrPlutusData where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Cost model
@@ -1694,11 +1811,17 @@ foreign import costModel_len :: CostModel -> Effect Number
 
 instance IsCsl CostModel where
   className _ = "CostModel"
+
 instance IsBytes CostModel
 instance IsJson CostModel
-instance EncodeAeson CostModel where encodeAeson = cslToAeson
-instance DecodeAeson CostModel where decodeAeson = cslFromAeson
-instance Show CostModel where show = showViaJson
+instance EncodeAeson CostModel where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson CostModel where
+  decodeAeson = cslFromAeson
+
+instance Show CostModel where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Costmdls
@@ -1710,11 +1833,17 @@ foreign import costmdls_retainLanguageVersions :: Costmdls -> Languages -> Costm
 
 instance IsCsl Costmdls where
   className _ = "Costmdls"
+
 instance IsBytes Costmdls
 instance IsJson Costmdls
-instance EncodeAeson Costmdls where encodeAeson = cslToAeson
-instance DecodeAeson Costmdls where decodeAeson = cslFromAeson
-instance Show Costmdls where show = showViaJson
+instance EncodeAeson Costmdls where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Costmdls where
+  decodeAeson = cslFromAeson
+
+instance Show Costmdls where
+  show = showViaJson
 
 instance IsMapContainer Costmdls Language CostModel
 
@@ -1732,11 +1861,17 @@ foreign import credential_hasScriptHash :: Credential -> Boolean
 
 instance IsCsl Credential where
   className _ = "Credential"
+
 instance IsBytes Credential
 instance IsJson Credential
-instance EncodeAeson Credential where encodeAeson = cslToAeson
-instance DecodeAeson Credential where decodeAeson = cslFromAeson
-instance Show Credential where show = showViaJson
+instance EncodeAeson Credential where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Credential where
+  decodeAeson = cslFromAeson
+
+instance Show Credential where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Credentials
@@ -1747,11 +1882,17 @@ foreign import credentials_new :: Credentials
 
 instance IsCsl Credentials where
   className _ = "Credentials"
+
 instance IsBytes Credentials
 instance IsJson Credentials
-instance EncodeAeson Credentials where encodeAeson = cslToAeson
-instance DecodeAeson Credentials where decodeAeson = cslFromAeson
-instance Show Credentials where show = showViaJson
+instance EncodeAeson Credentials where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Credentials where
+  decodeAeson = cslFromAeson
+
+instance Show Credentials where
+  show = showViaJson
 
 instance IsListContainer Credentials Credential
 
@@ -1765,11 +1906,17 @@ foreign import dnsRecordAorAAAA_record :: DNSRecordAorAAAA -> String
 
 instance IsCsl DNSRecordAorAAAA where
   className _ = "DNSRecordAorAAAA"
+
 instance IsBytes DNSRecordAorAAAA
 instance IsJson DNSRecordAorAAAA
-instance EncodeAeson DNSRecordAorAAAA where encodeAeson = cslToAeson
-instance DecodeAeson DNSRecordAorAAAA where decodeAeson = cslFromAeson
-instance Show DNSRecordAorAAAA where show = showViaJson
+instance EncodeAeson DNSRecordAorAAAA where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DNSRecordAorAAAA where
+  decodeAeson = cslFromAeson
+
+instance Show DNSRecordAorAAAA where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- DNSRecord srv
@@ -1781,11 +1928,17 @@ foreign import dnsRecordSRV_record :: DNSRecordSRV -> String
 
 instance IsCsl DNSRecordSRV where
   className _ = "DNSRecordSRV"
+
 instance IsBytes DNSRecordSRV
 instance IsJson DNSRecordSRV
-instance EncodeAeson DNSRecordSRV where encodeAeson = cslToAeson
-instance DecodeAeson DNSRecordSRV where decodeAeson = cslFromAeson
-instance Show DNSRecordSRV where show = showViaJson
+instance EncodeAeson DNSRecordSRV where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DNSRecordSRV where
+  decodeAeson = cslFromAeson
+
+instance Show DNSRecordSRV where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- DRep
@@ -1802,11 +1955,17 @@ foreign import dRep_toScriptHash :: DRep -> Nullable ScriptHash
 
 instance IsCsl DRep where
   className _ = "DRep"
+
 instance IsBytes DRep
 instance IsJson DRep
-instance EncodeAeson DRep where encodeAeson = cslToAeson
-instance DecodeAeson DRep where decodeAeson = cslFromAeson
-instance Show DRep where show = showViaJson
+instance EncodeAeson DRep where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DRep where
+  decodeAeson = cslFromAeson
+
+instance Show DRep where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Data cost
@@ -1829,10 +1988,16 @@ foreign import dataHash_fromBech32 :: String -> Nullable DataHash
 
 instance IsCsl DataHash where
   className _ = "DataHash"
+
 instance IsBytes DataHash
-instance EncodeAeson DataHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson DataHash where decodeAeson = cslFromAesonViaBytes
-instance Show DataHash where show = showViaBytes
+instance EncodeAeson DataHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson DataHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show DataHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Datum source
@@ -1857,11 +2022,17 @@ foreign import drepDeregistration_hasScriptCredentials :: DrepDeregistration -> 
 
 instance IsCsl DrepDeregistration where
   className _ = "DrepDeregistration"
+
 instance IsBytes DrepDeregistration
 instance IsJson DrepDeregistration
-instance EncodeAeson DrepDeregistration where encodeAeson = cslToAeson
-instance DecodeAeson DrepDeregistration where decodeAeson = cslFromAeson
-instance Show DrepDeregistration where show = showViaJson
+instance EncodeAeson DrepDeregistration where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DrepDeregistration where
+  decodeAeson = cslFromAeson
+
+instance Show DrepDeregistration where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Drep registration
@@ -1877,11 +2048,17 @@ foreign import drepRegistration_hasScriptCredentials :: DrepRegistration -> Bool
 
 instance IsCsl DrepRegistration where
   className _ = "DrepRegistration"
+
 instance IsBytes DrepRegistration
 instance IsJson DrepRegistration
-instance EncodeAeson DrepRegistration where encodeAeson = cslToAeson
-instance DecodeAeson DrepRegistration where decodeAeson = cslFromAeson
-instance Show DrepRegistration where show = showViaJson
+instance EncodeAeson DrepRegistration where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DrepRegistration where
+  decodeAeson = cslFromAeson
+
+instance Show DrepRegistration where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Drep update
@@ -1896,11 +2073,17 @@ foreign import drepUpdate_hasScriptCredentials :: DrepUpdate -> Boolean
 
 instance IsCsl DrepUpdate where
   className _ = "DrepUpdate"
+
 instance IsBytes DrepUpdate
 instance IsJson DrepUpdate
-instance EncodeAeson DrepUpdate where encodeAeson = cslToAeson
-instance DecodeAeson DrepUpdate where decodeAeson = cslFromAeson
-instance Show DrepUpdate where show = showViaJson
+instance EncodeAeson DrepUpdate where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DrepUpdate where
+  decodeAeson = cslFromAeson
+
+instance Show DrepUpdate where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Drep voting thresholds
@@ -1932,11 +2115,17 @@ foreign import drepVotingThresholds_treasuryWithdrawal :: DrepVotingThresholds -
 
 instance IsCsl DrepVotingThresholds where
   className _ = "DrepVotingThresholds"
+
 instance IsBytes DrepVotingThresholds
 instance IsJson DrepVotingThresholds
-instance EncodeAeson DrepVotingThresholds where encodeAeson = cslToAeson
-instance DecodeAeson DrepVotingThresholds where decodeAeson = cslFromAeson
-instance Show DrepVotingThresholds where show = showViaJson
+instance EncodeAeson DrepVotingThresholds where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DrepVotingThresholds where
+  decodeAeson = cslFromAeson
+
+instance Show DrepVotingThresholds where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Ed25519 key hash
@@ -1948,10 +2137,16 @@ foreign import ed25519KeyHash_fromBech32 :: String -> Nullable Ed25519KeyHash
 
 instance IsCsl Ed25519KeyHash where
   className _ = "Ed25519KeyHash"
+
 instance IsBytes Ed25519KeyHash
-instance EncodeAeson Ed25519KeyHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson Ed25519KeyHash where decodeAeson = cslFromAesonViaBytes
-instance Show Ed25519KeyHash where show = showViaBytes
+instance EncodeAeson Ed25519KeyHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson Ed25519KeyHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show Ed25519KeyHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Ed25519 key hashes
@@ -1964,11 +2159,17 @@ foreign import ed25519KeyHashes_toOption :: Ed25519KeyHashes -> Nullable Ed25519
 
 instance IsCsl Ed25519KeyHashes where
   className _ = "Ed25519KeyHashes"
+
 instance IsBytes Ed25519KeyHashes
 instance IsJson Ed25519KeyHashes
-instance EncodeAeson Ed25519KeyHashes where encodeAeson = cslToAeson
-instance DecodeAeson Ed25519KeyHashes where decodeAeson = cslFromAeson
-instance Show Ed25519KeyHashes where show = showViaJson
+instance EncodeAeson Ed25519KeyHashes where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Ed25519KeyHashes where
+  decodeAeson = cslFromAeson
+
+instance Show Ed25519KeyHashes where
+  show = showViaJson
 
 instance IsListContainer Ed25519KeyHashes Ed25519KeyHash
 
@@ -1982,10 +2183,16 @@ foreign import ed25519Signature_fromBech32 :: String -> Nullable Ed25519Signatur
 
 instance IsCsl Ed25519Signature where
   className _ = "Ed25519Signature"
+
 instance IsBytes Ed25519Signature
-instance EncodeAeson Ed25519Signature where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson Ed25519Signature where decodeAeson = cslFromAesonViaBytes
-instance Show Ed25519Signature where show = showViaBytes
+instance EncodeAeson Ed25519Signature where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson Ed25519Signature where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show Ed25519Signature where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Enterprise address
@@ -2011,11 +2218,17 @@ foreign import exUnitPrices_new :: UnitInterval -> UnitInterval -> ExUnitPrices
 
 instance IsCsl ExUnitPrices where
   className _ = "ExUnitPrices"
+
 instance IsBytes ExUnitPrices
 instance IsJson ExUnitPrices
-instance EncodeAeson ExUnitPrices where encodeAeson = cslToAeson
-instance DecodeAeson ExUnitPrices where decodeAeson = cslFromAeson
-instance Show ExUnitPrices where show = showViaJson
+instance EncodeAeson ExUnitPrices where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ExUnitPrices where
+  decodeAeson = cslFromAeson
+
+instance Show ExUnitPrices where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Ex units
@@ -2028,11 +2241,17 @@ foreign import exUnits_new :: BigNum -> BigNum -> ExUnits
 
 instance IsCsl ExUnits where
   className _ = "ExUnits"
+
 instance IsBytes ExUnits
 instance IsJson ExUnits
-instance EncodeAeson ExUnits where encodeAeson = cslToAeson
-instance DecodeAeson ExUnits where decodeAeson = cslFromAeson
-instance Show ExUnits where show = showViaJson
+instance EncodeAeson ExUnits where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ExUnits where
+  decodeAeson = cslFromAeson
+
+instance Show ExUnits where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- General transaction metadata
@@ -2043,11 +2262,17 @@ foreign import generalTransactionMetadata_new :: Effect GeneralTransactionMetada
 
 instance IsCsl GeneralTransactionMetadata where
   className _ = "GeneralTransactionMetadata"
+
 instance IsBytes GeneralTransactionMetadata
 instance IsJson GeneralTransactionMetadata
-instance EncodeAeson GeneralTransactionMetadata where encodeAeson = cslToAeson
-instance DecodeAeson GeneralTransactionMetadata where decodeAeson = cslFromAeson
-instance Show GeneralTransactionMetadata where show = showViaJson
+instance EncodeAeson GeneralTransactionMetadata where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson GeneralTransactionMetadata where
+  decodeAeson = cslFromAeson
+
+instance Show GeneralTransactionMetadata where
+  show = showViaJson
 
 instance IsMapContainer GeneralTransactionMetadata BigNum TransactionMetadatum
 
@@ -2061,10 +2286,16 @@ foreign import genesisDelegateHash_fromBech32 :: String -> Nullable GenesisDeleg
 
 instance IsCsl GenesisDelegateHash where
   className _ = "GenesisDelegateHash"
+
 instance IsBytes GenesisDelegateHash
-instance EncodeAeson GenesisDelegateHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson GenesisDelegateHash where decodeAeson = cslFromAesonViaBytes
-instance Show GenesisDelegateHash where show = showViaBytes
+instance EncodeAeson GenesisDelegateHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson GenesisDelegateHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show GenesisDelegateHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Genesis hash
@@ -2076,10 +2307,16 @@ foreign import genesisHash_fromBech32 :: String -> Nullable GenesisHash
 
 instance IsCsl GenesisHash where
   className _ = "GenesisHash"
+
 instance IsBytes GenesisHash
-instance EncodeAeson GenesisHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson GenesisHash where decodeAeson = cslFromAesonViaBytes
-instance Show GenesisHash where show = showViaBytes
+instance EncodeAeson GenesisHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson GenesisHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show GenesisHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Genesis hashes
@@ -2090,11 +2327,17 @@ foreign import genesisHashes_new :: Effect GenesisHashes
 
 instance IsCsl GenesisHashes where
   className _ = "GenesisHashes"
+
 instance IsBytes GenesisHashes
 instance IsJson GenesisHashes
-instance EncodeAeson GenesisHashes where encodeAeson = cslToAeson
-instance DecodeAeson GenesisHashes where decodeAeson = cslFromAeson
-instance Show GenesisHashes where show = showViaJson
+instance EncodeAeson GenesisHashes where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson GenesisHashes where
+  decodeAeson = cslFromAeson
+
+instance Show GenesisHashes where
+  show = showViaJson
 
 instance IsListContainer GenesisHashes GenesisHash
 
@@ -2110,11 +2353,17 @@ foreign import genesisKeyDelegation_new :: GenesisHash -> GenesisDelegateHash ->
 
 instance IsCsl GenesisKeyDelegation where
   className _ = "GenesisKeyDelegation"
+
 instance IsBytes GenesisKeyDelegation
 instance IsJson GenesisKeyDelegation
-instance EncodeAeson GenesisKeyDelegation where encodeAeson = cslToAeson
-instance DecodeAeson GenesisKeyDelegation where decodeAeson = cslFromAeson
-instance Show GenesisKeyDelegation where show = showViaJson
+instance EncodeAeson GenesisKeyDelegation where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson GenesisKeyDelegation where
+  decodeAeson = cslFromAeson
+
+instance Show GenesisKeyDelegation where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Governance action
@@ -2139,11 +2388,17 @@ foreign import governanceAction_asInfoAction :: GovernanceAction -> Nullable Inf
 
 instance IsCsl GovernanceAction where
   className _ = "GovernanceAction"
+
 instance IsBytes GovernanceAction
 instance IsJson GovernanceAction
-instance EncodeAeson GovernanceAction where encodeAeson = cslToAeson
-instance DecodeAeson GovernanceAction where decodeAeson = cslFromAeson
-instance Show GovernanceAction where show = showViaJson
+instance EncodeAeson GovernanceAction where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson GovernanceAction where
+  decodeAeson = cslFromAeson
+
+instance Show GovernanceAction where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Governance action id
@@ -2156,11 +2411,17 @@ foreign import governanceActionId_new :: TransactionHash -> Number -> Governance
 
 instance IsCsl GovernanceActionId where
   className _ = "GovernanceActionId"
+
 instance IsBytes GovernanceActionId
 instance IsJson GovernanceActionId
-instance EncodeAeson GovernanceActionId where encodeAeson = cslToAeson
-instance DecodeAeson GovernanceActionId where decodeAeson = cslFromAeson
-instance Show GovernanceActionId where show = showViaJson
+instance EncodeAeson GovernanceActionId where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson GovernanceActionId where
+  decodeAeson = cslFromAeson
+
+instance Show GovernanceActionId where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Governance action ids
@@ -2171,10 +2432,16 @@ foreign import governanceActionIds_new :: GovernanceActionIds
 
 instance IsCsl GovernanceActionIds where
   className _ = "GovernanceActionIds"
+
 instance IsJson GovernanceActionIds
-instance EncodeAeson GovernanceActionIds where encodeAeson = cslToAeson
-instance DecodeAeson GovernanceActionIds where decodeAeson = cslFromAeson
-instance Show GovernanceActionIds where show = showViaJson
+instance EncodeAeson GovernanceActionIds where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson GovernanceActionIds where
+  decodeAeson = cslFromAeson
+
+instance Show GovernanceActionIds where
+  show = showViaJson
 
 instance IsListContainer GovernanceActionIds GovernanceActionId
 
@@ -2190,11 +2457,17 @@ foreign import hardForkInitiationAction_newWithActionId :: GovernanceActionId ->
 
 instance IsCsl HardForkInitiationAction where
   className _ = "HardForkInitiationAction"
+
 instance IsBytes HardForkInitiationAction
 instance IsJson HardForkInitiationAction
-instance EncodeAeson HardForkInitiationAction where encodeAeson = cslToAeson
-instance DecodeAeson HardForkInitiationAction where decodeAeson = cslFromAeson
-instance Show HardForkInitiationAction where show = showViaJson
+instance EncodeAeson HardForkInitiationAction where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson HardForkInitiationAction where
+  decodeAeson = cslFromAeson
+
+instance Show HardForkInitiationAction where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Info action
@@ -2225,11 +2498,17 @@ foreign import int_fromStr :: String -> Nullable Int
 
 instance IsCsl Int where
   className _ = "Int"
+
 instance IsBytes Int
 instance IsJson Int
-instance EncodeAeson Int where encodeAeson = cslToAeson
-instance DecodeAeson Int where decodeAeson = cslFromAeson
-instance Show Int where show = showViaJson
+instance EncodeAeson Int where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Int where
+  decodeAeson = cslFromAeson
+
+instance Show Int where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Ipv4
@@ -2241,11 +2520,17 @@ foreign import ipv4_ip :: Ipv4 -> ByteArray
 
 instance IsCsl Ipv4 where
   className _ = "Ipv4"
+
 instance IsBytes Ipv4
 instance IsJson Ipv4
-instance EncodeAeson Ipv4 where encodeAeson = cslToAeson
-instance DecodeAeson Ipv4 where decodeAeson = cslFromAeson
-instance Show Ipv4 where show = showViaJson
+instance EncodeAeson Ipv4 where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Ipv4 where
+  decodeAeson = cslFromAeson
+
+instance Show Ipv4 where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Ipv6
@@ -2257,25 +2542,35 @@ foreign import ipv6_ip :: Ipv6 -> ByteArray
 
 instance IsCsl Ipv6 where
   className _ = "Ipv6"
+
 instance IsBytes Ipv6
 instance IsJson Ipv6
-instance EncodeAeson Ipv6 where encodeAeson = cslToAeson
-instance DecodeAeson Ipv6 where decodeAeson = cslFromAeson
-instance Show Ipv6 where show = showViaJson
+instance EncodeAeson Ipv6 where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Ipv6 where
+  decodeAeson = cslFromAeson
+
+instance Show Ipv6 where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- KESSignature
 
 foreign import data KESSignature :: Type
 
-
-
 instance IsCsl KESSignature where
   className _ = "KESSignature"
+
 instance IsBytes KESSignature
-instance EncodeAeson KESSignature where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson KESSignature where decodeAeson = cslFromAesonViaBytes
-instance Show KESSignature where show = showViaBytes
+instance EncodeAeson KESSignature where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson KESSignature where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show KESSignature where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- KESVKey
@@ -2287,10 +2582,16 @@ foreign import kesvKey_fromBech32 :: String -> Nullable KESVKey
 
 instance IsCsl KESVKey where
   className _ = "KESVKey"
+
 instance IsBytes KESVKey
-instance EncodeAeson KESVKey where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson KESVKey where decodeAeson = cslFromAesonViaBytes
-instance Show KESVKey where show = showViaBytes
+instance EncodeAeson KESVKey where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson KESVKey where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show KESVKey where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Language
@@ -2304,11 +2605,17 @@ foreign import language_kind :: Language -> LanguageKind
 
 instance IsCsl Language where
   className _ = "Language"
+
 instance IsBytes Language
 instance IsJson Language
-instance EncodeAeson Language where encodeAeson = cslToAeson
-instance DecodeAeson Language where decodeAeson = cslFromAeson
-instance Show Language where show = showViaJson
+instance EncodeAeson Language where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Language where
+  decodeAeson = cslFromAeson
+
+instance Show Language where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Languages
@@ -2355,11 +2662,17 @@ foreign import mirToStakeCredentials_new :: Effect MIRToStakeCredentials
 
 instance IsCsl MIRToStakeCredentials where
   className _ = "MIRToStakeCredentials"
+
 instance IsBytes MIRToStakeCredentials
 instance IsJson MIRToStakeCredentials
-instance EncodeAeson MIRToStakeCredentials where encodeAeson = cslToAeson
-instance DecodeAeson MIRToStakeCredentials where decodeAeson = cslFromAeson
-instance Show MIRToStakeCredentials where show = showViaJson
+instance EncodeAeson MIRToStakeCredentials where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson MIRToStakeCredentials where
+  decodeAeson = cslFromAeson
+
+instance Show MIRToStakeCredentials where
+  show = showViaJson
 
 instance IsMapContainer MIRToStakeCredentials Credential Int
 
@@ -2384,10 +2697,16 @@ foreign import metadataList_new :: Effect MetadataList
 
 instance IsCsl MetadataList where
   className _ = "MetadataList"
+
 instance IsBytes MetadataList
-instance EncodeAeson MetadataList where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson MetadataList where decodeAeson = cslFromAesonViaBytes
-instance Show MetadataList where show = showViaBytes
+instance EncodeAeson MetadataList where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson MetadataList where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show MetadataList where
+  show = showViaBytes
 
 instance IsListContainer MetadataList TransactionMetadatum
 
@@ -2405,10 +2724,16 @@ foreign import metadataMap_has :: MetadataMap -> TransactionMetadatum -> Effect 
 
 instance IsCsl MetadataMap where
   className _ = "MetadataMap"
+
 instance IsBytes MetadataMap
-instance EncodeAeson MetadataMap where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson MetadataMap where decodeAeson = cslFromAesonViaBytes
-instance Show MetadataMap where show = showViaBytes
+instance EncodeAeson MetadataMap where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson MetadataMap where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show MetadataMap where
+  show = showViaBytes
 
 instance IsMapContainer MetadataMap TransactionMetadatum TransactionMetadatum
 
@@ -2424,11 +2749,17 @@ foreign import mint_asNegativeMultiasset :: Mint -> Effect MultiAsset
 
 instance IsCsl Mint where
   className _ = "Mint"
+
 instance IsBytes Mint
 instance IsJson Mint
-instance EncodeAeson Mint where encodeAeson = cslToAeson
-instance DecodeAeson Mint where decodeAeson = cslFromAeson
-instance Show Mint where show = showViaJson
+instance EncodeAeson Mint where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Mint where
+  decodeAeson = cslFromAeson
+
+instance Show Mint where
+  show = showViaJson
 
 instance IsMapContainer Mint ScriptHash MintAssets
 
@@ -2465,10 +2796,16 @@ foreign import mintsAssets_new :: MintsAssets
 
 instance IsCsl MintsAssets where
   className _ = "MintsAssets"
+
 instance IsJson MintsAssets
-instance EncodeAeson MintsAssets where encodeAeson = cslToAeson
-instance DecodeAeson MintsAssets where decodeAeson = cslFromAeson
-instance Show MintsAssets where show = showViaJson
+instance EncodeAeson MintsAssets where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson MintsAssets where
+  decodeAeson = cslFromAeson
+
+instance Show MintsAssets where
+  show = showViaJson
 
 instance IsListContainer MintsAssets MintAssets
 
@@ -2486,11 +2823,17 @@ foreign import moveInstantaneousReward_asToStakeCreds :: MoveInstantaneousReward
 
 instance IsCsl MoveInstantaneousReward where
   className _ = "MoveInstantaneousReward"
+
 instance IsBytes MoveInstantaneousReward
 instance IsJson MoveInstantaneousReward
-instance EncodeAeson MoveInstantaneousReward where encodeAeson = cslToAeson
-instance DecodeAeson MoveInstantaneousReward where decodeAeson = cslFromAeson
-instance Show MoveInstantaneousReward where show = showViaJson
+instance EncodeAeson MoveInstantaneousReward where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson MoveInstantaneousReward where
+  decodeAeson = cslFromAeson
+
+instance Show MoveInstantaneousReward where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Move instantaneous rewards cert
@@ -2502,11 +2845,17 @@ foreign import moveInstantaneousRewardsCert_new :: MoveInstantaneousReward -> Mo
 
 instance IsCsl MoveInstantaneousRewardsCert where
   className _ = "MoveInstantaneousRewardsCert"
+
 instance IsBytes MoveInstantaneousRewardsCert
 instance IsJson MoveInstantaneousRewardsCert
-instance EncodeAeson MoveInstantaneousRewardsCert where encodeAeson = cslToAeson
-instance DecodeAeson MoveInstantaneousRewardsCert where decodeAeson = cslFromAeson
-instance Show MoveInstantaneousRewardsCert where show = showViaJson
+instance EncodeAeson MoveInstantaneousRewardsCert where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson MoveInstantaneousRewardsCert where
+  decodeAeson = cslFromAeson
+
+instance Show MoveInstantaneousRewardsCert where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Multi asset
@@ -2520,11 +2869,17 @@ foreign import multiAsset_sub :: MultiAsset -> MultiAsset -> Effect MultiAsset
 
 instance IsCsl MultiAsset where
   className _ = "MultiAsset"
+
 instance IsBytes MultiAsset
 instance IsJson MultiAsset
-instance EncodeAeson MultiAsset where encodeAeson = cslToAeson
-instance DecodeAeson MultiAsset where decodeAeson = cslFromAeson
-instance Show MultiAsset where show = showViaJson
+instance EncodeAeson MultiAsset where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson MultiAsset where
+  decodeAeson = cslFromAeson
+
+instance Show MultiAsset where
+  show = showViaJson
 
 instance IsMapContainer MultiAsset ScriptHash Assets
 
@@ -2538,11 +2893,17 @@ foreign import multiHostName_new :: DNSRecordSRV -> MultiHostName
 
 instance IsCsl MultiHostName where
   className _ = "MultiHostName"
+
 instance IsBytes MultiHostName
 instance IsJson MultiHostName
-instance EncodeAeson MultiHostName where encodeAeson = cslToAeson
-instance DecodeAeson MultiHostName where decodeAeson = cslFromAeson
-instance Show MultiHostName where show = showViaJson
+instance EncodeAeson MultiHostName where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson MultiHostName where
+  decodeAeson = cslFromAeson
+
+instance Show MultiHostName where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Native script
@@ -2567,11 +2928,17 @@ foreign import nativeScript_getRequiredSigners :: NativeScript -> Ed25519KeyHash
 
 instance IsCsl NativeScript where
   className _ = "NativeScript"
+
 instance IsBytes NativeScript
 instance IsJson NativeScript
-instance EncodeAeson NativeScript where encodeAeson = cslToAeson
-instance DecodeAeson NativeScript where decodeAeson = cslFromAeson
-instance Show NativeScript where show = showViaJson
+instance EncodeAeson NativeScript where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson NativeScript where
+  decodeAeson = cslFromAeson
+
+instance Show NativeScript where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Native script source
@@ -2594,11 +2961,17 @@ foreign import nativeScripts_new :: Effect NativeScripts
 
 instance IsCsl NativeScripts where
   className _ = "NativeScripts"
+
 instance IsBytes NativeScripts
 instance IsJson NativeScripts
-instance EncodeAeson NativeScripts where encodeAeson = cslToAeson
-instance DecodeAeson NativeScripts where decodeAeson = cslFromAeson
-instance Show NativeScripts where show = showViaJson
+instance EncodeAeson NativeScripts where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson NativeScripts where
+  decodeAeson = cslFromAeson
+
+instance Show NativeScripts where
+  show = showViaJson
 
 instance IsListContainer NativeScripts NativeScript
 
@@ -2613,11 +2986,17 @@ foreign import networkId_kind :: NetworkId -> NetworkIdKind
 
 instance IsCsl NetworkId where
   className _ = "NetworkId"
+
 instance IsBytes NetworkId
 instance IsJson NetworkId
-instance EncodeAeson NetworkId where encodeAeson = cslToAeson
-instance DecodeAeson NetworkId where decodeAeson = cslFromAeson
-instance Show NetworkId where show = showViaJson
+instance EncodeAeson NetworkId where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson NetworkId where
+  decodeAeson = cslFromAeson
+
+instance Show NetworkId where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Network info
@@ -2647,11 +3026,17 @@ foreign import newConstitutionAction_hasScriptHash :: NewConstitutionAction -> B
 
 instance IsCsl NewConstitutionAction where
   className _ = "NewConstitutionAction"
+
 instance IsBytes NewConstitutionAction
 instance IsJson NewConstitutionAction
-instance EncodeAeson NewConstitutionAction where encodeAeson = cslToAeson
-instance DecodeAeson NewConstitutionAction where decodeAeson = cslFromAeson
-instance Show NewConstitutionAction where show = showViaJson
+instance EncodeAeson NewConstitutionAction where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson NewConstitutionAction where
+  decodeAeson = cslFromAeson
+
+instance Show NewConstitutionAction where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- No confidence action
@@ -2664,11 +3049,17 @@ foreign import noConfidenceAction_newWithActionId :: GovernanceActionId -> NoCon
 
 instance IsCsl NoConfidenceAction where
   className _ = "NoConfidenceAction"
+
 instance IsBytes NoConfidenceAction
 instance IsJson NoConfidenceAction
-instance EncodeAeson NoConfidenceAction where encodeAeson = cslToAeson
-instance DecodeAeson NoConfidenceAction where decodeAeson = cslFromAeson
-instance Show NoConfidenceAction where show = showViaJson
+instance EncodeAeson NoConfidenceAction where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson NoConfidenceAction where
+  decodeAeson = cslFromAeson
+
+instance Show NoConfidenceAction where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Nonce
@@ -2681,11 +3072,17 @@ foreign import nonce_getHash :: Nonce -> Nullable ByteArray
 
 instance IsCsl Nonce where
   className _ = "Nonce"
+
 instance IsBytes Nonce
 instance IsJson Nonce
-instance EncodeAeson Nonce where encodeAeson = cslToAeson
-instance DecodeAeson Nonce where decodeAeson = cslFromAeson
-instance Show Nonce where show = showViaJson
+instance EncodeAeson Nonce where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Nonce where
+  decodeAeson = cslFromAeson
+
+instance Show Nonce where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Operational cert
@@ -2700,11 +3097,17 @@ foreign import operationalCert_new :: KESVKey -> Number -> Number -> Ed25519Sign
 
 instance IsCsl OperationalCert where
   className _ = "OperationalCert"
+
 instance IsBytes OperationalCert
 instance IsJson OperationalCert
-instance EncodeAeson OperationalCert where encodeAeson = cslToAeson
-instance DecodeAeson OperationalCert where decodeAeson = cslFromAeson
-instance Show OperationalCert where show = showViaJson
+instance EncodeAeson OperationalCert where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson OperationalCert where
+  decodeAeson = cslFromAeson
+
+instance Show OperationalCert where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Output datum
@@ -2734,11 +3137,17 @@ foreign import parameterChangeAction_newWithPolicyHashAndActionId :: GovernanceA
 
 instance IsCsl ParameterChangeAction where
   className _ = "ParameterChangeAction"
+
 instance IsBytes ParameterChangeAction
 instance IsJson ParameterChangeAction
-instance EncodeAeson ParameterChangeAction where encodeAeson = cslToAeson
-instance DecodeAeson ParameterChangeAction where decodeAeson = cslFromAeson
-instance Show ParameterChangeAction where show = showViaJson
+instance EncodeAeson ParameterChangeAction where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ParameterChangeAction where
+  decodeAeson = cslFromAeson
+
+instance Show ParameterChangeAction where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Plutus data
@@ -2762,11 +3171,17 @@ foreign import plutusData_fromAddress :: Address -> PlutusData
 
 instance IsCsl PlutusData where
   className _ = "PlutusData"
+
 instance IsBytes PlutusData
 instance IsJson PlutusData
-instance EncodeAeson PlutusData where encodeAeson = cslToAeson
-instance DecodeAeson PlutusData where decodeAeson = cslFromAeson
-instance Show PlutusData where show = showViaJson
+instance EncodeAeson PlutusData where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson PlutusData where
+  decodeAeson = cslFromAeson
+
+instance Show PlutusData where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Plutus list
@@ -2777,10 +3192,16 @@ foreign import plutusList_new :: Effect PlutusList
 
 instance IsCsl PlutusList where
   className _ = "PlutusList"
+
 instance IsBytes PlutusList
-instance EncodeAeson PlutusList where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson PlutusList where decodeAeson = cslFromAesonViaBytes
-instance Show PlutusList where show = showViaBytes
+instance EncodeAeson PlutusList where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson PlutusList where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show PlutusList where
+  show = showViaBytes
 
 instance IsListContainer PlutusList PlutusData
 
@@ -2793,10 +3214,16 @@ foreign import plutusMap_new :: Effect PlutusMap
 
 instance IsCsl PlutusMap where
   className _ = "PlutusMap"
+
 instance IsBytes PlutusMap
-instance EncodeAeson PlutusMap where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson PlutusMap where decodeAeson = cslFromAesonViaBytes
-instance Show PlutusMap where show = showViaBytes
+instance EncodeAeson PlutusMap where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson PlutusMap where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show PlutusMap where
+  show = showViaBytes
 
 instance IsMapContainer PlutusMap PlutusData PlutusData
 
@@ -2819,10 +3246,16 @@ foreign import plutusScript_languageVersion :: PlutusScript -> Language
 
 instance IsCsl PlutusScript where
   className _ = "PlutusScript"
+
 instance IsBytes PlutusScript
-instance EncodeAeson PlutusScript where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson PlutusScript where decodeAeson = cslFromAesonViaBytes
-instance Show PlutusScript where show = showViaBytes
+instance EncodeAeson PlutusScript where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson PlutusScript where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show PlutusScript where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Plutus script source
@@ -2846,11 +3279,17 @@ foreign import plutusScripts_new :: Effect PlutusScripts
 
 instance IsCsl PlutusScripts where
   className _ = "PlutusScripts"
+
 instance IsBytes PlutusScripts
 instance IsJson PlutusScripts
-instance EncodeAeson PlutusScripts where encodeAeson = cslToAeson
-instance DecodeAeson PlutusScripts where decodeAeson = cslFromAeson
-instance Show PlutusScripts where show = showViaJson
+instance EncodeAeson PlutusScripts where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson PlutusScripts where
+  decodeAeson = cslFromAeson
+
+instance Show PlutusScripts where
+  show = showViaJson
 
 instance IsListContainer PlutusScripts PlutusScript
 
@@ -2924,11 +3363,17 @@ foreign import poolMetadata_new :: URL -> PoolMetadataHash -> PoolMetadata
 
 instance IsCsl PoolMetadata where
   className _ = "PoolMetadata"
+
 instance IsBytes PoolMetadata
 instance IsJson PoolMetadata
-instance EncodeAeson PoolMetadata where encodeAeson = cslToAeson
-instance DecodeAeson PoolMetadata where decodeAeson = cslFromAeson
-instance Show PoolMetadata where show = showViaJson
+instance EncodeAeson PoolMetadata where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson PoolMetadata where
+  decodeAeson = cslFromAeson
+
+instance Show PoolMetadata where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Pool metadata hash
@@ -2940,10 +3385,16 @@ foreign import poolMetadataHash_fromBech32 :: String -> Nullable PoolMetadataHas
 
 instance IsCsl PoolMetadataHash where
   className _ = "PoolMetadataHash"
+
 instance IsBytes PoolMetadataHash
-instance EncodeAeson PoolMetadataHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson PoolMetadataHash where decodeAeson = cslFromAesonViaBytes
-instance Show PoolMetadataHash where show = showViaBytes
+instance EncodeAeson PoolMetadataHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson PoolMetadataHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show PoolMetadataHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Pool params
@@ -2963,11 +3414,17 @@ foreign import poolParams_new :: Ed25519KeyHash -> VRFKeyHash -> BigNum -> BigNu
 
 instance IsCsl PoolParams where
   className _ = "PoolParams"
+
 instance IsBytes PoolParams
 instance IsJson PoolParams
-instance EncodeAeson PoolParams where encodeAeson = cslToAeson
-instance DecodeAeson PoolParams where decodeAeson = cslFromAeson
-instance Show PoolParams where show = showViaJson
+instance EncodeAeson PoolParams where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson PoolParams where
+  decodeAeson = cslFromAeson
+
+instance Show PoolParams where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Pool registration
@@ -2979,11 +3436,17 @@ foreign import poolRegistration_new :: PoolParams -> PoolRegistration
 
 instance IsCsl PoolRegistration where
   className _ = "PoolRegistration"
+
 instance IsBytes PoolRegistration
 instance IsJson PoolRegistration
-instance EncodeAeson PoolRegistration where encodeAeson = cslToAeson
-instance DecodeAeson PoolRegistration where decodeAeson = cslFromAeson
-instance Show PoolRegistration where show = showViaJson
+instance EncodeAeson PoolRegistration where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson PoolRegistration where
+  decodeAeson = cslFromAeson
+
+instance Show PoolRegistration where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Pool retirement
@@ -2996,11 +3459,17 @@ foreign import poolRetirement_new :: Ed25519KeyHash -> Number -> PoolRetirement
 
 instance IsCsl PoolRetirement where
   className _ = "PoolRetirement"
+
 instance IsBytes PoolRetirement
 instance IsJson PoolRetirement
-instance EncodeAeson PoolRetirement where encodeAeson = cslToAeson
-instance DecodeAeson PoolRetirement where decodeAeson = cslFromAeson
-instance Show PoolRetirement where show = showViaJson
+instance EncodeAeson PoolRetirement where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson PoolRetirement where
+  decodeAeson = cslFromAeson
+
+instance Show PoolRetirement where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Pool voting thresholds
@@ -3015,11 +3484,17 @@ foreign import poolVotingThresholds_hardForkInitiation :: PoolVotingThresholds -
 
 instance IsCsl PoolVotingThresholds where
   className _ = "PoolVotingThresholds"
+
 instance IsBytes PoolVotingThresholds
 instance IsJson PoolVotingThresholds
-instance EncodeAeson PoolVotingThresholds where encodeAeson = cslToAeson
-instance DecodeAeson PoolVotingThresholds where decodeAeson = cslFromAeson
-instance Show PoolVotingThresholds where show = showViaJson
+instance EncodeAeson PoolVotingThresholds where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson PoolVotingThresholds where
+  decodeAeson = cslFromAeson
+
+instance Show PoolVotingThresholds where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Private key
@@ -3051,11 +3526,17 @@ foreign import proposedProtocolParameterUpdates_new :: Effect ProposedProtocolPa
 
 instance IsCsl ProposedProtocolParameterUpdates where
   className _ = "ProposedProtocolParameterUpdates"
+
 instance IsBytes ProposedProtocolParameterUpdates
 instance IsJson ProposedProtocolParameterUpdates
-instance EncodeAeson ProposedProtocolParameterUpdates where encodeAeson = cslToAeson
-instance DecodeAeson ProposedProtocolParameterUpdates where decodeAeson = cslFromAeson
-instance Show ProposedProtocolParameterUpdates where show = showViaJson
+instance EncodeAeson ProposedProtocolParameterUpdates where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ProposedProtocolParameterUpdates where
+  decodeAeson = cslFromAeson
+
+instance Show ProposedProtocolParameterUpdates where
+  show = showViaJson
 
 instance IsMapContainer ProposedProtocolParameterUpdates GenesisHash ProtocolParamUpdate
 
@@ -3132,11 +3613,17 @@ foreign import protocolParamUpdate_new :: ProtocolParamUpdate
 
 instance IsCsl ProtocolParamUpdate where
   className _ = "ProtocolParamUpdate"
+
 instance IsBytes ProtocolParamUpdate
 instance IsJson ProtocolParamUpdate
-instance EncodeAeson ProtocolParamUpdate where encodeAeson = cslToAeson
-instance DecodeAeson ProtocolParamUpdate where decodeAeson = cslFromAeson
-instance Show ProtocolParamUpdate where show = showViaJson
+instance EncodeAeson ProtocolParamUpdate where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ProtocolParamUpdate where
+  decodeAeson = cslFromAeson
+
+instance Show ProtocolParamUpdate where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Protocol version
@@ -3149,11 +3636,17 @@ foreign import protocolVersion_new :: Number -> Number -> ProtocolVersion
 
 instance IsCsl ProtocolVersion where
   className _ = "ProtocolVersion"
+
 instance IsBytes ProtocolVersion
 instance IsJson ProtocolVersion
-instance EncodeAeson ProtocolVersion where encodeAeson = cslToAeson
-instance DecodeAeson ProtocolVersion where decodeAeson = cslFromAeson
-instance Show ProtocolVersion where show = showViaJson
+instance EncodeAeson ProtocolVersion where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ProtocolVersion where
+  decodeAeson = cslFromAeson
+
+instance Show ProtocolVersion where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Public key
@@ -3186,11 +3679,17 @@ foreign import redeemer_new :: RedeemerTag -> BigNum -> PlutusData -> ExUnits ->
 
 instance IsCsl Redeemer where
   className _ = "Redeemer"
+
 instance IsBytes Redeemer
 instance IsJson Redeemer
-instance EncodeAeson Redeemer where encodeAeson = cslToAeson
-instance DecodeAeson Redeemer where decodeAeson = cslFromAeson
-instance Show Redeemer where show = showViaJson
+instance EncodeAeson Redeemer where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Redeemer where
+  decodeAeson = cslFromAeson
+
+instance Show Redeemer where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Redeemer tag
@@ -3207,11 +3706,17 @@ foreign import redeemerTag_kind :: RedeemerTag -> RedeemerTagKind
 
 instance IsCsl RedeemerTag where
   className _ = "RedeemerTag"
+
 instance IsBytes RedeemerTag
 instance IsJson RedeemerTag
-instance EncodeAeson RedeemerTag where encodeAeson = cslToAeson
-instance DecodeAeson RedeemerTag where decodeAeson = cslFromAeson
-instance Show RedeemerTag where show = showViaJson
+instance EncodeAeson RedeemerTag where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson RedeemerTag where
+  decodeAeson = cslFromAeson
+
+instance Show RedeemerTag where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Redeemers
@@ -3223,11 +3728,17 @@ foreign import redeemers_totalExUnits :: Redeemers -> ExUnits
 
 instance IsCsl Redeemers where
   className _ = "Redeemers"
+
 instance IsBytes Redeemers
 instance IsJson Redeemers
-instance EncodeAeson Redeemers where encodeAeson = cslToAeson
-instance DecodeAeson Redeemers where decodeAeson = cslFromAeson
-instance Show Redeemers where show = showViaJson
+instance EncodeAeson Redeemers where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Redeemers where
+  decodeAeson = cslFromAeson
+
+instance Show Redeemers where
+  show = showViaJson
 
 instance IsListContainer Redeemers Redeemer
 
@@ -3246,11 +3757,17 @@ foreign import relay_asMultiHostName :: Relay -> Nullable MultiHostName
 
 instance IsCsl Relay where
   className _ = "Relay"
+
 instance IsBytes Relay
 instance IsJson Relay
-instance EncodeAeson Relay where encodeAeson = cslToAeson
-instance DecodeAeson Relay where decodeAeson = cslFromAeson
-instance Show Relay where show = showViaJson
+instance EncodeAeson Relay where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Relay where
+  decodeAeson = cslFromAeson
+
+instance Show Relay where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Relays
@@ -3261,11 +3778,17 @@ foreign import relays_new :: Effect Relays
 
 instance IsCsl Relays where
   className _ = "Relays"
+
 instance IsBytes Relays
 instance IsJson Relays
-instance EncodeAeson Relays where encodeAeson = cslToAeson
-instance DecodeAeson Relays where decodeAeson = cslFromAeson
-instance Show Relays where show = showViaJson
+instance EncodeAeson Relays where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Relays where
+  decodeAeson = cslFromAeson
+
+instance Show Relays where
+  show = showViaJson
 
 instance IsListContainer Relays Relay
 
@@ -3291,11 +3814,17 @@ foreign import rewardAddresses_new :: Effect RewardAddresses
 
 instance IsCsl RewardAddresses where
   className _ = "RewardAddresses"
+
 instance IsBytes RewardAddresses
 instance IsJson RewardAddresses
-instance EncodeAeson RewardAddresses where encodeAeson = cslToAeson
-instance DecodeAeson RewardAddresses where decodeAeson = cslFromAeson
-instance Show RewardAddresses where show = showViaJson
+instance EncodeAeson RewardAddresses where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson RewardAddresses where
+  decodeAeson = cslFromAeson
+
+instance Show RewardAddresses where
+  show = showViaJson
 
 instance IsListContainer RewardAddresses RewardAddress
 
@@ -3309,11 +3838,17 @@ foreign import scriptAll_new :: NativeScripts -> ScriptAll
 
 instance IsCsl ScriptAll where
   className _ = "ScriptAll"
+
 instance IsBytes ScriptAll
 instance IsJson ScriptAll
-instance EncodeAeson ScriptAll where encodeAeson = cslToAeson
-instance DecodeAeson ScriptAll where decodeAeson = cslFromAeson
-instance Show ScriptAll where show = showViaJson
+instance EncodeAeson ScriptAll where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ScriptAll where
+  decodeAeson = cslFromAeson
+
+instance Show ScriptAll where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Script any
@@ -3325,11 +3860,17 @@ foreign import scriptAny_new :: NativeScripts -> ScriptAny
 
 instance IsCsl ScriptAny where
   className _ = "ScriptAny"
+
 instance IsBytes ScriptAny
 instance IsJson ScriptAny
-instance EncodeAeson ScriptAny where encodeAeson = cslToAeson
-instance DecodeAeson ScriptAny where decodeAeson = cslFromAeson
-instance Show ScriptAny where show = showViaJson
+instance EncodeAeson ScriptAny where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ScriptAny where
+  decodeAeson = cslFromAeson
+
+instance Show ScriptAny where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Script data hash
@@ -3341,10 +3882,16 @@ foreign import scriptDataHash_fromBech32 :: String -> Nullable ScriptDataHash
 
 instance IsCsl ScriptDataHash where
   className _ = "ScriptDataHash"
+
 instance IsBytes ScriptDataHash
-instance EncodeAeson ScriptDataHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson ScriptDataHash where decodeAeson = cslFromAesonViaBytes
-instance Show ScriptDataHash where show = showViaBytes
+instance EncodeAeson ScriptDataHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson ScriptDataHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show ScriptDataHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Script hash
@@ -3356,10 +3903,16 @@ foreign import scriptHash_fromBech32 :: String -> Nullable ScriptHash
 
 instance IsCsl ScriptHash where
   className _ = "ScriptHash"
+
 instance IsBytes ScriptHash
-instance EncodeAeson ScriptHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson ScriptHash where decodeAeson = cslFromAesonViaBytes
-instance Show ScriptHash where show = showViaBytes
+instance EncodeAeson ScriptHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson ScriptHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show ScriptHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Script hashes
@@ -3370,11 +3923,17 @@ foreign import scriptHashes_new :: Effect ScriptHashes
 
 instance IsCsl ScriptHashes where
   className _ = "ScriptHashes"
+
 instance IsBytes ScriptHashes
 instance IsJson ScriptHashes
-instance EncodeAeson ScriptHashes where encodeAeson = cslToAeson
-instance DecodeAeson ScriptHashes where decodeAeson = cslFromAeson
-instance Show ScriptHashes where show = showViaJson
+instance EncodeAeson ScriptHashes where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ScriptHashes where
+  decodeAeson = cslFromAeson
+
+instance Show ScriptHashes where
+  show = showViaJson
 
 instance IsListContainer ScriptHashes ScriptHash
 
@@ -3389,11 +3948,17 @@ foreign import scriptNOfK_new :: Number -> NativeScripts -> ScriptNOfK
 
 instance IsCsl ScriptNOfK where
   className _ = "ScriptNOfK"
+
 instance IsBytes ScriptNOfK
 instance IsJson ScriptNOfK
-instance EncodeAeson ScriptNOfK where encodeAeson = cslToAeson
-instance DecodeAeson ScriptNOfK where decodeAeson = cslFromAeson
-instance Show ScriptNOfK where show = showViaJson
+instance EncodeAeson ScriptNOfK where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ScriptNOfK where
+  decodeAeson = cslFromAeson
+
+instance Show ScriptNOfK where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Script pubkey
@@ -3405,11 +3970,17 @@ foreign import scriptPubkey_new :: Ed25519KeyHash -> ScriptPubkey
 
 instance IsCsl ScriptPubkey where
   className _ = "ScriptPubkey"
+
 instance IsBytes ScriptPubkey
 instance IsJson ScriptPubkey
-instance EncodeAeson ScriptPubkey where encodeAeson = cslToAeson
-instance DecodeAeson ScriptPubkey where decodeAeson = cslFromAeson
-instance Show ScriptPubkey where show = showViaJson
+instance EncodeAeson ScriptPubkey where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ScriptPubkey where
+  decodeAeson = cslFromAeson
+
+instance Show ScriptPubkey where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Script ref
@@ -3425,11 +3996,17 @@ foreign import scriptRef_plutusScript :: ScriptRef -> Nullable PlutusScript
 
 instance IsCsl ScriptRef where
   className _ = "ScriptRef"
+
 instance IsBytes ScriptRef
 instance IsJson ScriptRef
-instance EncodeAeson ScriptRef where encodeAeson = cslToAeson
-instance DecodeAeson ScriptRef where decodeAeson = cslFromAeson
-instance Show ScriptRef where show = showViaJson
+instance EncodeAeson ScriptRef where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson ScriptRef where
+  decodeAeson = cslFromAeson
+
+instance Show ScriptRef where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Single host addr
@@ -3443,11 +4020,17 @@ foreign import singleHostAddr_new :: Number -> Ipv4 -> Ipv6 -> SingleHostAddr
 
 instance IsCsl SingleHostAddr where
   className _ = "SingleHostAddr"
+
 instance IsBytes SingleHostAddr
 instance IsJson SingleHostAddr
-instance EncodeAeson SingleHostAddr where encodeAeson = cslToAeson
-instance DecodeAeson SingleHostAddr where decodeAeson = cslFromAeson
-instance Show SingleHostAddr where show = showViaJson
+instance EncodeAeson SingleHostAddr where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson SingleHostAddr where
+  decodeAeson = cslFromAeson
+
+instance Show SingleHostAddr where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Single host name
@@ -3460,11 +4043,17 @@ foreign import singleHostName_new :: Nullable Number -> DNSRecordAorAAAA -> Sing
 
 instance IsCsl SingleHostName where
   className _ = "SingleHostName"
+
 instance IsBytes SingleHostName
 instance IsJson SingleHostName
-instance EncodeAeson SingleHostName where encodeAeson = cslToAeson
-instance DecodeAeson SingleHostName where decodeAeson = cslFromAeson
-instance Show SingleHostName where show = showViaJson
+instance EncodeAeson SingleHostName where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson SingleHostName where
+  decodeAeson = cslFromAeson
+
+instance Show SingleHostName where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Stake and vote delegation
@@ -3479,11 +4068,17 @@ foreign import stakeAndVoteDelegation_hasScriptCredentials :: StakeAndVoteDelega
 
 instance IsCsl StakeAndVoteDelegation where
   className _ = "StakeAndVoteDelegation"
+
 instance IsBytes StakeAndVoteDelegation
 instance IsJson StakeAndVoteDelegation
-instance EncodeAeson StakeAndVoteDelegation where encodeAeson = cslToAeson
-instance DecodeAeson StakeAndVoteDelegation where decodeAeson = cslFromAeson
-instance Show StakeAndVoteDelegation where show = showViaJson
+instance EncodeAeson StakeAndVoteDelegation where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson StakeAndVoteDelegation where
+  decodeAeson = cslFromAeson
+
+instance Show StakeAndVoteDelegation where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Stake delegation
@@ -3497,11 +4092,17 @@ foreign import stakeDelegation_hasScriptCredentials :: StakeDelegation -> Boolea
 
 instance IsCsl StakeDelegation where
   className _ = "StakeDelegation"
+
 instance IsBytes StakeDelegation
 instance IsJson StakeDelegation
-instance EncodeAeson StakeDelegation where encodeAeson = cslToAeson
-instance DecodeAeson StakeDelegation where decodeAeson = cslFromAeson
-instance Show StakeDelegation where show = showViaJson
+instance EncodeAeson StakeDelegation where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson StakeDelegation where
+  decodeAeson = cslFromAeson
+
+instance Show StakeDelegation where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Stake deregistration
@@ -3516,11 +4117,17 @@ foreign import stakeDeregistration_hasScriptCredentials :: StakeDeregistration -
 
 instance IsCsl StakeDeregistration where
   className _ = "StakeDeregistration"
+
 instance IsBytes StakeDeregistration
 instance IsJson StakeDeregistration
-instance EncodeAeson StakeDeregistration where encodeAeson = cslToAeson
-instance DecodeAeson StakeDeregistration where decodeAeson = cslFromAeson
-instance Show StakeDeregistration where show = showViaJson
+instance EncodeAeson StakeDeregistration where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson StakeDeregistration where
+  decodeAeson = cslFromAeson
+
+instance Show StakeDeregistration where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Stake registration
@@ -3535,11 +4142,17 @@ foreign import stakeRegistration_hasScriptCredentials :: StakeRegistration -> Bo
 
 instance IsCsl StakeRegistration where
   className _ = "StakeRegistration"
+
 instance IsBytes StakeRegistration
 instance IsJson StakeRegistration
-instance EncodeAeson StakeRegistration where encodeAeson = cslToAeson
-instance DecodeAeson StakeRegistration where decodeAeson = cslFromAeson
-instance Show StakeRegistration where show = showViaJson
+instance EncodeAeson StakeRegistration where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson StakeRegistration where
+  decodeAeson = cslFromAeson
+
+instance Show StakeRegistration where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Stake registration and delegation
@@ -3554,11 +4167,17 @@ foreign import stakeRegistrationAndDelegation_hasScriptCredentials :: StakeRegis
 
 instance IsCsl StakeRegistrationAndDelegation where
   className _ = "StakeRegistrationAndDelegation"
+
 instance IsBytes StakeRegistrationAndDelegation
 instance IsJson StakeRegistrationAndDelegation
-instance EncodeAeson StakeRegistrationAndDelegation where encodeAeson = cslToAeson
-instance DecodeAeson StakeRegistrationAndDelegation where decodeAeson = cslFromAeson
-instance Show StakeRegistrationAndDelegation where show = showViaJson
+instance EncodeAeson StakeRegistrationAndDelegation where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson StakeRegistrationAndDelegation where
+  decodeAeson = cslFromAeson
+
+instance Show StakeRegistrationAndDelegation where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Stake vote registration and delegation
@@ -3574,11 +4193,17 @@ foreign import stakeVoteRegistrationAndDelegation_hasScriptCredentials :: StakeV
 
 instance IsCsl StakeVoteRegistrationAndDelegation where
   className _ = "StakeVoteRegistrationAndDelegation"
+
 instance IsBytes StakeVoteRegistrationAndDelegation
 instance IsJson StakeVoteRegistrationAndDelegation
-instance EncodeAeson StakeVoteRegistrationAndDelegation where encodeAeson = cslToAeson
-instance DecodeAeson StakeVoteRegistrationAndDelegation where decodeAeson = cslFromAeson
-instance Show StakeVoteRegistrationAndDelegation where show = showViaJson
+instance EncodeAeson StakeVoteRegistrationAndDelegation where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson StakeVoteRegistrationAndDelegation where
+  decodeAeson = cslFromAeson
+
+instance Show StakeVoteRegistrationAndDelegation where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Timelock expiry
@@ -3592,11 +4217,17 @@ foreign import timelockExpiry_newTimelockexpiry :: BigNum -> TimelockExpiry
 
 instance IsCsl TimelockExpiry where
   className _ = "TimelockExpiry"
+
 instance IsBytes TimelockExpiry
 instance IsJson TimelockExpiry
-instance EncodeAeson TimelockExpiry where encodeAeson = cslToAeson
-instance DecodeAeson TimelockExpiry where decodeAeson = cslFromAeson
-instance Show TimelockExpiry where show = showViaJson
+instance EncodeAeson TimelockExpiry where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TimelockExpiry where
+  decodeAeson = cslFromAeson
+
+instance Show TimelockExpiry where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Timelock start
@@ -3610,11 +4241,17 @@ foreign import timelockStart_newTimelockstart :: BigNum -> TimelockStart
 
 instance IsCsl TimelockStart where
   className _ = "TimelockStart"
+
 instance IsBytes TimelockStart
 instance IsJson TimelockStart
-instance EncodeAeson TimelockStart where encodeAeson = cslToAeson
-instance DecodeAeson TimelockStart where decodeAeson = cslFromAeson
-instance Show TimelockStart where show = showViaJson
+instance EncodeAeson TimelockStart where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TimelockStart where
+  decodeAeson = cslFromAeson
+
+instance Show TimelockStart where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Transaction
@@ -3630,18 +4267,22 @@ foreign import transaction_new :: TransactionBody -> TransactionWitnessSet -> Au
 
 instance IsCsl Transaction where
   className _ = "Transaction"
+
 instance IsBytes Transaction
 instance IsJson Transaction
-instance EncodeAeson Transaction where encodeAeson = cslToAeson
-instance DecodeAeson Transaction where decodeAeson = cslFromAeson
-instance Show Transaction where show = showViaJson
+instance EncodeAeson Transaction where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Transaction where
+  decodeAeson = cslFromAeson
+
+instance Show Transaction where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Transaction batch
 
 foreign import data TransactionBatch :: Type
-
-
 
 instance IsCsl TransactionBatch where
   className _ = "TransactionBatch"
@@ -3650,8 +4291,6 @@ instance IsCsl TransactionBatch where
 -- Transaction batch list
 
 foreign import data TransactionBatchList :: Type
-
-
 
 instance IsCsl TransactionBatchList where
   className _ = "TransactionBatchList"
@@ -3709,11 +4348,17 @@ foreign import transactionBody_newTxBody :: TransactionInputs -> TransactionOutp
 
 instance IsCsl TransactionBody where
   className _ = "TransactionBody"
+
 instance IsBytes TransactionBody
 instance IsJson TransactionBody
-instance EncodeAeson TransactionBody where encodeAeson = cslToAeson
-instance DecodeAeson TransactionBody where decodeAeson = cslFromAeson
-instance Show TransactionBody where show = showViaJson
+instance EncodeAeson TransactionBody where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TransactionBody where
+  decodeAeson = cslFromAeson
+
+instance Show TransactionBody where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Transaction hash
@@ -3725,10 +4370,16 @@ foreign import transactionHash_fromBech32 :: String -> Nullable TransactionHash
 
 instance IsCsl TransactionHash where
   className _ = "TransactionHash"
+
 instance IsBytes TransactionHash
-instance EncodeAeson TransactionHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson TransactionHash where decodeAeson = cslFromAesonViaBytes
-instance Show TransactionHash where show = showViaBytes
+instance EncodeAeson TransactionHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson TransactionHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show TransactionHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Transaction input
@@ -3741,11 +4392,17 @@ foreign import transactionInput_new :: TransactionHash -> Number -> TransactionI
 
 instance IsCsl TransactionInput where
   className _ = "TransactionInput"
+
 instance IsBytes TransactionInput
 instance IsJson TransactionInput
-instance EncodeAeson TransactionInput where encodeAeson = cslToAeson
-instance DecodeAeson TransactionInput where decodeAeson = cslFromAeson
-instance Show TransactionInput where show = showViaJson
+instance EncodeAeson TransactionInput where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TransactionInput where
+  decodeAeson = cslFromAeson
+
+instance Show TransactionInput where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Transaction inputs
@@ -3757,11 +4414,17 @@ foreign import transactionInputs_toOption :: TransactionInputs -> Nullable Trans
 
 instance IsCsl TransactionInputs where
   className _ = "TransactionInputs"
+
 instance IsBytes TransactionInputs
 instance IsJson TransactionInputs
-instance EncodeAeson TransactionInputs where encodeAeson = cslToAeson
-instance DecodeAeson TransactionInputs where decodeAeson = cslFromAeson
-instance Show TransactionInputs where show = showViaJson
+instance EncodeAeson TransactionInputs where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TransactionInputs where
+  decodeAeson = cslFromAeson
+
+instance Show TransactionInputs where
+  show = showViaJson
 
 instance IsListContainer TransactionInputs TransactionInput
 
@@ -3784,10 +4447,16 @@ foreign import transactionMetadatum_asText :: TransactionMetadatum -> Nullable S
 
 instance IsCsl TransactionMetadatum where
   className _ = "TransactionMetadatum"
+
 instance IsBytes TransactionMetadatum
-instance EncodeAeson TransactionMetadatum where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson TransactionMetadatum where decodeAeson = cslFromAesonViaBytes
-instance Show TransactionMetadatum where show = showViaBytes
+instance EncodeAeson TransactionMetadatum where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson TransactionMetadatum where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show TransactionMetadatum where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Transaction metadatum labels
@@ -3798,10 +4467,16 @@ foreign import transactionMetadatumLabels_new :: Effect TransactionMetadatumLabe
 
 instance IsCsl TransactionMetadatumLabels where
   className _ = "TransactionMetadatumLabels"
+
 instance IsBytes TransactionMetadatumLabels
-instance EncodeAeson TransactionMetadatumLabels where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson TransactionMetadatumLabels where decodeAeson = cslFromAesonViaBytes
-instance Show TransactionMetadatumLabels where show = showViaBytes
+instance EncodeAeson TransactionMetadatumLabels where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson TransactionMetadatumLabels where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show TransactionMetadatumLabels where
+  show = showViaBytes
 
 instance IsListContainer TransactionMetadatumLabels BigNum
 
@@ -3826,11 +4501,17 @@ foreign import transactionOutput_serializationFormat :: TransactionOutput -> Nul
 
 instance IsCsl TransactionOutput where
   className _ = "TransactionOutput"
+
 instance IsBytes TransactionOutput
 instance IsJson TransactionOutput
-instance EncodeAeson TransactionOutput where encodeAeson = cslToAeson
-instance DecodeAeson TransactionOutput where decodeAeson = cslFromAeson
-instance Show TransactionOutput where show = showViaJson
+instance EncodeAeson TransactionOutput where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TransactionOutput where
+  decodeAeson = cslFromAeson
+
+instance Show TransactionOutput where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Transaction outputs
@@ -3841,11 +4522,17 @@ foreign import transactionOutputs_new :: Effect TransactionOutputs
 
 instance IsCsl TransactionOutputs where
   className _ = "TransactionOutputs"
+
 instance IsBytes TransactionOutputs
 instance IsJson TransactionOutputs
-instance EncodeAeson TransactionOutputs where encodeAeson = cslToAeson
-instance DecodeAeson TransactionOutputs where decodeAeson = cslFromAeson
-instance Show TransactionOutputs where show = showViaJson
+instance EncodeAeson TransactionOutputs where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TransactionOutputs where
+  decodeAeson = cslFromAeson
+
+instance Show TransactionOutputs where
+  show = showViaJson
 
 instance IsListContainer TransactionOutputs TransactionOutput
 
@@ -3860,11 +4547,17 @@ foreign import transactionUnspentOutput_output :: TransactionUnspentOutput -> Tr
 
 instance IsCsl TransactionUnspentOutput where
   className _ = "TransactionUnspentOutput"
+
 instance IsBytes TransactionUnspentOutput
 instance IsJson TransactionUnspentOutput
-instance EncodeAeson TransactionUnspentOutput where encodeAeson = cslToAeson
-instance DecodeAeson TransactionUnspentOutput where decodeAeson = cslFromAeson
-instance Show TransactionUnspentOutput where show = showViaJson
+instance EncodeAeson TransactionUnspentOutput where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TransactionUnspentOutput where
+  decodeAeson = cslFromAeson
+
+instance Show TransactionUnspentOutput where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Transaction unspent outputs
@@ -3875,10 +4568,16 @@ foreign import transactionUnspentOutputs_new :: Effect TransactionUnspentOutputs
 
 instance IsCsl TransactionUnspentOutputs where
   className _ = "TransactionUnspentOutputs"
+
 instance IsJson TransactionUnspentOutputs
-instance EncodeAeson TransactionUnspentOutputs where encodeAeson = cslToAeson
-instance DecodeAeson TransactionUnspentOutputs where decodeAeson = cslFromAeson
-instance Show TransactionUnspentOutputs where show = showViaJson
+instance EncodeAeson TransactionUnspentOutputs where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TransactionUnspentOutputs where
+  decodeAeson = cslFromAeson
+
+instance Show TransactionUnspentOutputs where
+  show = showViaJson
 
 instance IsListContainer TransactionUnspentOutputs TransactionUnspentOutput
 
@@ -3903,11 +4602,17 @@ foreign import transactionWitnessSet_new :: Effect TransactionWitnessSet
 
 instance IsCsl TransactionWitnessSet where
   className _ = "TransactionWitnessSet"
+
 instance IsBytes TransactionWitnessSet
 instance IsJson TransactionWitnessSet
-instance EncodeAeson TransactionWitnessSet where encodeAeson = cslToAeson
-instance DecodeAeson TransactionWitnessSet where decodeAeson = cslFromAeson
-instance Show TransactionWitnessSet where show = showViaJson
+instance EncodeAeson TransactionWitnessSet where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TransactionWitnessSet where
+  decodeAeson = cslFromAeson
+
+instance Show TransactionWitnessSet where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Treasury withdrawals
@@ -3918,10 +4623,16 @@ foreign import treasuryWithdrawals_new :: TreasuryWithdrawals
 
 instance IsCsl TreasuryWithdrawals where
   className _ = "TreasuryWithdrawals"
+
 instance IsJson TreasuryWithdrawals
-instance EncodeAeson TreasuryWithdrawals where encodeAeson = cslToAeson
-instance DecodeAeson TreasuryWithdrawals where decodeAeson = cslFromAeson
-instance Show TreasuryWithdrawals where show = showViaJson
+instance EncodeAeson TreasuryWithdrawals where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TreasuryWithdrawals where
+  decodeAeson = cslFromAeson
+
+instance Show TreasuryWithdrawals where
+  show = showViaJson
 
 instance IsMapContainer TreasuryWithdrawals RewardAddress BigNum
 
@@ -3937,11 +4648,17 @@ foreign import treasuryWithdrawalsAction_newWithPolicyHash :: TreasuryWithdrawal
 
 instance IsCsl TreasuryWithdrawalsAction where
   className _ = "TreasuryWithdrawalsAction"
+
 instance IsBytes TreasuryWithdrawalsAction
 instance IsJson TreasuryWithdrawalsAction
-instance EncodeAeson TreasuryWithdrawalsAction where encodeAeson = cslToAeson
-instance DecodeAeson TreasuryWithdrawalsAction where decodeAeson = cslFromAeson
-instance Show TreasuryWithdrawalsAction where show = showViaJson
+instance EncodeAeson TreasuryWithdrawalsAction where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson TreasuryWithdrawalsAction where
+  decodeAeson = cslFromAeson
+
+instance Show TreasuryWithdrawalsAction where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- URL
@@ -3953,11 +4670,17 @@ foreign import url_url :: URL -> String
 
 instance IsCsl URL where
   className _ = "URL"
+
 instance IsBytes URL
 instance IsJson URL
-instance EncodeAeson URL where encodeAeson = cslToAeson
-instance DecodeAeson URL where decodeAeson = cslFromAeson
-instance Show URL where show = showViaJson
+instance EncodeAeson URL where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson URL where
+  decodeAeson = cslFromAeson
+
+instance Show URL where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Unit interval
@@ -3970,11 +4693,17 @@ foreign import unitInterval_new :: BigNum -> BigNum -> UnitInterval
 
 instance IsCsl UnitInterval where
   className _ = "UnitInterval"
+
 instance IsBytes UnitInterval
 instance IsJson UnitInterval
-instance EncodeAeson UnitInterval where encodeAeson = cslToAeson
-instance DecodeAeson UnitInterval where decodeAeson = cslFromAeson
-instance Show UnitInterval where show = showViaJson
+instance EncodeAeson UnitInterval where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson UnitInterval where
+  decodeAeson = cslFromAeson
+
+instance Show UnitInterval where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Update
@@ -3987,11 +4716,17 @@ foreign import update_new :: ProposedProtocolParameterUpdates -> Number -> Updat
 
 instance IsCsl Update where
   className _ = "Update"
+
 instance IsBytes Update
 instance IsJson Update
-instance EncodeAeson Update where encodeAeson = cslToAeson
-instance DecodeAeson Update where decodeAeson = cslFromAeson
-instance Show Update where show = showViaJson
+instance EncodeAeson Update where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Update where
+  decodeAeson = cslFromAeson
+
+instance Show Update where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Update committee action
@@ -4006,11 +4741,17 @@ foreign import updateCommitteeAction_newWithActionId :: GovernanceActionId -> Co
 
 instance IsCsl UpdateCommitteeAction where
   className _ = "UpdateCommitteeAction"
+
 instance IsBytes UpdateCommitteeAction
 instance IsJson UpdateCommitteeAction
-instance EncodeAeson UpdateCommitteeAction where encodeAeson = cslToAeson
-instance DecodeAeson UpdateCommitteeAction where decodeAeson = cslFromAeson
-instance Show UpdateCommitteeAction where show = showViaJson
+instance EncodeAeson UpdateCommitteeAction where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson UpdateCommitteeAction where
+  decodeAeson = cslFromAeson
+
+instance Show UpdateCommitteeAction where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- VRFCert
@@ -4023,11 +4764,17 @@ foreign import vrfCert_new :: ByteArray -> ByteArray -> VRFCert
 
 instance IsCsl VRFCert where
   className _ = "VRFCert"
+
 instance IsBytes VRFCert
 instance IsJson VRFCert
-instance EncodeAeson VRFCert where encodeAeson = cslToAeson
-instance DecodeAeson VRFCert where decodeAeson = cslFromAeson
-instance Show VRFCert where show = showViaJson
+instance EncodeAeson VRFCert where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson VRFCert where
+  decodeAeson = cslFromAeson
+
+instance Show VRFCert where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- VRFKey hash
@@ -4039,10 +4786,16 @@ foreign import vrfKeyHash_fromBech32 :: String -> Nullable VRFKeyHash
 
 instance IsCsl VRFKeyHash where
   className _ = "VRFKeyHash"
+
 instance IsBytes VRFKeyHash
-instance EncodeAeson VRFKeyHash where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson VRFKeyHash where decodeAeson = cslFromAesonViaBytes
-instance Show VRFKeyHash where show = showViaBytes
+instance EncodeAeson VRFKeyHash where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson VRFKeyHash where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show VRFKeyHash where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- VRFVKey
@@ -4054,10 +4807,16 @@ foreign import vrfvKey_fromBech32 :: String -> Nullable VRFVKey
 
 instance IsCsl VRFVKey where
   className _ = "VRFVKey"
+
 instance IsBytes VRFVKey
-instance EncodeAeson VRFVKey where encodeAeson = cslToAesonViaBytes
-instance DecodeAeson VRFVKey where decodeAeson = cslFromAesonViaBytes
-instance Show VRFVKey where show = showViaBytes
+instance EncodeAeson VRFVKey where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson VRFVKey where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show VRFVKey where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Value
@@ -4080,11 +4839,17 @@ foreign import value_compare :: Value -> Value -> Nullable Number
 
 instance IsCsl Value where
   className _ = "Value"
+
 instance IsBytes Value
 instance IsJson Value
-instance EncodeAeson Value where encodeAeson = cslToAeson
-instance DecodeAeson Value where decodeAeson = cslFromAeson
-instance Show Value where show = showViaJson
+instance EncodeAeson Value where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Value where
+  decodeAeson = cslFromAeson
+
+instance Show Value where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Vkey
@@ -4096,11 +4861,17 @@ foreign import vkey_publicKey :: Vkey -> PublicKey
 
 instance IsCsl Vkey where
   className _ = "Vkey"
+
 instance IsBytes Vkey
 instance IsJson Vkey
-instance EncodeAeson Vkey where encodeAeson = cslToAeson
-instance DecodeAeson Vkey where decodeAeson = cslFromAeson
-instance Show Vkey where show = showViaJson
+instance EncodeAeson Vkey where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Vkey where
+  decodeAeson = cslFromAeson
+
+instance Show Vkey where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Vkeys
@@ -4125,11 +4896,17 @@ foreign import vkeywitness_signature :: Vkeywitness -> Ed25519Signature
 
 instance IsCsl Vkeywitness where
   className _ = "Vkeywitness"
+
 instance IsBytes Vkeywitness
 instance IsJson Vkeywitness
-instance EncodeAeson Vkeywitness where encodeAeson = cslToAeson
-instance DecodeAeson Vkeywitness where decodeAeson = cslFromAeson
-instance Show Vkeywitness where show = showViaJson
+instance EncodeAeson Vkeywitness where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Vkeywitness where
+  decodeAeson = cslFromAeson
+
+instance Show Vkeywitness where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Vkeywitnesses
@@ -4140,11 +4917,17 @@ foreign import vkeywitnesses_new :: Effect Vkeywitnesses
 
 instance IsCsl Vkeywitnesses where
   className _ = "Vkeywitnesses"
+
 instance IsBytes Vkeywitnesses
 instance IsJson Vkeywitnesses
-instance EncodeAeson Vkeywitnesses where encodeAeson = cslToAeson
-instance DecodeAeson Vkeywitnesses where decodeAeson = cslFromAeson
-instance Show Vkeywitnesses where show = showViaJson
+instance EncodeAeson Vkeywitnesses where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Vkeywitnesses where
+  decodeAeson = cslFromAeson
+
+instance Show Vkeywitnesses where
+  show = showViaJson
 
 instance IsListContainer Vkeywitnesses Vkeywitness
 
@@ -4160,11 +4943,17 @@ foreign import voteDelegation_hasScriptCredentials :: VoteDelegation -> Boolean
 
 instance IsCsl VoteDelegation where
   className _ = "VoteDelegation"
+
 instance IsBytes VoteDelegation
 instance IsJson VoteDelegation
-instance EncodeAeson VoteDelegation where encodeAeson = cslToAeson
-instance DecodeAeson VoteDelegation where decodeAeson = cslFromAeson
-instance Show VoteDelegation where show = showViaJson
+instance EncodeAeson VoteDelegation where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson VoteDelegation where
+  decodeAeson = cslFromAeson
+
+instance Show VoteDelegation where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Vote registration and delegation
@@ -4179,11 +4968,17 @@ foreign import voteRegistrationAndDelegation_hasScriptCredentials :: VoteRegistr
 
 instance IsCsl VoteRegistrationAndDelegation where
   className _ = "VoteRegistrationAndDelegation"
+
 instance IsBytes VoteRegistrationAndDelegation
 instance IsJson VoteRegistrationAndDelegation
-instance EncodeAeson VoteRegistrationAndDelegation where encodeAeson = cslToAeson
-instance DecodeAeson VoteRegistrationAndDelegation where decodeAeson = cslFromAeson
-instance Show VoteRegistrationAndDelegation where show = showViaJson
+instance EncodeAeson VoteRegistrationAndDelegation where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson VoteRegistrationAndDelegation where
+  decodeAeson = cslFromAeson
+
+instance Show VoteRegistrationAndDelegation where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Voter
@@ -4202,11 +4997,17 @@ foreign import voter_toKeyHash :: Voter -> Nullable Ed25519KeyHash
 
 instance IsCsl Voter where
   className _ = "Voter"
+
 instance IsBytes Voter
 instance IsJson Voter
-instance EncodeAeson Voter where encodeAeson = cslToAeson
-instance DecodeAeson Voter where decodeAeson = cslFromAeson
-instance Show Voter where show = showViaJson
+instance EncodeAeson Voter where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Voter where
+  decodeAeson = cslFromAeson
+
+instance Show Voter where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Voters
@@ -4217,10 +5018,16 @@ foreign import voters_new :: Voters
 
 instance IsCsl Voters where
   className _ = "Voters"
+
 instance IsJson Voters
-instance EncodeAeson Voters where encodeAeson = cslToAeson
-instance DecodeAeson Voters where decodeAeson = cslFromAeson
-instance Show Voters where show = showViaJson
+instance EncodeAeson Voters where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Voters where
+  decodeAeson = cslFromAeson
+
+instance Show Voters where
+  show = showViaJson
 
 instance IsListContainer Voters Voter
 
@@ -4253,11 +5060,17 @@ foreign import votingProcedure_anchor :: VotingProcedure -> Nullable Anchor
 
 instance IsCsl VotingProcedure where
   className _ = "VotingProcedure"
+
 instance IsBytes VotingProcedure
 instance IsJson VotingProcedure
-instance EncodeAeson VotingProcedure where encodeAeson = cslToAeson
-instance DecodeAeson VotingProcedure where decodeAeson = cslFromAeson
-instance Show VotingProcedure where show = showViaJson
+instance EncodeAeson VotingProcedure where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson VotingProcedure where
+  decodeAeson = cslFromAeson
+
+instance Show VotingProcedure where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Voting procedures
@@ -4270,11 +5083,17 @@ foreign import votingProcedures_getGovernanceActionIdsByVoter :: VotingProcedure
 
 instance IsCsl VotingProcedures where
   className _ = "VotingProcedures"
+
 instance IsBytes VotingProcedures
 instance IsJson VotingProcedures
-instance EncodeAeson VotingProcedures where encodeAeson = cslToAeson
-instance DecodeAeson VotingProcedures where decodeAeson = cslFromAeson
-instance Show VotingProcedures where show = showViaJson
+instance EncodeAeson VotingProcedures where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson VotingProcedures where
+  decodeAeson = cslFromAeson
+
+instance Show VotingProcedures where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Voting proposal
@@ -4289,11 +5108,17 @@ foreign import votingProposal_new :: GovernanceAction -> Anchor -> RewardAddress
 
 instance IsCsl VotingProposal where
   className _ = "VotingProposal"
+
 instance IsBytes VotingProposal
 instance IsJson VotingProposal
-instance EncodeAeson VotingProposal where encodeAeson = cslToAeson
-instance DecodeAeson VotingProposal where decodeAeson = cslFromAeson
-instance Show VotingProposal where show = showViaJson
+instance EncodeAeson VotingProposal where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson VotingProposal where
+  decodeAeson = cslFromAeson
+
+instance Show VotingProposal where
+  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Voting proposal builder
@@ -4319,11 +5144,17 @@ foreign import votingProposals_new :: VotingProposals
 
 instance IsCsl VotingProposals where
   className _ = "VotingProposals"
+
 instance IsBytes VotingProposals
 instance IsJson VotingProposals
-instance EncodeAeson VotingProposals where encodeAeson = cslToAeson
-instance DecodeAeson VotingProposals where decodeAeson = cslFromAeson
-instance Show VotingProposals where show = showViaJson
+instance EncodeAeson VotingProposals where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson VotingProposals where
+  decodeAeson = cslFromAeson
+
+instance Show VotingProposals where
+  show = showViaJson
 
 instance IsListContainer VotingProposals VotingProposal
 
@@ -4336,11 +5167,17 @@ foreign import withdrawals_new :: Effect Withdrawals
 
 instance IsCsl Withdrawals where
   className _ = "Withdrawals"
+
 instance IsBytes Withdrawals
 instance IsJson Withdrawals
-instance EncodeAeson Withdrawals where encodeAeson = cslToAeson
-instance DecodeAeson Withdrawals where decodeAeson = cslFromAeson
-instance Show Withdrawals where show = showViaJson
+instance EncodeAeson Withdrawals where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson Withdrawals where
+  decodeAeson = cslFromAeson
+
+instance Show Withdrawals where
+  show = showViaJson
 
 instance IsMapContainer Withdrawals RewardAddress BigNum
 
@@ -4376,8 +5213,8 @@ data VoteKindValues
 
 derive instance Generic VoteKindValues _
 instance IsCslEnum VoteKindValues VoteKind
-instance Show VoteKindValues where show = genericShow
-
+instance Show VoteKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- ScriptSchema
@@ -4390,8 +5227,8 @@ data ScriptSchemaValues
 
 derive instance Generic ScriptSchemaValues _
 instance IsCslEnum ScriptSchemaValues ScriptSchema
-instance Show ScriptSchemaValues where show = genericShow
-
+instance Show ScriptSchemaValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- CredKind
@@ -4404,8 +5241,8 @@ data CredKindValues
 
 derive instance Generic CredKindValues _
 instance IsCslEnum CredKindValues CredKind
-instance Show CredKindValues where show = genericShow
-
+instance Show CredKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- MIRPot
@@ -4418,8 +5255,8 @@ data MIRPotValues
 
 derive instance Generic MIRPotValues _
 instance IsCslEnum MIRPotValues MIRPot
-instance Show MIRPotValues where show = genericShow
-
+instance Show MIRPotValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- NetworkIdKind
@@ -4432,8 +5269,8 @@ data NetworkIdKindValues
 
 derive instance Generic NetworkIdKindValues _
 instance IsCslEnum NetworkIdKindValues NetworkIdKind
-instance Show NetworkIdKindValues where show = genericShow
-
+instance Show NetworkIdKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- VoterKind
@@ -4449,8 +5286,8 @@ data VoterKindValues
 
 derive instance Generic VoterKindValues _
 instance IsCslEnum VoterKindValues VoterKind
-instance Show VoterKindValues where show = genericShow
-
+instance Show VoterKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- AddressKind
@@ -4467,8 +5304,8 @@ data AddressKindValues
 
 derive instance Generic AddressKindValues _
 instance IsCslEnum AddressKindValues AddressKind
-instance Show AddressKindValues where show = genericShow
-
+instance Show AddressKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- ScriptHashNamespace
@@ -4483,8 +5320,8 @@ data ScriptHashNamespaceValues
 
 derive instance Generic ScriptHashNamespaceValues _
 instance IsCslEnum ScriptHashNamespaceValues ScriptHashNamespace
-instance Show ScriptHashNamespaceValues where show = genericShow
-
+instance Show ScriptHashNamespaceValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- NativeScriptKind
@@ -4501,8 +5338,8 @@ data NativeScriptKindValues
 
 derive instance Generic NativeScriptKindValues _
 instance IsCslEnum NativeScriptKindValues NativeScriptKind
-instance Show NativeScriptKindValues where show = genericShow
-
+instance Show NativeScriptKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- LanguageKind
@@ -4516,8 +5353,8 @@ data LanguageKindValues
 
 derive instance Generic LanguageKindValues _
 instance IsCslEnum LanguageKindValues LanguageKind
-instance Show LanguageKindValues where show = genericShow
-
+instance Show LanguageKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- MetadataJsonSchema
@@ -4531,8 +5368,8 @@ data MetadataJsonSchemaValues
 
 derive instance Generic MetadataJsonSchemaValues _
 instance IsCslEnum MetadataJsonSchemaValues MetadataJsonSchema
-instance Show MetadataJsonSchemaValues where show = genericShow
-
+instance Show MetadataJsonSchemaValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- MIRKind
@@ -4545,8 +5382,8 @@ data MIRKindValues
 
 derive instance Generic MIRKindValues _
 instance IsCslEnum MIRKindValues MIRKind
-instance Show MIRKindValues where show = genericShow
-
+instance Show MIRKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- RedeemerTagKind
@@ -4563,8 +5400,8 @@ data RedeemerTagKindValues
 
 derive instance Generic RedeemerTagKindValues _
 instance IsCslEnum RedeemerTagKindValues RedeemerTagKind
-instance Show RedeemerTagKindValues where show = genericShow
-
+instance Show RedeemerTagKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- CoinSelectionStrategyCIP2
@@ -4579,8 +5416,8 @@ data CoinSelectionStrategyCIP2Values
 
 derive instance Generic CoinSelectionStrategyCIP2Values _
 instance IsCslEnum CoinSelectionStrategyCIP2Values CoinSelectionStrategyCIP2
-instance Show CoinSelectionStrategyCIP2Values where show = genericShow
-
+instance Show CoinSelectionStrategyCIP2Values where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- RelayKind
@@ -4594,8 +5431,8 @@ data RelayKindValues
 
 derive instance Generic RelayKindValues _
 instance IsCslEnum RelayKindValues RelayKind
-instance Show RelayKindValues where show = genericShow
-
+instance Show RelayKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- CborContainerType
@@ -4608,8 +5445,8 @@ data CborContainerTypeValues
 
 derive instance Generic CborContainerTypeValues _
 instance IsCslEnum CborContainerTypeValues CborContainerType
-instance Show CborContainerTypeValues where show = genericShow
-
+instance Show CborContainerTypeValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- PlutusDatumSchema
@@ -4622,8 +5459,8 @@ data PlutusDatumSchemaValues
 
 derive instance Generic PlutusDatumSchemaValues _
 instance IsCslEnum PlutusDatumSchemaValues PlutusDatumSchema
-instance Show PlutusDatumSchemaValues where show = genericShow
-
+instance Show PlutusDatumSchemaValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- GovernanceActionKind
@@ -4641,8 +5478,8 @@ data GovernanceActionKindValues
 
 derive instance Generic GovernanceActionKindValues _
 instance IsCslEnum GovernanceActionKindValues GovernanceActionKind
-instance Show GovernanceActionKindValues where show = genericShow
-
+instance Show GovernanceActionKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- DRepKind
@@ -4657,8 +5494,8 @@ data DRepKindValues
 
 derive instance Generic DRepKindValues _
 instance IsCslEnum DRepKindValues DRepKind
-instance Show DRepKindValues where show = genericShow
-
+instance Show DRepKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- CertificateKind
@@ -4686,8 +5523,8 @@ data CertificateKindValues
 
 derive instance Generic CertificateKindValues _
 instance IsCslEnum CertificateKindValues CertificateKind
-instance Show CertificateKindValues where show = genericShow
-
+instance Show CertificateKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- TransactionMetadatumKind
@@ -4703,8 +5540,8 @@ data TransactionMetadatumKindValues
 
 derive instance Generic TransactionMetadatumKindValues _
 instance IsCslEnum TransactionMetadatumKindValues TransactionMetadatumKind
-instance Show TransactionMetadatumKindValues where show = genericShow
-
+instance Show TransactionMetadatumKindValues where
+  show = genericShow
 
 --------------------------------------------------------------------------------
 -- PlutusDataKind
@@ -4720,7 +5557,6 @@ data PlutusDataKindValues
 
 derive instance Generic PlutusDataKindValues _
 instance IsCslEnum PlutusDataKindValues PlutusDataKind
-instance Show PlutusDataKindValues where show = genericShow
-
-
+instance Show PlutusDataKindValues where
+  show = genericShow
 
