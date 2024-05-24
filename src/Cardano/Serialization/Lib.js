@@ -1559,9 +1559,24 @@ export const votingProcedure_voteKind = self => self.vote_kind.bind(self)();
 export const votingProcedure_anchor = self => self.anchor.bind(self)();
 
 // VotingProcedures
-export const votingProcedures_new = CSL.VotingProcedures.new();
-export const votingProcedures_getVoters = self => self.get_voters.bind(self)();
-export const votingProcedures_getGovernanceActionIdsByVoter = self => voter =>
+export const votingProcedures_free = self => errorableToPurs(self.free.bind(self));
+export const votingProcedures_toBytes = self => self.to_bytes.bind(self)();
+export const votingProcedures_fromBytes = bytes =>
+  errorableToPurs(CSL.VotingProcedures.from_bytes, bytes);
+export const votingProcedures_toHex = self => self.to_hex.bind(self)();
+export const votingProcedures_fromHex = hex_str =>
+  errorableToPurs(CSL.VotingProcedures.from_hex, hex_str);
+export const votingProcedures_toJson = self => self.to_json.bind(self)();
+export const votingProcedures_fromJson = json =>
+  errorableToPurs(CSL.VotingProcedures.from_json, json);
+export const votingProcedures_new = () => CSL.VotingProcedures.new();
+export const votingProcedures_insert =
+  self => voter => governance_action_id => voting_procedure => () =>
+    self.insert.bind(self)(voter, governance_action_id, voting_procedure);
+export const votingProcedures_get = self => voter => governance_action_id => () =>
+  self.get.bind(self)(voter, governance_action_id);
+export const votingProcedures_getVoters = self => () => self.get_voters.bind(self)();
+export const votingProcedures_getGovernanceActionIdsByVoter = self => voter => () =>
   self.get_governance_action_ids_by_voter.bind(self)(voter);
 
 // VotingProposal

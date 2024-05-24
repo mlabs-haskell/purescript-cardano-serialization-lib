@@ -354,7 +354,7 @@ substInt = replace "Number" "Int" . replace "number" "int"
 filterMethods :: Class -> [Method]
 filterMethods (Class name ms)
   -- CostModel is a special case: it looks like a mapping type, but isn't
-  | name `elem` ["PublicKey", "PrivateKey", "CostModel"] =
+  | name `elem` ["PublicKey", "PrivateKey", "CostModel", "VotingProcedures"] =
       filter (not . isIgnored . method'fun) ms -- these types need special handling
   | otherwise = filter (not . isCommon . method'fun) ms
   where
@@ -448,6 +448,7 @@ getPureness :: String -> Fun -> Pureness
 getPureness className Fun{..}
   | isConvertor fun'name = Pure
   | take 4 fun'name `elem` [ "set_", "add_" ] = Mutating
+  | fun'name == "insert" = Mutating
   | fun'res == "void" = Throwing
   | isMutating && not isThrowing = Mutating
   | not isMutating && not isThrowing = Pure
@@ -542,6 +543,7 @@ mutating =
     , keys "ProposedProtocolParameterUpdates"
     , keys "Withdrawals"
     , inClass "Committee" ["new"]
+    , inClass "VotingProcedures" ["new", "get", "get_voters", "get_governance_action_ids_by_voter"]
     ] ++ map (list . fst) listTypes
   where
     inClass name ms = Set.fromList $ fmap (name, ) ms

@@ -821,7 +821,16 @@ module Cardano.Serialization.Lib
   , votingProcedure_newWithAnchor
   , votingProcedure_voteKind
   , votingProcedure_anchor
+  , votingProcedures_free
+  , votingProcedures_toBytes
+  , votingProcedures_fromBytes
+  , votingProcedures_toHex
+  , votingProcedures_fromHex
+  , votingProcedures_toJson
+  , votingProcedures_fromJson
   , votingProcedures_new
+  , votingProcedures_insert
+  , votingProcedures_get
   , votingProcedures_getVoters
   , votingProcedures_getGovernanceActionIdsByVoter
   , votingProposal_governanceAction
@@ -5009,9 +5018,18 @@ instance Show VotingProcedure where
 
 foreign import data VotingProcedures :: Type
 
-foreign import votingProcedures_new :: VotingProcedures
-foreign import votingProcedures_getVoters :: VotingProcedures -> Voters
-foreign import votingProcedures_getGovernanceActionIdsByVoter :: VotingProcedures -> Voter -> GovernanceActionIds
+foreign import votingProcedures_free :: VotingProcedures -> Nullable Unit
+foreign import votingProcedures_toBytes :: VotingProcedures -> ByteArray
+foreign import votingProcedures_fromBytes :: ByteArray -> Nullable VotingProcedures
+foreign import votingProcedures_toHex :: VotingProcedures -> String
+foreign import votingProcedures_fromHex :: String -> Nullable VotingProcedures
+foreign import votingProcedures_toJson :: VotingProcedures -> String
+foreign import votingProcedures_fromJson :: String -> Nullable VotingProcedures
+foreign import votingProcedures_new :: Effect VotingProcedures
+foreign import votingProcedures_insert :: VotingProcedures -> Voter -> GovernanceActionId -> VotingProcedure -> Effect Unit
+foreign import votingProcedures_get :: VotingProcedures -> Voter -> GovernanceActionId -> Effect ((Nullable VotingProcedure))
+foreign import votingProcedures_getVoters :: VotingProcedures -> Effect Voters
+foreign import votingProcedures_getGovernanceActionIdsByVoter :: VotingProcedures -> Voter -> Effect GovernanceActionIds
 
 instance IsCsl VotingProcedures where
   className _ = "VotingProcedures"
