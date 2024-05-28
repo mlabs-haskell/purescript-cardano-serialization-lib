@@ -27,6 +27,10 @@ library
   exposed-modules:
       Csl
       Csl.Gen
+      Csl.Gen.JavaScript
+      Csl.Gen.Pureness
+      Csl.Gen.PureScript
+      Csl.Gen.Utils
       Csl.Parse
       Csl.Types
   other-modules:

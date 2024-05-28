@@ -1,4 +1,11 @@
-module Csl.Types where
+module Csl.Types (
+  Arg (..),
+  Fun (..),
+  Class (..),
+  MethodType (..),
+  Method (..),
+  CslEnum (..),
+) where
 
 data Arg = Arg
   { arg'name :: String
@@ -9,7 +16,7 @@ data Arg = Arg
 data Fun = Fun
   { fun'name :: String
   , fun'args :: [Arg]
-  , fun'res  :: String
+  , fun'res :: String
   }
   deriving (Show)
 
