@@ -11,5 +11,5 @@ module Csl.Gen (
 
 import Csl.Gen.JavaScript (classJs, funJs)
 import Csl.Gen.PureScript (classPurs, enumPurs, exportListPurs, funPurs)
-import Csl.Gen.Pureness (getPureness)
+import Csl.Gen.Types.FunPurity (getPureness)
 import Csl.Gen.Utils (isCommon)

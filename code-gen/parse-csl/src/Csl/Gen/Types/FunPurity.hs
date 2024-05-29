@@ -1,6 +1,6 @@
-module Csl.Gen.Pureness (
+module Csl.Gen.Types.FunPurity (
   getPureness,
-  Pureness (Pure, Mutating, Throwing),
+  FunPurity (Pure, Mutating, Throwing),
   isPure,
 ) where
 
@@ -8,10 +8,10 @@ import Csl.Types
 import Data.Set (Set)
 import Data.Set qualified as Set
 
-data Pureness = Pure | Mutating | Throwing
+data FunPurity = Pure | Mutating | Throwing
   deriving (Eq, Show)
 
-getPureness :: String -> Fun -> Pureness
+getPureness :: String -> Fun -> FunPurity
 getPureness className Fun {..}
   | isConvertor fun'name = Pure
   | take 4 fun'name `elem` ["set_", "add_"] = Mutating

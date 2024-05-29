@@ -2,7 +2,7 @@
 
 module Csl.Gen.JavaScript (funJs, classJs) where
 
-import Csl.Gen.Pureness (Pureness (Mutating, Throwing), getPureness)
+import Csl.Gen.Types.FunPurity (FunPurity (Mutating, Throwing), getPureness)
 import Csl.Gen.Utils (filterMethods, toName, toTypePrefix, withSemicolon)
 import Csl.Types
 import Data.List.Extra qualified as L (intercalate, null)
@@ -11,7 +11,7 @@ data FunSpec = FunSpec
   { funSpec'parent :: String
   , funSpec'skipFirst :: Bool
   , funSpec'prefix :: String
-  , funSpec'pureness :: Pureness
+  , funSpec'pureness :: FunPurity
   }
 
 -- process standalone functions

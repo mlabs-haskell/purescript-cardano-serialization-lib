@@ -28,8 +28,8 @@ library
       Csl
       Csl.Gen
       Csl.Gen.JavaScript
-      Csl.Gen.Pureness
       Csl.Gen.PureScript
+      Csl.Gen.Types.FunPurity
       Csl.Gen.Utils
       Csl.Parse
       Csl.Types
