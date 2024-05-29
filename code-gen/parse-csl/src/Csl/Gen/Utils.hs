@@ -121,7 +121,8 @@ lowerHead str
 
 filterMethods :: Class -> [Method]
 filterMethods (Class name ms)
-  -- CostModel is a special case: it looks like a mapping type, but isn't
+  -- CostModel and VotingProcedures are special cases: they are not normal maps
+  -- and must expose their methods.
   | name `elem` ["PublicKey", "PrivateKey", "CostModel", "VotingProcedures"] =
       filter (not . isIgnored . method'fun) ms -- these types need special handling
   | otherwise = filter (not . isCommon . method'fun) ms
