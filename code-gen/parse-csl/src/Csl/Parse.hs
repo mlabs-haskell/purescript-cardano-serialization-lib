@@ -1,10 +1,11 @@
 module Csl.Parse where
 
-import Data.List as L
-import Data.List.Extra (trim)
-import Data.List.Split (splitOn)
-import Data.Maybe (mapMaybe)
-import Csl.Types
+import           Control.Monad   (guard)
+import           Csl.Types
+import           Data.List       as L
+import           Data.List.Extra (trim)
+import           Data.List.Split (splitOn)
+import           Data.Maybe      (mapMaybe)
 
 toFunParts :: String -> [String]
 toFunParts = splitOn "\n\n"
@@ -16,7 +17,7 @@ parseFun :: String -> Maybe Fun
 parseFun str =
   case splitOn funPrefix str of
     [_, content] -> funBody content
-    _ -> Nothing
+    _            -> Nothing
 
 funBody :: String -> Maybe Fun
 funBody content = do
@@ -37,7 +38,7 @@ parseArg :: String -> Maybe Arg
 parseArg str =
   case splitOn ":" str of
     [a, b] -> Just $ Arg (trim a) (trim b)
-    _ -> Nothing
+    _      -> Nothing
 
 toClassParts = tail . splitOn classPrefix
 
@@ -72,7 +73,6 @@ file = "data/cardano_serialization_lib.js.flow"
 removeComments :: String -> String
 removeComments str = mconcat $
   case splitOn "/*" str of
-    [] -> []
-    a:[] -> [a]
+    []     -> []
+    a:[]   -> [a]
     a:rest -> a : fmap (mconcat . tail . splitOn "*/") rest
-

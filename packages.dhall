@@ -105,7 +105,91 @@ in  upstream
 -------------------------------
 -}
 let upstream =
-      https://github.com/purescript/package-sets/releases/download/psc-0.15.4-20220901/packages.dhall
-        sha256:f1531b29c21ac437ffe5666c1b6cc76f0a9c29d3c9d107ff047aa2567744994f
+      https://github.com/purescript/package-sets/releases/download/psc-0.15.4-20230105/packages.dhall
+        sha256:3e9fbc9ba03e9a1fcfd895f65e2d50ee2f5e86c4cd273f3d5c841b655a0e1bda
 
-in  upstream
+let additions =
+      { aeson =
+        { dependencies =
+          [ "aff"
+          , "argonaut"
+          , "argonaut-codecs"
+          , "argonaut-core"
+          , "arrays"
+          , "bifunctors"
+          , "const"
+          , "control"
+          , "effect"
+          , "either"
+          , "exceptions"
+          , "foldable-traversable"
+          , "foreign-object"
+          , "integers"
+          , "js-bigints"
+          , "lists"
+          , "maybe"
+          , "mote"
+          , "numbers"
+          , "ordered-collections"
+          , "partial"
+          , "prelude"
+          , "quickcheck"
+          , "record"
+          , "spec"
+          , "strings"
+          , "tuples"
+          , "typelevel"
+          , "typelevel-prelude"
+          , "uint"
+          , "untagged-union"
+          ]
+        , repo = "https://github.com/mlabs-haskell/purescript-aeson.git"
+        , version = "v2.0.0"
+        }
+      , bignumber =
+        { dependencies =
+          [ "console"
+          , "effect"
+          , "either"
+          , "exceptions"
+          , "functions"
+          , "integers"
+          , "partial"
+          , "prelude"
+          , "tuples"
+          ]
+        , repo = "https://github.com/mlabs-haskell/purescript-bignumber"
+        , version = "760d11b41ece31b8cdd3c53349c5c2fd48d3ff89"
+        }
+      , mote =
+        { dependencies = [ "these", "transformers", "arrays" ]
+        , repo = "https://github.com/garyb/purescript-mote"
+        , version = "v1.1.0"
+        }
+      , js-bigints =
+        { dependencies = [ "integers", "maybe", "prelude" ]
+        , repo = "https://github.com/purescript-contrib/purescript-js-bigints"
+        , version = "36a7d8ac75a7230043ae511f3145f9ed130954a9"
+        }
+      , bytearrays =
+        { dependencies =
+          [ "aeson"
+          , "aff"
+          , "arraybuffer-types"
+          , "effect"
+          , "either"
+          , "foldable-traversable"
+          , "maybe"
+          , "newtype"
+          , "prelude"
+          , "quickcheck"
+          , "quickcheck-laws"
+          , "spec"
+          , "strings"
+          ]
+        , repo = "https://github.com/mlabs-haskell/purescript-bytearrays"
+        , version = "e3991d562a04d8825472551d91a06407ad9c9112"
+        }
+      }
+
+in  upstream // additions

@@ -4,4 +4,5 @@ build:
 	stack build
 
 run:
-	stack run
+	mkdir -p output
+	stack run -- output

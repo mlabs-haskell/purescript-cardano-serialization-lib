@@ -1,6 +1,8 @@
+.spago2nix/
 .spago/
 output/
 demo/dist/
 demo/node_modules/
 demo/src/purs.js
 demo/package-lock.json
+result

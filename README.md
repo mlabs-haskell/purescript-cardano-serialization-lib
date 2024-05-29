@@ -1,17 +1,12 @@
 # purescript-cardano-serialization-lib
 
-Pursecript library for cardano frontend types for [emurgo/cardano-serialisation-lib](https://github.com/Emurgo/cardano-serialization-lib)
-At the moment bindongs are only for browser version.
-
-Cardano serialization library can be used to work with Cardano types on frontend.
-We can create TX and export them to the form which can then be submitted
-over wallet or API to the node.
-
-The main ide of the library is to provide thin layer of FFI bindings to the original CSL library.
-It does not try to make any abstractions beyond what is provided with CSL. 
-It gives you solid foundation to build your own abstractions.
+This is a code-generated wrapper for `@mlabs-haskell/cardano-serialization-lib-gc`, a vendored version of [CSL by Emurgo](https://github.com/Emurgo/cardano-serialization-lib/).
 
 ## How to use the library
+
+Most likely you would want to use [`purescript-cardano-types`](https://github.com/mlabs-haskell/purescript-cardano-types) - that library provides a nice purely-functional interface on top of these raw bindings.
+
+## How this library works
 
 Library ports the [CSL api](https://github.com/Emurgo/cardano-serialization-lib/blob/master/rust/pkg/cardano_serialization_lib.js.flow).
 The JS classes are converted to values of record type which
@@ -27,47 +22,18 @@ Csl.BigNum.from_str("100200");
 In purescript it is called on the value `bigInt` which provides the function:
 
 ```purescript
-Csl.bigNum.fromStr "100200"
-```
+import Cardano.Serialization.Lib as CSL
 
-So you can apply all the functions from emurgo/CSL. Just read the original API
-and see translation conventions to use it in purescript.
+CSL.bigNum_fromStr "100200"
+```
 
 ### How to build your code with it
 
-To use this library you whould also add emurgo/cardano-serialization-lib-browser
+To use this library you whould also add `@mlabs-haskell/cardano-serialization-lib-gc`
 as external dependency. Provide this library with your JS code package manager
 and also compile the purs code with it as external dep.
 
-See the Makefile for example how to do it. We should build with spago
-and use esbuild on packaging to js code bundle where we can set up the external 
-dependency on CSL:
-
-```
-> esbuild \
-  ./output/Main/index.js \
-  --bundle \
-  --outfile=demo/src/purs.js \
-  --platform=browser \
-  --format=esm \
-  --external:@emurgo/cardano-serialization-lib-browser
-```
-
-To add the library to your project edit `packages.dhall` (see fields `upstream` and `with` on the examples in the comments) to
-include external github library. see the spago docs on how to do that.
-
-## Used translation conventions
-
-* snake case becomes camel case: `from_str` turns to `fromStr`
-
-* For class, function and method names long words are substituted with shorter ones:
-
-  * `Transaction` to `Tx`
-  * `Output` to `Out`
-  * `Input` to `In`
-  * `ValueJSON` to `ValueJson` etc for all types
-
-So `TransactionInput` becomes `TxIn` and `AddressJSON` becomes `AddresJson`.
+Usage example: [`purescript-cardano-types`](https://github.com/mlabs-haskell/purescript-cardano-types).
 
 ## Possible issues
 
@@ -78,4 +44,29 @@ which is declared like pure and vise versa.
 
 See the `code-gen` directory for the source code of the code parser and generator.
 
+## How to run the code-gen:
 
+1. Run the haskell binary:
+
+```bash
+cd code-gen/parse-csl
+make run # assumes haskell stack is installed
+```
+
+2. Copy the output
+
+```bash
+make copy # run in the project root
+```
+
+3. Apply formatting
+
+```bash
+make format # run in the project root
+```
+
+## How the codegen pipeline works
+
+1. `./code-gen/parse-csl/fixtures` contains some fixture files that the haskell binary reads
+2. `./code-gen/parse-csl/data` contains type definitions for CSL, based on which the PS code is generated
+3. `./code-gen/parse-csl/output` is where the generated files appear, from where they can be copied to `src/`

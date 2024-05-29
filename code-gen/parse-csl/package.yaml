@@ -59,6 +59,8 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - parse-csl
+    - directory
+    - filepath
 
 tests:
   parse-csl-test:
