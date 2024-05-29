@@ -2,8 +2,9 @@
 
 module Csl.Gen.JavaScript (funJs, classJs) where
 
+import Csl.Gen.Lib (filterMethods, toName, toTypePrefix)
 import Csl.Gen.Types.FunPurity (FunPurity (Mutating, Throwing), getPureness)
-import Csl.Gen.Utils (filterMethods, toName, toTypePrefix, withSemicolon)
+import Csl.Gen.Utils (withSemicolon)
 import Csl.Types
 import Data.List.Extra qualified as L (intercalate, null)
 
@@ -72,4 +73,5 @@ methodJs className = toFun
         funJsBy (FunSpec ("CSL." <> className) False pre (getPureness className f)) f
       ObjectMethod ->
         funJsBy (FunSpec "self" True pre (getPureness className f)) (f {fun'args = Arg "self" className : fun'args f})
+
     pre = toTypePrefix className <> "_"

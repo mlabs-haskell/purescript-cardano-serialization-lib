@@ -5,8 +5,9 @@ module Csl.Gen.PureScript (
   funPurs,
 ) where
 
+import Csl.Gen.Lib (SigPos, classMethods, classTypes, enumName, filterMethods, intro, isListContainer, isMapContainer, methodName, substIntArgs, substIntRes, toName, toType)
 import Csl.Gen.Types.FunPurity (FunPurity (Mutating, Pure, Throwing), getPureness, isPure)
-import Csl.Gen.Utils (SigPos, classMethods, classTypes, enumName, filterMethods, intro, isListContainer, isMapContainer, methodName, substIntArgs, substIntRes, toName, toTitle, toType)
+import Csl.Gen.Utils (toTitle)
 import Csl.Types
 import Data.Functor ((<&>))
 import Data.List.Extra (trim)
