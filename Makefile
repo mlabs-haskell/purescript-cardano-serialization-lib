@@ -15,7 +15,7 @@ build:
 	spago build
 
 test:
-	echo "TODO: implement purs tests"
+	spago test
 
 run:
 	spago build --then ${esbuild-cmd}
