@@ -15,7 +15,12 @@ import Data.List qualified as L (foldl', null)
 import Data.List.Extra (isPrefixOf)
 import Data.Text (Text)
 import Data.Text qualified as T (pack, replace, unpack)
-import Data.Text.Manipulate qualified as T (lowerHead, toCamel, toTitle, upperHead)
+import Data.Text.Manipulate qualified as T (
+  lowerHead,
+  toCamel,
+  toTitle,
+  upperHead,
+ )
 
 withSemicolon :: String -> String
 withSemicolon = flip mappend ";"
@@ -25,7 +30,11 @@ replaceFirst from to str
   | from `isPrefixOf` str = to <> drop (length from) str
   | otherwise = str
 
-replacesBy :: (String -> String -> String -> String) -> [(String, String)] -> String -> String
+replacesBy ::
+  (String -> String -> String -> String) ->
+  [(String, String)] ->
+  String ->
+  String
 replacesBy repl = L.foldl' (\res a -> res . uncurry repl a) id
 
 replace :: String -> String -> String -> String

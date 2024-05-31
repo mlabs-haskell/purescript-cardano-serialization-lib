@@ -9,7 +9,7 @@ import Data.Set (Set)
 import Data.Set qualified as Set
 
 data FunPurity = Pure | Mutating | Throwing
-  deriving (Eq, Show)
+  deriving stock (Eq, Show)
 
 getPureness :: String -> Fun -> FunPurity
 getPureness className Fun {..}
@@ -22,7 +22,9 @@ getPureness className Fun {..}
   | otherwise = Throwing
   where
     isMutating = mutatingMethods (className, fun'name)
-    isThrowing = Set.member (className, fun'name) throwingSet || isCommonThrowingMethod fun'name
+    isThrowing =
+      Set.member (className, fun'name) throwingSet
+        || isCommonThrowingMethod fun'name
     isConvertor a = Set.member a convertorSet
 
 isPure :: String -> Fun -> Bool
@@ -40,24 +42,67 @@ mutating =
     , inClass "TransactionWitnessSet" ["new"]
     , inClass
         "AuxiliaryData"
-        ["new", "set_native_scripts", "set_plutus_scripts", "set_metadata", "set_prefer_alonzo_format"]
+        [ "new"
+        , "set_native_scripts"
+        , "set_plutus_scripts"
+        , "set_metadata"
+        , "set_prefer_alonzo_format"
+        ]
     , inClass "AuxiliaryDataSet" ["new", "insert", "get", "indices"]
     , newSetGet "CostModel"
     , keys "Costmdls"
     , keys "GeneralTransactionMetadata"
     , keys "MIRToStakeCredentials"
-    , inClass "MetadataMap" ["new", "insert", "insert_str", "insert_i32", "get", "get_str", "get_i32", "has", "keys"]
-    , keys "Mint" <> inClass "Mint" ["new_from_entry", "as_positive_multiasset", "as_negative_multiasset"]
+    , inClass
+        "MetadataMap"
+        [ "new"
+        , "insert"
+        , "insert_str"
+        , "insert_i32"
+        , "get"
+        , "get_str"
+        , "get_i32"
+        , "has"
+        , "keys"
+        ]
+    , keys "Mint"
+        <> inClass
+          "Mint"
+          [ "new_from_entry"
+          , "as_positive_multiasset"
+          , "as_negative_multiasset"
+          ]
     , keys "MintAssets"
-    , inClass "MultiAsset" ["new", "len", "inset", "get", "get_asset", "set_asset", "keys", "sub"]
+    , inClass
+        "MultiAsset"
+        [ "new"
+        , "len"
+        , "inset"
+        , "get"
+        , "get_asset"
+        , "set_asset"
+        , "keys"
+        , "sub"
+        ]
     , inClass "Value" ["set_multiasset"]
-    , inClass "TransactionOutput" ["set_data_hash", "set_plutus_data", "set_script_ref"]
+    , inClass
+        "TransactionOutput"
+        [ "set_data_hash"
+        , "set_plutus_data"
+        , "set_script_ref"
+        ]
     , keys "PlutusMap"
     , inClass "PrivateKey" ["generate_ed25519", "generate_ed25519extended"]
     , keys "ProposedProtocolParameterUpdates"
     , keys "Withdrawals"
     , inClass "Committee" ["new"]
-    , inClass "VotingProcedures" ["new", "get", "get_voters", "get_governance_action_ids_by_voter"]
+    , inClass
+        "VotingProcedures"
+        [ "new"
+        , "get"
+        , "get_voters"
+        , "get_governance_action_ids_by_voter"
+        ]
     ]
       ++ map (list . fst) listTypes
   where
@@ -129,13 +174,13 @@ convertorSet =
     (\x -> fmap (<> x) ["to_"])
       =<< ["hex", "string", "bytes", "bech32", "json", "js_value"]
 
-{- | Is function pure and can throw (in this case we can catch it to Maybe on purs side)
-if it's global function use empty name for class
+{- | Is function pure and can throw (in this case we can catch it to Maybe on
+ - purs side) if it's global function use empty name for class
 -}
 isCommonThrowingMethod :: String -> Bool
-isCommonThrowingMethod method = Set.member method froms
+isCommonThrowingMethod method = Set.member method forms
   where
-    froms =
+    forms =
       Set.fromList
         [ "from_hex"
         , "from_bytes"

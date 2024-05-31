@@ -5,8 +5,30 @@ module Csl.Gen.PureScript (
   funPurs,
 ) where
 
-import Csl.Gen.Lib (SigPos, classMethods, classTypes, enumName, filterMethods, intro, isListContainer, isMapContainer, methodName, substIntArgs, substIntRes, toName, toType)
-import Csl.Gen.Types.FunPurity (FunPurity (Mutating, Pure, Throwing), getPureness, isPure)
+import Csl.Gen.Lib (
+  SigPos,
+  classMethods,
+  classTypes,
+  enumName,
+  filterMethods,
+  intro,
+  isListContainer,
+  isMapContainer,
+  methodName,
+  substIntArgs,
+  substIntRes,
+  toName,
+  toType,
+ )
+import Csl.Gen.Types.FunPurity (
+  FunPurity (
+    Mutating,
+    Pure,
+    Throwing
+  ),
+  getPureness,
+  isPure,
+ )
 import Csl.Gen.Utils (toTitle)
 import Csl.Types
 import Data.Functor ((<&>))
@@ -109,17 +131,38 @@ classPurs cls@(Class name _ms) =
 
     methodDefs = unlines $ toDef <$> filteredMethods
       where
-        toDef m = unwords ["foreign import", jsMethodName m, "::", psSig UseNullable m]
+        toDef m =
+          unwords
+            [ "foreign import"
+            , jsMethodName m
+            , "::"
+            , psSig UseNullable m
+            ]
 
     jsMethodName Method {..} = methodName name (fun'name method'fun)
 
-    psSig nullType m@Method {..} = trim $ unwords [if L.null argTys then "" else L.intercalate " -> " argTys <> " ->", resTy]
+    psSig nullType m@Method {..} =
+      trim $
+        unwords
+          [ if L.null argTys
+              then ""
+              else
+                L.intercalate " -> " argTys <> " ->"
+          , resTy
+          ]
       where
         addTypePrefix pref x
           | length (words x) > 1 = unwords [pref, "(" <> x <> ")"]
           | otherwise = unwords [pref, x]
 
-        argTys = handleNumArgs $ (if not (isObj m) then id else (toType name :)) $ handleVoid True . arg'type <$> fun'args method'fun
+        argTys =
+          handleNumArgs
+            $ ( if not (isObj m)
+                  then
+                    id
+                  else (toType name :)
+              )
+            $ handleVoid True . arg'type <$> fun'args method'fun
         resTy =
           let pureFun = isPure name method'fun
            in ( case getPureness name method'fun of
@@ -135,7 +178,16 @@ classPurs cls@(Class name _ms) =
           UseMaybe -> "Maybe"
 
         handleVoid pureFun str
-          | L.isSuffixOf "| void" str = (if pureFun then id else \a -> "(" <> a <> ")") $ fromNullType nullType <> " " <> toType (head $ splitOn "|" str)
+          | L.isSuffixOf "| void" str =
+              ( if pureFun
+                  then
+                    id
+                  else \a -> "(" <> a <> ")"
+              )
+                $ fromNullType
+                  nullType
+                  <> " "
+                  <> toType (head $ splitOn "|" str)
           | otherwise = toType str
 
         handleNumArgs =
@@ -165,15 +217,23 @@ commonInstances (Class name methods) =
       <> ( if hasJson
             then
               [ "instance IsJson " <> name
-              , "instance EncodeAeson " <> name <> " where encodeAeson = cslToAeson"
-              , "instance DecodeAeson " <> name <> " where decodeAeson = cslFromAeson"
+              , "instance EncodeAeson "
+                  <> name
+                  <> " where encodeAeson = cslToAeson"
+              , "instance DecodeAeson "
+                  <> name
+                  <> " where decodeAeson = cslFromAeson"
               , "instance Show " <> name <> " where show = showViaJson"
               ]
             else
               if hasBytes
                 then
-                  [ "instance EncodeAeson " <> name <> " where encodeAeson = cslToAesonViaBytes"
-                  , "instance DecodeAeson " <> name <> " where decodeAeson = cslFromAesonViaBytes"
+                  [ "instance EncodeAeson "
+                      <> name
+                      <> " where encodeAeson = cslToAesonViaBytes"
+                  , "instance DecodeAeson "
+                      <> name
+                      <> " where decodeAeson = cslFromAesonViaBytes"
                   , "instance Show " <> name <> " where show = showViaBytes"
                   ]
                 else []
@@ -192,7 +252,11 @@ containerInstances cls@(Class name _) =
         [ isListContainer cls <&> \elemType ->
             "instance IsListContainer " <> unwords [name, elemType]
         , isMapContainer cls <&> \(keyType, valueType, isMultiMap) ->
-            (if isMultiMap then "instance IsMultiMapContainer " else "instance IsMapContainer ")
+            ( if isMultiMap
+                then
+                  "instance IsMultiMapContainer "
+                else "instance IsMapContainer "
+            )
               <> unwords [name, keyType, valueType]
         ]
   where

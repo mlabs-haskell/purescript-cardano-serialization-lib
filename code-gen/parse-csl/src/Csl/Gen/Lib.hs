@@ -1,5 +1,5 @@
 module Csl.Gen.Lib (
-  SigPos (..),
+  SigPos (ResPos, ArgPos),
   classMethods,
   classTypes,
   enumName,
@@ -20,7 +20,14 @@ module Csl.Gen.Lib (
 ) where
 
 import Control.Monad (guard)
-import Csl.Gen.Utils (lowerHead, replace, replaceFirst, replacesBy, toCamel, upperHead)
+import Csl.Gen.Utils (
+  lowerHead,
+  replace,
+  replaceFirst,
+  replacesBy,
+  toCamel,
+  upperHead,
+ )
 import Csl.Types
 import Data.List.Extra (dropPrefix)
 import Data.List.Extra qualified as L (
@@ -81,10 +88,12 @@ filterMethods (Class name ms)
   -- CostModel and VotingProcedures are special cases: they are not normal maps
   -- and must expose their methods.
   | name `elem` ["PublicKey", "PrivateKey", "CostModel", "VotingProcedures"] =
-      filter (not . isIgnored . method'fun) ms -- these types need special handling
+      -- these types need special handling
+      filter (not . isIgnored . method'fun) ms
   | otherwise = filter (not . isCommon . method'fun) ms
   where
-    -- we still need to remove `to_js_value`, because its return type is unknown
+    -- we still need to remove `to_js_value`, because its return type is
+    -- unknown
     isIgnored :: Fun -> Bool
     isIgnored (Fun "to_js_value" _ _) = True
     isIgnored _ = False
@@ -123,7 +132,11 @@ isMapContainer (Class _ methods) = do
         Method _ (Fun "insert" [Arg _ keyType, Arg _ valueType] _) ->
           Just (keyType, valueType)
         Method _ (Fun "get" [Arg _ keyType] valueType) ->
-          Just (keyType, fromMaybe valueType $ L.stripSuffix " | void" valueType)
+          Just
+            ( keyType
+            , fromMaybe valueType $
+                L.stripSuffix " | void" valueType
+            )
         _ ->
           Nothing
 
@@ -139,8 +152,11 @@ substIntArgs ps args =
     ArgPos n : restPos ->
       case args of
         [] -> []
-        (m, arg) : restArgs | n == m -> substInt arg : substIntArgs restPos restArgs
-        (_, arg) : restArgs -> arg : substIntArgs (ArgPos n : restPos) restArgs
+        (m, arg) : restArgs
+          | n == m ->
+              substInt arg : substIntArgs restPos restArgs
+        (_, arg) : restArgs ->
+          arg : substIntArgs (ArgPos n : restPos) restArgs
 
 substIntRes :: [SigPos] -> String -> String
 substIntRes = \case
@@ -153,7 +169,11 @@ substInt = replace "Number" "Int" . replace "number" "int"
 
 -- Remove standard types and transform case
 postProcTypes :: [String] -> [String]
-postProcTypes = filter (not . flip Set.member standardTypes) . fmap toType . L.sort . L.nub
+postProcTypes =
+  filter (not . flip Set.member standardTypes)
+    . fmap toType
+    . L.sort
+    . L.nub
   where
     standardTypes :: Set String
     standardTypes =

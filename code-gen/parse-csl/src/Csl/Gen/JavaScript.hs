@@ -53,8 +53,8 @@ funJsBy (FunSpec parent isSkipFirst prefix pureness) (Fun name args _res) =
               ]
     ]
   where
-    -- if a function is mutating, we add another function wrapper that represents
-    -- PureScript's `Effect` at runtime
+    -- if a function is mutating, we add another function wrapper that
+    -- represents PureScript's `Effect` at runtime
     argNames = (if pureness == Mutating then (<> ["()"]) else id) argNamesIn
     argNamesIn = fmap (filter (/= '?')) $ arg'name <$> args
     jsArgs = (if isSkipFirst then tail else id) argNamesIn
@@ -70,8 +70,17 @@ methodJs className = toFun
   where
     toFun (Method ty f) = case ty of
       StaticMethod ->
-        funJsBy (FunSpec ("CSL." <> className) False pre (getPureness className f)) f
+        funJsBy
+          ( FunSpec
+              ("CSL." <> className)
+              False
+              pre
+              (getPureness className f)
+          )
+          f
       ObjectMethod ->
-        funJsBy (FunSpec "self" True pre (getPureness className f)) (f {fun'args = Arg "self" className : fun'args f})
+        funJsBy
+          (FunSpec "self" True pre (getPureness className f))
+          (f {fun'args = Arg "self" className : fun'args f})
 
     pre = toTypePrefix className <> "_"

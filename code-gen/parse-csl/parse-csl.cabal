@@ -44,7 +44,8 @@ library
       OverloadedStrings
       RecordWildCards
       TupleSections
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+      DerivingStrategies
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wmissing-deriving-strategies
   build-depends:
       base >=4.7 && <5
     , containers
@@ -66,7 +67,8 @@ executable parse-csl-exe
       OverloadedStrings
       RecordWildCards
       TupleSections
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+      DerivingStrategies
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wmissing-deriving-strategies -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , directory
@@ -87,7 +89,8 @@ test-suite parse-csl-test
       OverloadedStrings
       RecordWildCards
       TupleSections
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+      DerivingStrategies
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wmissing-deriving-strategies -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , parse-csl
