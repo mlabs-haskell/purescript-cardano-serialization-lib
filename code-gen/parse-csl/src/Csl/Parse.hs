@@ -80,8 +80,8 @@ classPrefix = "declare export class "
 funPrefix = "declare export function "
 enumPrefix = "declare export var "
 
--- Taken from Emurgo/cardano-serialization-lib:
--- https://github.com/Emurgo/cardano-serialization-lib/blob/102b8dc0e12feaa29f2a1c7d395fbe89490fffd1/rust/pkg/cardano_serialization_lib.js.flow
+-- Taken from Emurgo/cardano-serialization-lib (v12.0.0-alpha.31):
+-- https://github.com/Emurgo/cardano-serialization-lib/blob/3eb710750347b88e92a95deca55080c389eba107/rust/pkg/cardano_serialization_lib.js.flow
 file = "data/cardano_serialization_lib.js.flow"
 
 ----------------------------------------------------------------------------

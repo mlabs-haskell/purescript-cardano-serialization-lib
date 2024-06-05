@@ -923,6 +923,8 @@ export const poolVotingThresholds_committeeNoConfidence = self =>
   self.committee_no_confidence.bind(self)();
 export const poolVotingThresholds_hardForkInitiation = self =>
   self.hard_fork_initiation.bind(self)();
+export const poolVotingThresholds_securityRelevantThreshold = self =>
+  self.security_relevant_threshold.bind(self)();
 
 // PrivateKey
 export const privateKey_free = self => errorableToPurs(self.free.bind(self));
