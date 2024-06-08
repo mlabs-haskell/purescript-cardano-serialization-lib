@@ -194,6 +194,7 @@
                 nodePackages.prettier
                 fd
                 git
+                gmp
                 nodejs-18_x
               ];
             };

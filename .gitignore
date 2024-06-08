@@ -1,4 +1,6 @@
+/node_modules/
 /.psci_modules/
+/.psc*
 /.spago2nix/
 /.spago/
 output/

@@ -15,7 +15,7 @@ build:
 	spago build
 
 test:
-	echo "TODO: implement purs tests"
+	spago test
 
 run:
 	spago build --then ${esbuild-cmd}
@@ -28,12 +28,14 @@ serve: run
 
 format:
 	@purs-tidy format-in-place "src/**/*.purs"
+	@purs-tidy format-in-place "test/**/*.purs"
 	@nixpkgs-fmt ${nix-sources}
 	@prettier -w ${js-sources}
 	@make check-format
 
 check-format:
 	@purs-tidy check "src/**/*.purs"
+	@purs-tidy check "test/**/*.purs"
 	@nixpkgs-fmt --check ${nix-sources}
 	@prettier --log-level warn -c ${js-sources}
 	@eslint --quiet ${js-sources} --parser-options 'sourceType: module'

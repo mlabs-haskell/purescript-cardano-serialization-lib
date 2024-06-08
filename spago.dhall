@@ -13,10 +13,10 @@ to generate this file without the comments in this block.
 { name = "cardano-serialization-lib"
 , dependencies =
   [ "aeson"
+  , "aff"
   , "argonaut"
   , "bifunctors"
   , "bytearrays"
-  , "console"
   , "effect"
   , "either"
   , "enums"
@@ -26,6 +26,8 @@ to generate this file without the comments in this block.
   , "partial"
   , "prelude"
   , "profunctor"
+  , "spec"
+  , "transformers"
   , "tuples"
   , "unsafe-coerce"
   ]

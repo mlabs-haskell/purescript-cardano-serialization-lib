@@ -32,6 +32,7 @@ ghc-options:
 - -Wmissing-home-modules
 - -Wpartial-fields
 - -Wredundant-constraints
+- -Wmissing-deriving-strategies
 
 default-extensions:
   - LambdaCase
@@ -39,6 +40,7 @@ default-extensions:
   - OverloadedStrings
   - RecordWildCards
   - TupleSections
+  - DerivingStrategies
 
 library:
   source-dirs: src
