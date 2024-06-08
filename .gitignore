@@ -1,5 +1,8 @@
-.spago2nix/
-.spago/
+/node_modules/
+/.psci_modules/
+/.psc*
+/.spago2nix/
+/.spago/
 output/
 demo/dist/
 demo/node_modules/

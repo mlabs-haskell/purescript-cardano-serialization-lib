@@ -7,7 +7,7 @@
   nixConfig = {
     extra-substituters = [ "https://plutonomicon.cachix.org" ];
     extra-trusted-public-keys = [ "plutonomicon.cachix.org-1:evUxtNULjCjOipxwAnYhNFeF/lyYU1FeNGaVAnm+QQw=" ];
-    bash-prompt = "\\[\\e[0m\\][\\[\\e[0;2m\\]nix-develop \\[\\e[0;1m\\]ps-cip30-typesafe@\\[\\033[33m\\]$(git rev-parse --abbrev-ref HEAD) \\[\\e[0;32m\\]\\w\\[\\e[0m\\]]\\[\\e[0m\\]$ \\[\\e[0m\\]";
+    bash-prompt = "\\[\\e[0m\\][\\[\\e[0;2m\\]nix-develop \\[\\e[0;1m\\]ps-csl@\\[\\033[33m\\]$(git rev-parse --abbrev-ref HEAD) \\[\\e[0;32m\\]\\w\\[\\e[0m\\]]\\[\\e[0m\\]$ \\[\\e[0m\\]";
   };
 
   inputs = {
@@ -183,6 +183,7 @@
             default = pkgs.mkShell {
               buildInputs = with pkgs; [
                 nixpkgs-fmt
+                haskellPackages.stack
                 easy-ps.purs
                 easy-ps.purs-tidy
                 easy-ps.spago
@@ -193,14 +194,10 @@
                 nodePackages.prettier
                 fd
                 git
+                gmp
                 nodejs-18_x
               ];
             };
-          };
-
-          packages = {
-            # Example package. Build with `nix build` or `nix build .#myapp`.
-            default = self'.packages.myapp;
           };
 
           # Example flake checks. Run with `nix flake check --keep-going`
