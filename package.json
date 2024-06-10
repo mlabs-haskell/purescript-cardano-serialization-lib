@@ -1,0 +1,15 @@
+{
+    "name": "purescript-cardano-serialization-lib",
+    "type": "module",
+    "scripts": {
+        "test": "spago test"
+    },
+    "dependencies": {
+        "@mlabs-haskell/cardano-serialization-lib-gc": "v12.0.0-alpha.31",
+        "@mlabs-haskell/json-bigint": "^2.0.0"
+    },
+    "prettier": {
+        "arrowParens": "avoid",
+        "trailingComma": "none"
+    }
+}

@@ -13,17 +13,23 @@ to generate this file without the comments in this block.
 { name = "cardano-serialization-lib"
 , dependencies =
   [ "aeson"
+  , "aff"
   , "argonaut"
   , "bifunctors"
   , "bytearrays"
   , "effect"
   , "either"
+  , "enums"
   , "maybe"
   , "nullable"
   , "ordered-collections"
+  , "partial"
   , "prelude"
   , "profunctor"
+  , "spec"
+  , "transformers"
   , "tuples"
+  , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
