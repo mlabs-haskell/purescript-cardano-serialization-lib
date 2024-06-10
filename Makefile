@@ -48,3 +48,7 @@ copy:
 	cp code-gen/parse-csl/output/Lib.purs src/Cardano/Serialization/Lib.purs
 	cp code-gen/parse-csl/output/Lib/Internal.purs src/Cardano/Serialization/Lib/Internal.purs
 	cp code-gen/parse-csl/output/Lib/Internal.js src/Cardano/Serialization/Lib/Internal.js
+
+ci-actions:
+	nix build -L .#checks.x86_64-linux.formatting-check
+	nix build -L .#checks.x86_64-linux.tests
