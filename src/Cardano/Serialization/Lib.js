@@ -77,6 +77,7 @@ export const baseAddress_stakeCred = self => self.stake_cred.bind(self)();
 export const baseAddress_toAddress = self => self.to_address.bind(self)();
 export const baseAddress_fromAddress = addr =>
   CSL.BaseAddress.from_address(addr);
+export const baseAddress_networkId = self => self.network_id.bind(self)();
 
 // BigInt
 export const bigInt_isZero = self => self.is_zero.bind(self)();
@@ -448,8 +449,6 @@ export const drepVotingThresholds_new =
       pp_governance_group,
       treasury_withdrawal
     );
-export const drepVotingThresholds_newDefault =
-  CSL.DrepVotingThresholds.new_default();
 export const drepVotingThresholds_setMotionNoConfidence =
   self => motion_no_confidence => () =>
     self.set_motion_no_confidence.bind(self)(motion_no_confidence);
@@ -526,6 +525,7 @@ export const enterpriseAddress_paymentCred = self =>
 export const enterpriseAddress_toAddress = self => self.to_address.bind(self)();
 export const enterpriseAddress_fromAddress = addr =>
   CSL.EnterpriseAddress.from_address(addr);
+export const enterpriseAddress_networkId = self => self.network_id.bind(self)();
 
 // ExUnitPrices
 export const exUnitPrices_memPrice = self => self.mem_price.bind(self)();
@@ -926,6 +926,9 @@ export const plutusList_new = () => CSL.PlutusList.new();
 // PlutusMap
 export const plutusMap_new = () => CSL.PlutusMap.new();
 
+// PlutusMapValues
+export const plutusMapValues_new = CSL.PlutusMapValues.new();
+
 // PlutusScript
 export const plutusScript_new = bytes => CSL.PlutusScript.new(bytes);
 export const plutusScript_newV2 = bytes => CSL.PlutusScript.new_v2(bytes);
@@ -1003,6 +1006,7 @@ export const pointerAddress_stakePointer = self =>
 export const pointerAddress_toAddress = self => self.to_address.bind(self)();
 export const pointerAddress_fromAddress = addr =>
   CSL.PointerAddress.from_address(addr);
+export const pointerAddress_networkId = self => self.network_id.bind(self)();
 
 // PoolMetadata
 export const poolMetadata_url = self => self.url.bind(self)();
@@ -1329,6 +1333,7 @@ export const rewardAddress_paymentCred = self => self.payment_cred.bind(self)();
 export const rewardAddress_toAddress = self => self.to_address.bind(self)();
 export const rewardAddress_fromAddress = addr =>
   CSL.RewardAddress.from_address(addr);
+export const rewardAddress_networkId = self => self.network_id.bind(self)();
 
 // RewardAddresses
 export const rewardAddresses_new = () => CSL.RewardAddresses.new();
@@ -1381,6 +1386,8 @@ export const scriptRef_isPlutusScript = self =>
   self.is_plutus_script.bind(self)();
 export const scriptRef_nativeScript = self => self.native_script.bind(self)();
 export const scriptRef_plutusScript = self => self.plutus_script.bind(self)();
+export const scriptRef_toUnwrappedBytes = self =>
+  self.to_unwrapped_bytes.bind(self)();
 
 // SingleHostAddr
 export const singleHostAddr_port = self => self.port.bind(self)();
@@ -1903,6 +1910,9 @@ export const votingProposals_new = CSL.VotingProposals.new();
 // Withdrawals
 export const withdrawals_new = () => CSL.Withdrawals.new();
 
+export const minFee = tx => linear_fee => CSL.min_fee(tx, linear_fee);
+export const minScriptFee = tx => ex_unit_prices =>
+  CSL.min_script_fee(tx, ex_unit_prices);
 export const makeVkeyWitness = tx_body_hash => sk =>
   CSL.make_vkey_witness(tx_body_hash, sk);
 export const hashAuxiliaryData = auxiliary_data =>
@@ -1913,6 +1923,3 @@ export const hashScriptData = redeemers => cost_models => datums =>
   CSL.hash_script_data(redeemers, cost_models, datums);
 export const minAdaForOutput = output => data_cost =>
   CSL.min_ada_for_output(output, data_cost);
-export const minFee = tx => linear_fee => CSL.min_fee(tx, linear_fee);
-export const minScriptFee = tx => ex_unit_prices =>
-  CSL.min_script_fee(tx, ex_unit_prices);

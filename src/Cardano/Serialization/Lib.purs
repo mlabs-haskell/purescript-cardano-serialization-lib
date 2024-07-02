@@ -31,6 +31,7 @@ module Cardano.Serialization.Lib
   , baseAddress_stakeCred
   , baseAddress_toAddress
   , baseAddress_fromAddress
+  , baseAddress_networkId
   , bigInt_isZero
   , bigInt_asU64
   , bigInt_asInt
@@ -203,7 +204,6 @@ module Cardano.Serialization.Lib
   , drepUpdate_newWithAnchor
   , drepUpdate_hasScriptCredentials
   , drepVotingThresholds_new
-  , drepVotingThresholds_newDefault
   , drepVotingThresholds_setMotionNoConfidence
   , drepVotingThresholds_setCommitteeNormal
   , drepVotingThresholds_setCommitteeNoConfidence
@@ -235,6 +235,7 @@ module Cardano.Serialization.Lib
   , enterpriseAddress_paymentCred
   , enterpriseAddress_toAddress
   , enterpriseAddress_fromAddress
+  , enterpriseAddress_networkId
   , exUnitPrices_memPrice
   , exUnitPrices_stepPrice
   , exUnitPrices_new
@@ -408,6 +409,7 @@ module Cardano.Serialization.Lib
   , plutusData_fromAddress
   , plutusList_new
   , plutusMap_new
+  , plutusMapValues_new
   , plutusScript_new
   , plutusScript_newV2
   , plutusScript_newV3
@@ -445,6 +447,7 @@ module Cardano.Serialization.Lib
   , pointerAddress_stakePointer
   , pointerAddress_toAddress
   , pointerAddress_fromAddress
+  , pointerAddress_networkId
   , poolMetadata_url
   , poolMetadata_poolMetadataHash
   , poolMetadata_new
@@ -587,6 +590,7 @@ module Cardano.Serialization.Lib
   , rewardAddress_paymentCred
   , rewardAddress_toAddress
   , rewardAddress_fromAddress
+  , rewardAddress_networkId
   , rewardAddresses_new
   , scriptAll_nativeScripts
   , scriptAll_new
@@ -608,6 +612,7 @@ module Cardano.Serialization.Lib
   , scriptRef_isPlutusScript
   , scriptRef_nativeScript
   , scriptRef_plutusScript
+  , scriptRef_toUnwrappedBytes
   , singleHostAddr_port
   , singleHostAddr_ipv4
   , singleHostAddr_ipv6
@@ -841,14 +846,14 @@ module Cardano.Serialization.Lib
   , votingProposal_new
   , votingProposals_new
   , withdrawals_new
+  , minFee
+  , minScriptFee
   , makeVkeyWitness
   , hashAuxiliaryData
   , hashTransaction
   , hashPlutusData
   , hashScriptData
   , minAdaForOutput
-  , minFee
-  , minScriptFee
   , Address
   , Anchor
   , AnchorDataHash
@@ -939,6 +944,7 @@ module Cardano.Serialization.Lib
   , PlutusData
   , PlutusList
   , PlutusMap
+  , PlutusMapValues
   , PlutusScript
   , PlutusScriptSource
   , PlutusScripts
@@ -1019,50 +1025,52 @@ module Cardano.Serialization.Lib
   , VotingProposal
   , VotingProposals
   , Withdrawals
-  , RedeemerTagKind
-  , RelayKind
-  , AddressKind
-  , PlutusDatumSchema
-  , VoterKind
-  , MIRPot
-  , VoteKind
-  , LanguageKind
-  , ScriptSchema
-  , CoinSelectionStrategyCIP2
-  , DRepKind
-  , NativeScriptKind
-  , CertificateKind
-  , NetworkIdKind
-  , PlutusDataKind
   , CredKind
   , TransactionMetadatumKind
+  , PlutusDataKind
+  , CertificateKind
+  , PlutusDatumSchema
+  , LanguageKind
+  , DRepKind
+  , NativeScriptKind
+  , ScriptHashNamespace
+  , VoteKind
+  , CoinSelectionStrategyCIP2
+  , NetworkIdKind
+  , MIRPot
   , MetadataJsonSchema
-  , GovernanceActionKind
+  , BlockEra
+  , RedeemerTagKind
+  , ScriptSchema
+  , AddressKind
   , MIRKind
   , CborContainerType
-  , ScriptHashNamespace
-  , RedeemerTagKindValues(..)
-  , RelayKindValues(..)
-  , AddressKindValues(..)
-  , PlutusDatumSchemaValues(..)
-  , VoterKindValues(..)
-  , MIRPotValues(..)
-  , VoteKindValues(..)
-  , LanguageKindValues(..)
-  , ScriptSchemaValues(..)
-  , CoinSelectionStrategyCIP2Values(..)
-  , DRepKindValues(..)
-  , NativeScriptKindValues(..)
-  , CertificateKindValues(..)
-  , NetworkIdKindValues(..)
-  , PlutusDataKindValues(..)
+  , RelayKind
+  , VoterKind
+  , GovernanceActionKind
   , CredKindValues(..)
   , TransactionMetadatumKindValues(..)
+  , PlutusDataKindValues(..)
+  , CertificateKindValues(..)
+  , PlutusDatumSchemaValues(..)
+  , LanguageKindValues(..)
+  , DRepKindValues(..)
+  , NativeScriptKindValues(..)
+  , ScriptHashNamespaceValues(..)
+  , VoteKindValues(..)
+  , CoinSelectionStrategyCIP2Values(..)
+  , NetworkIdKindValues(..)
+  , MIRPotValues(..)
   , MetadataJsonSchemaValues(..)
-  , GovernanceActionKindValues(..)
+  , BlockEraValues(..)
+  , RedeemerTagKindValues(..)
+  , ScriptSchemaValues(..)
+  , AddressKindValues(..)
   , MIRKindValues(..)
   , CborContainerTypeValues(..)
-  , ScriptHashNamespaceValues(..)
+  , RelayKindValues(..)
+  , VoterKindValues(..)
+  , GovernanceActionKindValues(..)
   ) where
 
 import Prelude
@@ -1119,6 +1127,14 @@ class IsStr a where
   toStr :: a -> String
 
 -- functions
+-- | Min fee
+-- > minFee tx linearFee
+foreign import minFee :: Transaction -> LinearFee -> BigNum
+
+-- | Min script fee
+-- > minScriptFee tx exUnitPrices
+foreign import minScriptFee :: Transaction -> ExUnitPrices -> BigNum
+
 -- | Make vkey witness
 -- > makeVkeyWitness txBodyHash sk
 foreign import makeVkeyWitness :: TransactionHash -> PrivateKey -> Vkeywitness
@@ -1142,14 +1158,6 @@ foreign import hashScriptData :: Redeemers -> Costmdls -> PlutusList -> ScriptDa
 -- | Min ada for output
 -- > minAdaForOutput output dataCost
 foreign import minAdaForOutput :: TransactionOutput -> DataCost -> BigNum
-
--- | Min fee
--- > minFee tx linearFee
-foreign import minFee :: Transaction -> LinearFee -> BigNum
-
--- | Min script fee
--- > minScriptFee tx exUnitPrices
-foreign import minScriptFee :: Transaction -> ExUnitPrices -> BigNum
 
 -- classes
 
@@ -1351,6 +1359,7 @@ foreign import baseAddress_paymentCred :: BaseAddress -> Credential
 foreign import baseAddress_stakeCred :: BaseAddress -> Credential
 foreign import baseAddress_toAddress :: BaseAddress -> Address
 foreign import baseAddress_fromAddress :: Address -> Nullable BaseAddress
+foreign import baseAddress_networkId :: BaseAddress -> Number
 
 instance IsCsl BaseAddress where
   className _ = "BaseAddress"
@@ -1508,6 +1517,17 @@ foreign import bootstrapWitnesses_new :: Effect BootstrapWitnesses
 
 instance IsCsl BootstrapWitnesses where
   className _ = "BootstrapWitnesses"
+
+instance IsBytes BootstrapWitnesses
+instance IsJson BootstrapWitnesses
+instance EncodeAeson BootstrapWitnesses where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson BootstrapWitnesses where
+  decodeAeson = cslFromAeson
+
+instance Show BootstrapWitnesses where
+  show = showViaJson
 
 instance IsListContainer BootstrapWitnesses BootstrapWitness
 
@@ -2050,7 +2070,6 @@ instance Show DrepUpdate where
 foreign import data DrepVotingThresholds :: Type
 
 foreign import drepVotingThresholds_new :: UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> DrepVotingThresholds
-foreign import drepVotingThresholds_newDefault :: DrepVotingThresholds
 foreign import drepVotingThresholds_setMotionNoConfidence :: DrepVotingThresholds -> UnitInterval -> Effect Unit
 foreign import drepVotingThresholds_setCommitteeNormal :: DrepVotingThresholds -> UnitInterval -> Effect Unit
 foreign import drepVotingThresholds_setCommitteeNoConfidence :: DrepVotingThresholds -> UnitInterval -> Effect Unit
@@ -2162,6 +2181,7 @@ foreign import enterpriseAddress_new :: Number -> Credential -> EnterpriseAddres
 foreign import enterpriseAddress_paymentCred :: EnterpriseAddress -> Credential
 foreign import enterpriseAddress_toAddress :: EnterpriseAddress -> Address
 foreign import enterpriseAddress_fromAddress :: Address -> Nullable EnterpriseAddress
+foreign import enterpriseAddress_networkId :: EnterpriseAddress -> Number
 
 instance IsCsl EnterpriseAddress where
   className _ = "EnterpriseAddress"
@@ -3184,7 +3204,19 @@ instance DecodeAeson PlutusMap where
 instance Show PlutusMap where
   show = showViaBytes
 
-instance IsMapContainer PlutusMap PlutusData PlutusData
+instance IsMapContainer PlutusMap PlutusData PlutusMapValues
+
+--------------------------------------------------------------------------------
+-- Plutus map values
+
+foreign import data PlutusMapValues :: Type
+
+foreign import plutusMapValues_new :: PlutusMapValues
+
+instance IsCsl PlutusMapValues where
+  className _ = "PlutusMapValues"
+
+instance IsListContainer PlutusMapValues PlutusData
 
 --------------------------------------------------------------------------------
 -- Plutus script
@@ -3307,6 +3339,7 @@ foreign import pointerAddress_paymentCred :: PointerAddress -> Credential
 foreign import pointerAddress_stakePointer :: PointerAddress -> Pointer
 foreign import pointerAddress_toAddress :: PointerAddress -> Address
 foreign import pointerAddress_fromAddress :: Address -> Nullable PointerAddress
+foreign import pointerAddress_networkId :: PointerAddress -> Number
 
 instance IsCsl PointerAddress where
   className _ = "PointerAddress"
@@ -3761,6 +3794,7 @@ foreign import rewardAddress_new :: Number -> Credential -> RewardAddress
 foreign import rewardAddress_paymentCred :: RewardAddress -> Credential
 foreign import rewardAddress_toAddress :: RewardAddress -> Address
 foreign import rewardAddress_fromAddress :: Address -> Nullable RewardAddress
+foreign import rewardAddress_networkId :: RewardAddress -> Number
 
 instance IsCsl RewardAddress where
   className _ = "RewardAddress"
@@ -3953,6 +3987,7 @@ foreign import scriptRef_isNativeScript :: ScriptRef -> Boolean
 foreign import scriptRef_isPlutusScript :: ScriptRef -> Boolean
 foreign import scriptRef_nativeScript :: ScriptRef -> Nullable NativeScript
 foreign import scriptRef_plutusScript :: ScriptRef -> Nullable PlutusScript
+foreign import scriptRef_toUnwrappedBytes :: ScriptRef -> ByteArray
 
 instance IsCsl ScriptRef where
   className _ = "ScriptRef"
@@ -5121,54 +5156,80 @@ instance IsMapContainer Withdrawals RewardAddress BigNum
 -- enums
 
 --------------------------------------------------------------------------------
--- RedeemerTagKind
+-- CredKind
 
-foreign import data RedeemerTagKind :: Type
+foreign import data CredKind :: Type
 
-data RedeemerTagKindValues
-  = RedeemerTagKind_Spend
-  | RedeemerTagKind_Mint
-  | RedeemerTagKind_Cert
-  | RedeemerTagKind_Reward
-  | RedeemerTagKind_Vote
-  | RedeemerTagKind_VotingProposal
+data CredKindValues
+  = CredKind_Key
+  | CredKind_Script
 
-derive instance Generic RedeemerTagKindValues _
-instance IsCslEnum RedeemerTagKindValues RedeemerTagKind
-instance Show RedeemerTagKindValues where
+derive instance Generic CredKindValues _
+instance IsCslEnum CredKindValues CredKind
+instance Show CredKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- RelayKind
+-- TransactionMetadatumKind
 
-foreign import data RelayKind :: Type
+foreign import data TransactionMetadatumKind :: Type
 
-data RelayKindValues
-  = RelayKind_SingleHostAddr
-  | RelayKind_SingleHostName
-  | RelayKind_MultiHostName
+data TransactionMetadatumKindValues
+  = TransactionMetadatumKind_MetadataMap
+  | TransactionMetadatumKind_MetadataList
+  | TransactionMetadatumKind_Int
+  | TransactionMetadatumKind_Bytes
+  | TransactionMetadatumKind_Text
 
-derive instance Generic RelayKindValues _
-instance IsCslEnum RelayKindValues RelayKind
-instance Show RelayKindValues where
+derive instance Generic TransactionMetadatumKindValues _
+instance IsCslEnum TransactionMetadatumKindValues TransactionMetadatumKind
+instance Show TransactionMetadatumKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- AddressKind
+-- PlutusDataKind
 
-foreign import data AddressKind :: Type
+foreign import data PlutusDataKind :: Type
 
-data AddressKindValues
-  = AddressKind_Base
-  | AddressKind_Pointer
-  | AddressKind_Enterprise
-  | AddressKind_Reward
-  | AddressKind_Byron
-  | AddressKind_Malformed
+data PlutusDataKindValues
+  = PlutusDataKind_ConstrPlutusData
+  | PlutusDataKind_Map
+  | PlutusDataKind_List
+  | PlutusDataKind_Integer
+  | PlutusDataKind_Bytes
 
-derive instance Generic AddressKindValues _
-instance IsCslEnum AddressKindValues AddressKind
-instance Show AddressKindValues where
+derive instance Generic PlutusDataKindValues _
+instance IsCslEnum PlutusDataKindValues PlutusDataKind
+instance Show PlutusDataKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- CertificateKind
+
+foreign import data CertificateKind :: Type
+
+data CertificateKindValues
+  = CertificateKind_StakeRegistration
+  | CertificateKind_StakeDeregistration
+  | CertificateKind_StakeDelegation
+  | CertificateKind_PoolRegistration
+  | CertificateKind_PoolRetirement
+  | CertificateKind_GenesisKeyDelegation
+  | CertificateKind_MoveInstantaneousRewardsCert
+  | CertificateKind_CommitteeHotAuth
+  | CertificateKind_CommitteeColdResign
+  | CertificateKind_DrepDeregistration
+  | CertificateKind_DrepRegistration
+  | CertificateKind_DrepUpdate
+  | CertificateKind_StakeAndVoteDelegation
+  | CertificateKind_StakeRegistrationAndDelegation
+  | CertificateKind_StakeVoteRegistrationAndDelegation
+  | CertificateKind_VoteDelegation
+  | CertificateKind_VoteRegistrationAndDelegation
+
+derive instance Generic CertificateKindValues _
+instance IsCslEnum CertificateKindValues CertificateKind
+instance Show CertificateKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
@@ -5186,52 +5247,6 @@ instance Show PlutusDatumSchemaValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- VoterKind
-
-foreign import data VoterKind :: Type
-
-data VoterKindValues
-  = VoterKind_ConstitutionalCommitteeHotKeyHash
-  | VoterKind_ConstitutionalCommitteeHotScriptHash
-  | VoterKind_DRepKeyHash
-  | VoterKind_DRepScriptHash
-  | VoterKind_StakingPoolKeyHash
-
-derive instance Generic VoterKindValues _
-instance IsCslEnum VoterKindValues VoterKind
-instance Show VoterKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- MIRPot
-
-foreign import data MIRPot :: Type
-
-data MIRPotValues
-  = MIRPot_Reserves
-  | MIRPot_Treasury
-
-derive instance Generic MIRPotValues _
-instance IsCslEnum MIRPotValues MIRPot
-instance Show MIRPotValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- VoteKind
-
-foreign import data VoteKind :: Type
-
-data VoteKindValues
-  = VoteKind_No
-  | VoteKind_Yes
-  | VoteKind_Abstain
-
-derive instance Generic VoteKindValues _
-instance IsCslEnum VoteKindValues VoteKind
-instance Show VoteKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
 -- LanguageKind
 
 foreign import data LanguageKind :: Type
@@ -5244,36 +5259,6 @@ data LanguageKindValues
 derive instance Generic LanguageKindValues _
 instance IsCslEnum LanguageKindValues LanguageKind
 instance Show LanguageKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- ScriptSchema
-
-foreign import data ScriptSchema :: Type
-
-data ScriptSchemaValues
-  = ScriptSchema_Wallet
-  | ScriptSchema_Node
-
-derive instance Generic ScriptSchemaValues _
-instance IsCslEnum ScriptSchemaValues ScriptSchema
-instance Show ScriptSchemaValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- CoinSelectionStrategyCIP2
-
-foreign import data CoinSelectionStrategyCIP2 :: Type
-
-data CoinSelectionStrategyCIP2Values
-  = CoinSelectionStrategyCIP2_LargestFirst
-  | CoinSelectionStrategyCIP2_RandomImprove
-  | CoinSelectionStrategyCIP2_LargestFirstMultiAsset
-  | CoinSelectionStrategyCIP2_RandomImproveMultiAsset
-
-derive instance Generic CoinSelectionStrategyCIP2Values _
-instance IsCslEnum CoinSelectionStrategyCIP2Values CoinSelectionStrategyCIP2
-instance Show CoinSelectionStrategyCIP2Values where
   show = genericShow
 
 --------------------------------------------------------------------------------
@@ -5311,32 +5296,50 @@ instance Show NativeScriptKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- CertificateKind
+-- ScriptHashNamespace
 
-foreign import data CertificateKind :: Type
+foreign import data ScriptHashNamespace :: Type
 
-data CertificateKindValues
-  = CertificateKind_StakeRegistration
-  | CertificateKind_StakeDeregistration
-  | CertificateKind_StakeDelegation
-  | CertificateKind_PoolRegistration
-  | CertificateKind_PoolRetirement
-  | CertificateKind_GenesisKeyDelegation
-  | CertificateKind_MoveInstantaneousRewardsCert
-  | CertificateKind_CommitteeHotAuth
-  | CertificateKind_CommitteeColdResign
-  | CertificateKind_DrepDeregistration
-  | CertificateKind_DrepRegistration
-  | CertificateKind_DrepUpdate
-  | CertificateKind_StakeAndVoteDelegation
-  | CertificateKind_StakeRegistrationAndDelegation
-  | CertificateKind_StakeVoteRegistrationAndDelegation
-  | CertificateKind_VoteDelegation
-  | CertificateKind_VoteRegistrationAndDelegation
+data ScriptHashNamespaceValues
+  = ScriptHashNamespace_NativeScript
+  | ScriptHashNamespace_PlutusScript
+  | ScriptHashNamespace_PlutusScriptV2
+  | ScriptHashNamespace_PlutusScriptV3
 
-derive instance Generic CertificateKindValues _
-instance IsCslEnum CertificateKindValues CertificateKind
-instance Show CertificateKindValues where
+derive instance Generic ScriptHashNamespaceValues _
+instance IsCslEnum ScriptHashNamespaceValues ScriptHashNamespace
+instance Show ScriptHashNamespaceValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- VoteKind
+
+foreign import data VoteKind :: Type
+
+data VoteKindValues
+  = VoteKind_No
+  | VoteKind_Yes
+  | VoteKind_Abstain
+
+derive instance Generic VoteKindValues _
+instance IsCslEnum VoteKindValues VoteKind
+instance Show VoteKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- CoinSelectionStrategyCIP2
+
+foreign import data CoinSelectionStrategyCIP2 :: Type
+
+data CoinSelectionStrategyCIP2Values
+  = CoinSelectionStrategyCIP2_LargestFirst
+  | CoinSelectionStrategyCIP2_RandomImprove
+  | CoinSelectionStrategyCIP2_LargestFirstMultiAsset
+  | CoinSelectionStrategyCIP2_RandomImproveMultiAsset
+
+derive instance Generic CoinSelectionStrategyCIP2Values _
+instance IsCslEnum CoinSelectionStrategyCIP2Values CoinSelectionStrategyCIP2
+instance Show CoinSelectionStrategyCIP2Values where
   show = genericShow
 
 --------------------------------------------------------------------------------
@@ -5354,51 +5357,17 @@ instance Show NetworkIdKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- PlutusDataKind
+-- MIRPot
 
-foreign import data PlutusDataKind :: Type
+foreign import data MIRPot :: Type
 
-data PlutusDataKindValues
-  = PlutusDataKind_ConstrPlutusData
-  | PlutusDataKind_Map
-  | PlutusDataKind_List
-  | PlutusDataKind_Integer
-  | PlutusDataKind_Bytes
+data MIRPotValues
+  = MIRPot_Reserves
+  | MIRPot_Treasury
 
-derive instance Generic PlutusDataKindValues _
-instance IsCslEnum PlutusDataKindValues PlutusDataKind
-instance Show PlutusDataKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- CredKind
-
-foreign import data CredKind :: Type
-
-data CredKindValues
-  = CredKind_Key
-  | CredKind_Script
-
-derive instance Generic CredKindValues _
-instance IsCslEnum CredKindValues CredKind
-instance Show CredKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- TransactionMetadatumKind
-
-foreign import data TransactionMetadatumKind :: Type
-
-data TransactionMetadatumKindValues
-  = TransactionMetadatumKind_MetadataMap
-  | TransactionMetadatumKind_MetadataList
-  | TransactionMetadatumKind_Int
-  | TransactionMetadatumKind_Bytes
-  | TransactionMetadatumKind_Text
-
-derive instance Generic TransactionMetadatumKindValues _
-instance IsCslEnum TransactionMetadatumKindValues TransactionMetadatumKind
-instance Show TransactionMetadatumKindValues where
+derive instance Generic MIRPotValues _
+instance IsCslEnum MIRPotValues MIRPot
+instance Show MIRPotValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
@@ -5417,22 +5386,73 @@ instance Show MetadataJsonSchemaValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- GovernanceActionKind
+-- BlockEra
 
-foreign import data GovernanceActionKind :: Type
+foreign import data BlockEra :: Type
 
-data GovernanceActionKindValues
-  = GovernanceActionKind_ParameterChangeAction
-  | GovernanceActionKind_HardForkInitiationAction
-  | GovernanceActionKind_TreasuryWithdrawalsAction
-  | GovernanceActionKind_NoConfidenceAction
-  | GovernanceActionKind_UpdateCommitteeAction
-  | GovernanceActionKind_NewConstitutionAction
-  | GovernanceActionKind_InfoAction
+data BlockEraValues
+  = BlockEra_Byron
+  | BlockEra_Shelley
+  | BlockEra_Allegra
+  | BlockEra_Mary
+  | BlockEra_Alonzo
+  | BlockEra_Babbage
+  | BlockEra_Conway
+  | BlockEra_Unknown
 
-derive instance Generic GovernanceActionKindValues _
-instance IsCslEnum GovernanceActionKindValues GovernanceActionKind
-instance Show GovernanceActionKindValues where
+derive instance Generic BlockEraValues _
+instance IsCslEnum BlockEraValues BlockEra
+instance Show BlockEraValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- RedeemerTagKind
+
+foreign import data RedeemerTagKind :: Type
+
+data RedeemerTagKindValues
+  = RedeemerTagKind_Spend
+  | RedeemerTagKind_Mint
+  | RedeemerTagKind_Cert
+  | RedeemerTagKind_Reward
+  | RedeemerTagKind_Vote
+  | RedeemerTagKind_VotingProposal
+
+derive instance Generic RedeemerTagKindValues _
+instance IsCslEnum RedeemerTagKindValues RedeemerTagKind
+instance Show RedeemerTagKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- ScriptSchema
+
+foreign import data ScriptSchema :: Type
+
+data ScriptSchemaValues
+  = ScriptSchema_Wallet
+  | ScriptSchema_Node
+
+derive instance Generic ScriptSchemaValues _
+instance IsCslEnum ScriptSchemaValues ScriptSchema
+instance Show ScriptSchemaValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- AddressKind
+
+foreign import data AddressKind :: Type
+
+data AddressKindValues
+  = AddressKind_Base
+  | AddressKind_Pointer
+  | AddressKind_Enterprise
+  | AddressKind_Reward
+  | AddressKind_Byron
+  | AddressKind_Malformed
+
+derive instance Generic AddressKindValues _
+instance IsCslEnum AddressKindValues AddressKind
+instance Show AddressKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
@@ -5464,18 +5484,53 @@ instance Show CborContainerTypeValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- ScriptHashNamespace
+-- RelayKind
 
-foreign import data ScriptHashNamespace :: Type
+foreign import data RelayKind :: Type
 
-data ScriptHashNamespaceValues
-  = ScriptHashNamespace_NativeScript
-  | ScriptHashNamespace_PlutusScript
-  | ScriptHashNamespace_PlutusScriptV2
-  | ScriptHashNamespace_PlutusScriptV3
+data RelayKindValues
+  = RelayKind_SingleHostAddr
+  | RelayKind_SingleHostName
+  | RelayKind_MultiHostName
 
-derive instance Generic ScriptHashNamespaceValues _
-instance IsCslEnum ScriptHashNamespaceValues ScriptHashNamespace
-instance Show ScriptHashNamespaceValues where
+derive instance Generic RelayKindValues _
+instance IsCslEnum RelayKindValues RelayKind
+instance Show RelayKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- VoterKind
+
+foreign import data VoterKind :: Type
+
+data VoterKindValues
+  = VoterKind_ConstitutionalCommitteeHotKeyHash
+  | VoterKind_ConstitutionalCommitteeHotScriptHash
+  | VoterKind_DRepKeyHash
+  | VoterKind_DRepScriptHash
+  | VoterKind_StakingPoolKeyHash
+
+derive instance Generic VoterKindValues _
+instance IsCslEnum VoterKindValues VoterKind
+instance Show VoterKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- GovernanceActionKind
+
+foreign import data GovernanceActionKind :: Type
+
+data GovernanceActionKindValues
+  = GovernanceActionKind_ParameterChangeAction
+  | GovernanceActionKind_HardForkInitiationAction
+  | GovernanceActionKind_TreasuryWithdrawalsAction
+  | GovernanceActionKind_NoConfidenceAction
+  | GovernanceActionKind_UpdateCommitteeAction
+  | GovernanceActionKind_NewConstitutionAction
+  | GovernanceActionKind_InfoAction
+
+derive instance Generic GovernanceActionKindValues _
+instance IsCslEnum GovernanceActionKindValues GovernanceActionKind
+instance Show GovernanceActionKindValues where
   show = genericShow
 

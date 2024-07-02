@@ -90,8 +90,8 @@ funPrefix = "declare export function "
 enumPrefix :: String
 enumPrefix = "declare export var "
 
--- Taken from Emurgo/cardano-serialization-lib (v12.0.0-alpha.31):
--- https://github.com/Emurgo/cardano-serialization-lib/blob/3eb710750347b88e92a95deca55080c389eba107/rust/pkg/cardano_serialization_lib.js.flow
+-- Taken from Emurgo/cardano-serialization-lib (v12.0.0-beta.2):
+-- https://github.com/Emurgo/cardano-serialization-lib/blob/f2403651fbe76c95db5e324eb4d62d7765d82501/rust/pkg/cardano_serialization_lib.js.flow
 file :: String
 file = "data/cardano_serialization_lib.js.flow"
 

@@ -43,6 +43,7 @@ unneededClasses =
   , "WithdrawalsBuilder"
   , -- block data, not needed for `ps-cardano-types`
     "Block"
+  , "VersionedBlock"
   , "Header"
   , "HeaderBody"
   , "TransactionBodies"
