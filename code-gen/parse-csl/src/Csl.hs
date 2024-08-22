@@ -63,6 +63,7 @@ neededFunctions =
   , "hash_script_data"
   , "min_script_fee"
   , "min_fee"
+  , "min_ref_script_fee"
   , "make_vkey_witness"
   ]
 

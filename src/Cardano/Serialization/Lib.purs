@@ -849,6 +849,7 @@ module Cardano.Serialization.Lib
   , minAdaForOutput
   , minFee
   , minScriptFee
+  , minRefScriptFee
   , Address
   , Anchor
   , AnchorDataHash
@@ -1150,6 +1151,10 @@ foreign import minFee :: Transaction -> LinearFee -> BigNum
 -- | Min script fee
 -- > minScriptFee tx exUnitPrices
 foreign import minScriptFee :: Transaction -> ExUnitPrices -> BigNum
+
+-- | Min ref script fee
+-- > minRefScriptFee totalRefScriptsSize refScriptCoinsPerByte
+foreign import minRefScriptFee :: Number -> UnitInterval -> BigNum
 
 -- classes
 

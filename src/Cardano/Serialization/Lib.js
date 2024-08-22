@@ -1916,3 +1916,6 @@ export const minAdaForOutput = output => data_cost =>
 export const minFee = tx => linear_fee => CSL.min_fee(tx, linear_fee);
 export const minScriptFee = tx => ex_unit_prices =>
   CSL.min_script_fee(tx, ex_unit_prices);
+export const minRefScriptFee =
+  total_ref_scripts_size => ref_script_coins_per_byte =>
+    CSL.min_ref_script_fee(total_ref_scripts_size, ref_script_coins_per_byte);
