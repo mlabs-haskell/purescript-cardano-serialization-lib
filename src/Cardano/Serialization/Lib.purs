@@ -31,15 +31,21 @@ module Cardano.Serialization.Lib
   , baseAddress_stakeCred
   , baseAddress_toAddress
   , baseAddress_fromAddress
+  , baseAddress_networkId
   , bigInt_isZero
   , bigInt_asU64
   , bigInt_asInt
   , bigInt_fromStr
   , bigInt_toStr
+  , bigInt_sub
   , bigInt_mul
+  , bigInt_pow
   , bigInt_one
+  , bigInt_zero
+  , bigInt_abs
   , bigInt_increment
   , bigInt_divCeil
+  , bigInt_divFloor
   , bigNum_fromStr
   , bigNum_toStr
   , bigNum_zero
@@ -89,7 +95,9 @@ module Cardano.Serialization.Lib
   , byronAddress_toAddress
   , byronAddress_fromAddress
   , certificate_newStakeRegistration
+  , certificate_newRegCert
   , certificate_newStakeDeregistration
+  , certificate_newUnregCert
   , certificate_newStakeDelegation
   , certificate_newPoolRegistration
   , certificate_newPoolRetirement
@@ -107,7 +115,9 @@ module Cardano.Serialization.Lib
   , certificate_newVoteRegistrationAndDelegation
   , certificate_kind
   , certificate_asStakeRegistration
+  , certificate_asRegCert
   , certificate_asStakeDeregistration
+  , certificate_asUnregCert
   , certificate_asStakeDelegation
   , certificate_asPoolRegistration
   , certificate_asPoolRetirement
@@ -134,13 +144,13 @@ module Cardano.Serialization.Lib
   , committee_quorumThreshold
   , committee_addMember
   , committee_getMemberEpoch
-  , committeeColdResign_committeeColdKey
+  , committeeColdResign_committeeColdCredential
   , committeeColdResign_anchor
   , committeeColdResign_new
   , committeeColdResign_newWithAnchor
   , committeeColdResign_hasScriptCredentials
-  , committeeHotAuth_committeeColdKey
-  , committeeHotAuth_committeeHotKey
+  , committeeHotAuth_committeeColdCredential
+  , committeeHotAuth_committeeHotCredential
   , committeeHotAuth_new
   , committeeHotAuth_hasScriptCredentials
   , constitution_anchor
@@ -178,52 +188,54 @@ module Cardano.Serialization.Lib
   , dRep_newScriptHash
   , dRep_newAlwaysAbstain
   , dRep_newAlwaysNoConfidence
+  , dRep_newFromCredential
   , dRep_kind
   , dRep_toKeyHash
   , dRep_toScriptHash
+  , dRep_toBech32
+  , dRep_fromBech32
+  , dRepDeregistration_votingCredential
+  , dRepDeregistration_coin
+  , dRepDeregistration_new
+  , dRepDeregistration_hasScriptCredentials
+  , dRepRegistration_votingCredential
+  , dRepRegistration_coin
+  , dRepRegistration_anchor
+  , dRepRegistration_new
+  , dRepRegistration_newWithAnchor
+  , dRepRegistration_hasScriptCredentials
+  , dRepUpdate_votingCredential
+  , dRepUpdate_anchor
+  , dRepUpdate_new
+  , dRepUpdate_newWithAnchor
+  , dRepUpdate_hasScriptCredentials
+  , dRepVotingThresholds_new
+  , dRepVotingThresholds_setMotionNoConfidence
+  , dRepVotingThresholds_setCommitteeNormal
+  , dRepVotingThresholds_setCommitteeNoConfidence
+  , dRepVotingThresholds_setUpdateConstitution
+  , dRepVotingThresholds_setHardForkInitiation
+  , dRepVotingThresholds_setPpNetworkGroup
+  , dRepVotingThresholds_setPpEconomicGroup
+  , dRepVotingThresholds_setPpTechnicalGroup
+  , dRepVotingThresholds_setPpGovernanceGroup
+  , dRepVotingThresholds_setTreasuryWithdrawal
+  , dRepVotingThresholds_motionNoConfidence
+  , dRepVotingThresholds_committeeNormal
+  , dRepVotingThresholds_committeeNoConfidence
+  , dRepVotingThresholds_updateConstitution
+  , dRepVotingThresholds_hardForkInitiation
+  , dRepVotingThresholds_ppNetworkGroup
+  , dRepVotingThresholds_ppEconomicGroup
+  , dRepVotingThresholds_ppTechnicalGroup
+  , dRepVotingThresholds_ppGovernanceGroup
+  , dRepVotingThresholds_treasuryWithdrawal
   , dataCost_newCoinsPerByte
   , dataCost_coinsPerByte
   , dataHash_toBech32
   , dataHash_fromBech32
   , datumSource_new
   , datumSource_newRefInput
-  , drepDeregistration_votingCredential
-  , drepDeregistration_coin
-  , drepDeregistration_new
-  , drepDeregistration_hasScriptCredentials
-  , drepRegistration_votingCredential
-  , drepRegistration_coin
-  , drepRegistration_anchor
-  , drepRegistration_new
-  , drepRegistration_newWithAnchor
-  , drepRegistration_hasScriptCredentials
-  , drepUpdate_votingCredential
-  , drepUpdate_anchor
-  , drepUpdate_new
-  , drepUpdate_newWithAnchor
-  , drepUpdate_hasScriptCredentials
-  , drepVotingThresholds_new
-  , drepVotingThresholds_newDefault
-  , drepVotingThresholds_setMotionNoConfidence
-  , drepVotingThresholds_setCommitteeNormal
-  , drepVotingThresholds_setCommitteeNoConfidence
-  , drepVotingThresholds_setUpdateConstitution
-  , drepVotingThresholds_setHardForkInitiation
-  , drepVotingThresholds_setPpNetworkGroup
-  , drepVotingThresholds_setPpEconomicGroup
-  , drepVotingThresholds_setPpTechnicalGroup
-  , drepVotingThresholds_setPpGovernanceGroup
-  , drepVotingThresholds_setTreasuryWithdrawal
-  , drepVotingThresholds_motionNoConfidence
-  , drepVotingThresholds_committeeNormal
-  , drepVotingThresholds_committeeNoConfidence
-  , drepVotingThresholds_updateConstitution
-  , drepVotingThresholds_hardForkInitiation
-  , drepVotingThresholds_ppNetworkGroup
-  , drepVotingThresholds_ppEconomicGroup
-  , drepVotingThresholds_ppTechnicalGroup
-  , drepVotingThresholds_ppGovernanceGroup
-  , drepVotingThresholds_treasuryWithdrawal
   , ed25519KeyHash_toBech32
   , ed25519KeyHash_fromBech32
   , ed25519KeyHashes_new
@@ -235,12 +247,25 @@ module Cardano.Serialization.Lib
   , enterpriseAddress_paymentCred
   , enterpriseAddress_toAddress
   , enterpriseAddress_fromAddress
+  , enterpriseAddress_networkId
   , exUnitPrices_memPrice
   , exUnitPrices_stepPrice
   , exUnitPrices_new
   , exUnits_mem
   , exUnits_steps
   , exUnits_new
+  , fixedBlock_header
+  , fixedBlock_transactionBodies
+  , fixedBlock_transactionWitnessSets
+  , fixedBlock_auxiliaryDataSet
+  , fixedBlock_invalidTransactions
+  , fixedBlock_blockHash
+  , fixedTransactionBodies_new
+  , fixedTransactionBody_transactionBody
+  , fixedTransactionBody_txHash
+  , fixedTransactionBody_originalBytes
+  , fixedVersionedBlock_block
+  , fixedVersionedBlock_era
   , generalTransactionMetadata_new
   , genesisDelegateHash_toBech32
   , genesisDelegateHash_fromBech32
@@ -355,6 +380,7 @@ module Cardano.Serialization.Lib
   , nativeScriptSource_new
   , nativeScriptSource_newRefInput
   , nativeScriptSource_setRequiredSigners
+  , nativeScriptSource_getRefScriptSize
   , nativeScripts_new
   , networkId_testnet
   , networkId_mainnet
@@ -408,6 +434,7 @@ module Cardano.Serialization.Lib
   , plutusData_fromAddress
   , plutusList_new
   , plutusMap_new
+  , plutusMapValues_new
   , plutusScript_new
   , plutusScript_newV2
   , plutusScript_newV3
@@ -445,6 +472,7 @@ module Cardano.Serialization.Lib
   , pointerAddress_stakePointer
   , pointerAddress_toAddress
   , pointerAddress_fromAddress
+  , pointerAddress_networkId
   , poolMetadata_url
   , poolMetadata_poolMetadataHash
   , poolMetadata_new
@@ -587,6 +615,7 @@ module Cardano.Serialization.Lib
   , rewardAddress_paymentCred
   , rewardAddress_toAddress
   , rewardAddress_fromAddress
+  , rewardAddress_networkId
   , rewardAddresses_new
   , scriptAll_nativeScripts
   , scriptAll_new
@@ -608,6 +637,7 @@ module Cardano.Serialization.Lib
   , scriptRef_isPlutusScript
   , scriptRef_nativeScript
   , scriptRef_plutusScript
+  , scriptRef_toUnwrappedBytes
   , singleHostAddr_port
   , singleHostAddr_ipv4
   , singleHostAddr_ipv6
@@ -627,12 +657,12 @@ module Cardano.Serialization.Lib
   , stakeDeregistration_stakeCredential
   , stakeDeregistration_coin
   , stakeDeregistration_new
-  , stakeDeregistration_newWithCoin
+  , stakeDeregistration_newWithExplicitRefund
   , stakeDeregistration_hasScriptCredentials
   , stakeRegistration_stakeCredential
   , stakeRegistration_coin
   , stakeRegistration_new
-  , stakeRegistration_newWithCoin
+  , stakeRegistration_newWithExplicitDeposit
   , stakeRegistration_hasScriptCredentials
   , stakeRegistrationAndDelegation_stakeCredential
   , stakeRegistrationAndDelegation_poolKeyhash
@@ -808,13 +838,13 @@ module Cardano.Serialization.Lib
   , voteRegistrationAndDelegation_coin
   , voteRegistrationAndDelegation_new
   , voteRegistrationAndDelegation_hasScriptCredentials
-  , voter_newConstitutionalCommitteeHotKey
-  , voter_newDrep
-  , voter_newStakingPool
+  , voter_newConstitutionalCommitteeHotCredential
+  , voter_newDrepCredential
+  , voter_newStakePoolKeyHash
   , voter_kind
-  , voter_toConstitutionalCommitteeHotCred
-  , voter_toDrepCred
-  , voter_toStakingPoolKeyHash
+  , voter_toConstitutionalCommitteeHotCredential
+  , voter_toDrepCredential
+  , voter_toStakePoolKeyHash
   , voter_hasScriptCredentials
   , voter_toKeyHash
   , voters_new
@@ -841,15 +871,15 @@ module Cardano.Serialization.Lib
   , votingProposal_new
   , votingProposals_new
   , withdrawals_new
+  , minFee
+  , minScriptFee
+  , minRefScriptFee
   , makeVkeyWitness
   , hashAuxiliaryData
   , hashTransaction
   , hashPlutusData
   , hashScriptData
   , minAdaForOutput
-  , minFee
-  , minScriptFee
-  , minRefScriptFee
   , Address
   , Anchor
   , AnchorDataHash
@@ -882,19 +912,23 @@ module Cardano.Serialization.Lib
   , DNSRecordAorAAAA
   , DNSRecordSRV
   , DRep
+  , DRepDeregistration
+  , DRepRegistration
+  , DRepUpdate
+  , DRepVotingThresholds
   , DataCost
   , DataHash
   , DatumSource
-  , DrepDeregistration
-  , DrepRegistration
-  , DrepUpdate
-  , DrepVotingThresholds
   , Ed25519KeyHash
   , Ed25519KeyHashes
   , Ed25519Signature
   , EnterpriseAddress
   , ExUnitPrices
   , ExUnits
+  , FixedBlock
+  , FixedTransactionBodies
+  , FixedTransactionBody
+  , FixedVersionedBlock
   , GeneralTransactionMetadata
   , GenesisDelegateHash
   , GenesisHash
@@ -940,6 +974,7 @@ module Cardano.Serialization.Lib
   , PlutusData
   , PlutusList
   , PlutusMap
+  , PlutusMapValues
   , PlutusScript
   , PlutusScriptSource
   , PlutusScripts
@@ -1020,50 +1055,52 @@ module Cardano.Serialization.Lib
   , VotingProposal
   , VotingProposals
   , Withdrawals
-  , RedeemerTagKind
-  , CoinSelectionStrategyCIP2
-  , VoteKind
-  , VoterKind
-  , RelayKind
-  , ScriptSchema
   , GovernanceActionKind
-  , AddressKind
-  , PlutusDatumSchema
-  , CredKind
-  , MIRKind
-  , NetworkIdKind
   , CborContainerType
-  , MIRPot
-  , ScriptHashNamespace
-  , LanguageKind
+  , VoterKind
+  , NetworkIdKind
+  , CoinSelectionStrategyCIP2
   , NativeScriptKind
+  , MIRPot
+  , RelayKind
+  , PlutusDatumSchema
+  , CertificateKind
+  , DRepKind
+  , ScriptHashNamespace
   , TransactionMetadatumKind
   , PlutusDataKind
-  , CertificateKind
   , MetadataJsonSchema
-  , DRepKind
-  , RedeemerTagKindValues(..)
-  , CoinSelectionStrategyCIP2Values(..)
-  , VoteKindValues(..)
-  , VoterKindValues(..)
-  , RelayKindValues(..)
-  , ScriptSchemaValues(..)
+  , VoteKind
+  , LanguageKind
+  , BlockEra
+  , ScriptSchema
+  , MIRKind
+  , RedeemerTagKind
+  , CredKind
+  , AddressKind
   , GovernanceActionKindValues(..)
-  , AddressKindValues(..)
-  , PlutusDatumSchemaValues(..)
-  , CredKindValues(..)
-  , MIRKindValues(..)
-  , NetworkIdKindValues(..)
   , CborContainerTypeValues(..)
-  , MIRPotValues(..)
-  , ScriptHashNamespaceValues(..)
-  , LanguageKindValues(..)
+  , VoterKindValues(..)
+  , NetworkIdKindValues(..)
+  , CoinSelectionStrategyCIP2Values(..)
   , NativeScriptKindValues(..)
+  , MIRPotValues(..)
+  , RelayKindValues(..)
+  , PlutusDatumSchemaValues(..)
+  , CertificateKindValues(..)
+  , DRepKindValues(..)
+  , ScriptHashNamespaceValues(..)
   , TransactionMetadatumKindValues(..)
   , PlutusDataKindValues(..)
-  , CertificateKindValues(..)
   , MetadataJsonSchemaValues(..)
-  , DRepKindValues(..)
+  , VoteKindValues(..)
+  , LanguageKindValues(..)
+  , BlockEraValues(..)
+  , ScriptSchemaValues(..)
+  , MIRKindValues(..)
+  , RedeemerTagKindValues(..)
+  , CredKindValues(..)
+  , AddressKindValues(..)
   ) where
 
 import Prelude
@@ -1120,6 +1157,18 @@ class IsStr a where
   toStr :: a -> String
 
 -- functions
+-- | Min fee
+-- > minFee tx linearFee
+foreign import minFee :: Transaction -> LinearFee -> BigNum
+
+-- | Min script fee
+-- > minScriptFee tx exUnitPrices
+foreign import minScriptFee :: Transaction -> ExUnitPrices -> BigNum
+
+-- | Min ref script fee
+-- > minRefScriptFee totalRefScriptsSize refScriptCoinsPerByte
+foreign import minRefScriptFee :: Number -> UnitInterval -> BigNum
+
 -- | Make vkey witness
 -- > makeVkeyWitness txBodyHash sk
 foreign import makeVkeyWitness :: TransactionHash -> PrivateKey -> Vkeywitness
@@ -1143,18 +1192,6 @@ foreign import hashScriptData :: Redeemers -> Costmdls -> PlutusList -> ScriptDa
 -- | Min ada for output
 -- > minAdaForOutput output dataCost
 foreign import minAdaForOutput :: TransactionOutput -> DataCost -> BigNum
-
--- | Min fee
--- > minFee tx linearFee
-foreign import minFee :: Transaction -> LinearFee -> BigNum
-
--- | Min script fee
--- > minScriptFee tx exUnitPrices
-foreign import minScriptFee :: Transaction -> ExUnitPrices -> BigNum
-
--- | Min ref script fee
--- > minRefScriptFee totalRefScriptsSize refScriptCoinsPerByte
-foreign import minRefScriptFee :: Number -> UnitInterval -> BigNum
 
 -- classes
 
@@ -1356,6 +1393,7 @@ foreign import baseAddress_paymentCred :: BaseAddress -> Credential
 foreign import baseAddress_stakeCred :: BaseAddress -> Credential
 foreign import baseAddress_toAddress :: BaseAddress -> Address
 foreign import baseAddress_fromAddress :: Address -> Nullable BaseAddress
+foreign import baseAddress_networkId :: BaseAddress -> Number
 
 instance IsCsl BaseAddress where
   className _ = "BaseAddress"
@@ -1370,10 +1408,15 @@ foreign import bigInt_asU64 :: BigInt -> Nullable BigNum
 foreign import bigInt_asInt :: BigInt -> Nullable Int
 foreign import bigInt_fromStr :: String -> Nullable BigInt
 foreign import bigInt_toStr :: BigInt -> String
+foreign import bigInt_sub :: BigInt -> BigInt -> BigInt
 foreign import bigInt_mul :: BigInt -> BigInt -> BigInt
+foreign import bigInt_pow :: BigInt -> Number -> BigInt
 foreign import bigInt_one :: BigInt
+foreign import bigInt_zero :: BigInt
+foreign import bigInt_abs :: BigInt -> BigInt
 foreign import bigInt_increment :: BigInt -> BigInt
 foreign import bigInt_divCeil :: BigInt -> BigInt -> BigInt
+foreign import bigInt_divFloor :: BigInt -> BigInt -> BigInt
 
 instance IsCsl BigInt where
   className _ = "BigInt"
@@ -1514,6 +1557,17 @@ foreign import bootstrapWitnesses_new :: Effect BootstrapWitnesses
 instance IsCsl BootstrapWitnesses where
   className _ = "BootstrapWitnesses"
 
+instance IsBytes BootstrapWitnesses
+instance IsJson BootstrapWitnesses
+instance EncodeAeson BootstrapWitnesses where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson BootstrapWitnesses where
+  decodeAeson = cslFromAeson
+
+instance Show BootstrapWitnesses where
+  show = showViaJson
+
 instance IsListContainer BootstrapWitnesses BootstrapWitness
 
 --------------------------------------------------------------------------------
@@ -1550,7 +1604,9 @@ instance Show ByronAddress where
 foreign import data Certificate :: Type
 
 foreign import certificate_newStakeRegistration :: StakeRegistration -> Certificate
+foreign import certificate_newRegCert :: StakeRegistration -> Certificate
 foreign import certificate_newStakeDeregistration :: StakeDeregistration -> Certificate
+foreign import certificate_newUnregCert :: StakeDeregistration -> Certificate
 foreign import certificate_newStakeDelegation :: StakeDelegation -> Certificate
 foreign import certificate_newPoolRegistration :: PoolRegistration -> Certificate
 foreign import certificate_newPoolRetirement :: PoolRetirement -> Certificate
@@ -1558,9 +1614,9 @@ foreign import certificate_newGenesisKeyDelegation :: GenesisKeyDelegation -> Ce
 foreign import certificate_newMoveInstantaneousRewardsCert :: MoveInstantaneousRewardsCert -> Certificate
 foreign import certificate_newCommitteeHotAuth :: CommitteeHotAuth -> Certificate
 foreign import certificate_newCommitteeColdResign :: CommitteeColdResign -> Certificate
-foreign import certificate_newDrepDeregistration :: DrepDeregistration -> Certificate
-foreign import certificate_newDrepRegistration :: DrepRegistration -> Certificate
-foreign import certificate_newDrepUpdate :: DrepUpdate -> Certificate
+foreign import certificate_newDrepDeregistration :: DRepDeregistration -> Certificate
+foreign import certificate_newDrepRegistration :: DRepRegistration -> Certificate
+foreign import certificate_newDrepUpdate :: DRepUpdate -> Certificate
 foreign import certificate_newStakeAndVoteDelegation :: StakeAndVoteDelegation -> Certificate
 foreign import certificate_newStakeRegistrationAndDelegation :: StakeRegistrationAndDelegation -> Certificate
 foreign import certificate_newStakeVoteRegistrationAndDelegation :: StakeVoteRegistrationAndDelegation -> Certificate
@@ -1568,7 +1624,9 @@ foreign import certificate_newVoteDelegation :: VoteDelegation -> Certificate
 foreign import certificate_newVoteRegistrationAndDelegation :: VoteRegistrationAndDelegation -> Certificate
 foreign import certificate_kind :: Certificate -> CertificateKind
 foreign import certificate_asStakeRegistration :: Certificate -> Nullable StakeRegistration
+foreign import certificate_asRegCert :: Certificate -> Nullable StakeRegistration
 foreign import certificate_asStakeDeregistration :: Certificate -> Nullable StakeDeregistration
+foreign import certificate_asUnregCert :: Certificate -> Nullable StakeDeregistration
 foreign import certificate_asStakeDelegation :: Certificate -> Nullable StakeDelegation
 foreign import certificate_asPoolRegistration :: Certificate -> Nullable PoolRegistration
 foreign import certificate_asPoolRetirement :: Certificate -> Nullable PoolRetirement
@@ -1576,9 +1634,9 @@ foreign import certificate_asGenesisKeyDelegation :: Certificate -> Nullable Gen
 foreign import certificate_asMoveInstantaneousRewardsCert :: Certificate -> Nullable MoveInstantaneousRewardsCert
 foreign import certificate_asCommitteeHotAuth :: Certificate -> Nullable CommitteeHotAuth
 foreign import certificate_asCommitteeColdResign :: Certificate -> Nullable CommitteeColdResign
-foreign import certificate_asDrepDeregistration :: Certificate -> Nullable DrepDeregistration
-foreign import certificate_asDrepRegistration :: Certificate -> Nullable DrepRegistration
-foreign import certificate_asDrepUpdate :: Certificate -> Nullable DrepUpdate
+foreign import certificate_asDrepDeregistration :: Certificate -> Nullable DRepDeregistration
+foreign import certificate_asDrepRegistration :: Certificate -> Nullable DRepRegistration
+foreign import certificate_asDrepUpdate :: Certificate -> Nullable DRepUpdate
 foreign import certificate_asStakeAndVoteDelegation :: Certificate -> Nullable StakeAndVoteDelegation
 foreign import certificate_asStakeRegistrationAndDelegation :: Certificate -> Nullable StakeRegistrationAndDelegation
 foreign import certificate_asStakeVoteRegistrationAndDelegation :: Certificate -> Nullable StakeVoteRegistrationAndDelegation
@@ -1666,7 +1724,7 @@ instance Show Committee where
 
 foreign import data CommitteeColdResign :: Type
 
-foreign import committeeColdResign_committeeColdKey :: CommitteeColdResign -> Credential
+foreign import committeeColdResign_committeeColdCredential :: CommitteeColdResign -> Credential
 foreign import committeeColdResign_anchor :: CommitteeColdResign -> Nullable Anchor
 foreign import committeeColdResign_new :: Credential -> CommitteeColdResign
 foreign import committeeColdResign_newWithAnchor :: Credential -> Anchor -> CommitteeColdResign
@@ -1691,8 +1749,8 @@ instance Show CommitteeColdResign where
 
 foreign import data CommitteeHotAuth :: Type
 
-foreign import committeeHotAuth_committeeColdKey :: CommitteeHotAuth -> Credential
-foreign import committeeHotAuth_committeeHotKey :: CommitteeHotAuth -> Credential
+foreign import committeeHotAuth_committeeColdCredential :: CommitteeHotAuth -> Credential
+foreign import committeeHotAuth_committeeHotCredential :: CommitteeHotAuth -> Credential
 foreign import committeeHotAuth_new :: Credential -> Credential -> CommitteeHotAuth
 foreign import committeeHotAuth_hasScriptCredentials :: CommitteeHotAuth -> Boolean
 
@@ -1913,9 +1971,12 @@ foreign import dRep_newKeyHash :: Ed25519KeyHash -> DRep
 foreign import dRep_newScriptHash :: ScriptHash -> DRep
 foreign import dRep_newAlwaysAbstain :: DRep
 foreign import dRep_newAlwaysNoConfidence :: DRep
+foreign import dRep_newFromCredential :: Credential -> DRep
 foreign import dRep_kind :: DRep -> DRepKind
 foreign import dRep_toKeyHash :: DRep -> Nullable Ed25519KeyHash
 foreign import dRep_toScriptHash :: DRep -> Nullable ScriptHash
+foreign import dRep_toBech32 :: DRep -> String
+foreign import dRep_fromBech32 :: String -> Nullable DRep
 
 instance IsCsl DRep where
   className _ = "DRep"
@@ -1929,6 +1990,122 @@ instance DecodeAeson DRep where
   decodeAeson = cslFromAeson
 
 instance Show DRep where
+  show = showViaJson
+
+--------------------------------------------------------------------------------
+-- DRep deregistration
+
+foreign import data DRepDeregistration :: Type
+
+foreign import dRepDeregistration_votingCredential :: DRepDeregistration -> Credential
+foreign import dRepDeregistration_coin :: DRepDeregistration -> BigNum
+foreign import dRepDeregistration_new :: Credential -> BigNum -> DRepDeregistration
+foreign import dRepDeregistration_hasScriptCredentials :: DRepDeregistration -> Boolean
+
+instance IsCsl DRepDeregistration where
+  className _ = "DRepDeregistration"
+
+instance IsBytes DRepDeregistration
+instance IsJson DRepDeregistration
+instance EncodeAeson DRepDeregistration where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DRepDeregistration where
+  decodeAeson = cslFromAeson
+
+instance Show DRepDeregistration where
+  show = showViaJson
+
+--------------------------------------------------------------------------------
+-- DRep registration
+
+foreign import data DRepRegistration :: Type
+
+foreign import dRepRegistration_votingCredential :: DRepRegistration -> Credential
+foreign import dRepRegistration_coin :: DRepRegistration -> BigNum
+foreign import dRepRegistration_anchor :: DRepRegistration -> Nullable Anchor
+foreign import dRepRegistration_new :: Credential -> BigNum -> DRepRegistration
+foreign import dRepRegistration_newWithAnchor :: Credential -> BigNum -> Anchor -> DRepRegistration
+foreign import dRepRegistration_hasScriptCredentials :: DRepRegistration -> Boolean
+
+instance IsCsl DRepRegistration where
+  className _ = "DRepRegistration"
+
+instance IsBytes DRepRegistration
+instance IsJson DRepRegistration
+instance EncodeAeson DRepRegistration where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DRepRegistration where
+  decodeAeson = cslFromAeson
+
+instance Show DRepRegistration where
+  show = showViaJson
+
+--------------------------------------------------------------------------------
+-- DRep update
+
+foreign import data DRepUpdate :: Type
+
+foreign import dRepUpdate_votingCredential :: DRepUpdate -> Credential
+foreign import dRepUpdate_anchor :: DRepUpdate -> Nullable Anchor
+foreign import dRepUpdate_new :: Credential -> DRepUpdate
+foreign import dRepUpdate_newWithAnchor :: Credential -> Anchor -> DRepUpdate
+foreign import dRepUpdate_hasScriptCredentials :: DRepUpdate -> Boolean
+
+instance IsCsl DRepUpdate where
+  className _ = "DRepUpdate"
+
+instance IsBytes DRepUpdate
+instance IsJson DRepUpdate
+instance EncodeAeson DRepUpdate where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DRepUpdate where
+  decodeAeson = cslFromAeson
+
+instance Show DRepUpdate where
+  show = showViaJson
+
+--------------------------------------------------------------------------------
+-- DRep voting thresholds
+
+foreign import data DRepVotingThresholds :: Type
+
+foreign import dRepVotingThresholds_new :: UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> DRepVotingThresholds
+foreign import dRepVotingThresholds_setMotionNoConfidence :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setCommitteeNormal :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setCommitteeNoConfidence :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setUpdateConstitution :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setHardForkInitiation :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setPpNetworkGroup :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setPpEconomicGroup :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setPpTechnicalGroup :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setPpGovernanceGroup :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_setTreasuryWithdrawal :: DRepVotingThresholds -> UnitInterval -> Effect Unit
+foreign import dRepVotingThresholds_motionNoConfidence :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_committeeNormal :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_committeeNoConfidence :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_updateConstitution :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_hardForkInitiation :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_ppNetworkGroup :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_ppEconomicGroup :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_ppTechnicalGroup :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_ppGovernanceGroup :: DRepVotingThresholds -> UnitInterval
+foreign import dRepVotingThresholds_treasuryWithdrawal :: DRepVotingThresholds -> UnitInterval
+
+instance IsCsl DRepVotingThresholds where
+  className _ = "DRepVotingThresholds"
+
+instance IsBytes DRepVotingThresholds
+instance IsJson DRepVotingThresholds
+instance EncodeAeson DRepVotingThresholds where
+  encodeAeson = cslToAeson
+
+instance DecodeAeson DRepVotingThresholds where
+  decodeAeson = cslFromAeson
+
+instance Show DRepVotingThresholds where
   show = showViaJson
 
 --------------------------------------------------------------------------------
@@ -1973,123 +2150,6 @@ foreign import datumSource_newRefInput :: TransactionInput -> DatumSource
 
 instance IsCsl DatumSource where
   className _ = "DatumSource"
-
---------------------------------------------------------------------------------
--- Drep deregistration
-
-foreign import data DrepDeregistration :: Type
-
-foreign import drepDeregistration_votingCredential :: DrepDeregistration -> Credential
-foreign import drepDeregistration_coin :: DrepDeregistration -> BigNum
-foreign import drepDeregistration_new :: Credential -> BigNum -> DrepDeregistration
-foreign import drepDeregistration_hasScriptCredentials :: DrepDeregistration -> Boolean
-
-instance IsCsl DrepDeregistration where
-  className _ = "DrepDeregistration"
-
-instance IsBytes DrepDeregistration
-instance IsJson DrepDeregistration
-instance EncodeAeson DrepDeregistration where
-  encodeAeson = cslToAeson
-
-instance DecodeAeson DrepDeregistration where
-  decodeAeson = cslFromAeson
-
-instance Show DrepDeregistration where
-  show = showViaJson
-
---------------------------------------------------------------------------------
--- Drep registration
-
-foreign import data DrepRegistration :: Type
-
-foreign import drepRegistration_votingCredential :: DrepRegistration -> Credential
-foreign import drepRegistration_coin :: DrepRegistration -> BigNum
-foreign import drepRegistration_anchor :: DrepRegistration -> Nullable Anchor
-foreign import drepRegistration_new :: Credential -> BigNum -> DrepRegistration
-foreign import drepRegistration_newWithAnchor :: Credential -> BigNum -> Anchor -> DrepRegistration
-foreign import drepRegistration_hasScriptCredentials :: DrepRegistration -> Boolean
-
-instance IsCsl DrepRegistration where
-  className _ = "DrepRegistration"
-
-instance IsBytes DrepRegistration
-instance IsJson DrepRegistration
-instance EncodeAeson DrepRegistration where
-  encodeAeson = cslToAeson
-
-instance DecodeAeson DrepRegistration where
-  decodeAeson = cslFromAeson
-
-instance Show DrepRegistration where
-  show = showViaJson
-
---------------------------------------------------------------------------------
--- Drep update
-
-foreign import data DrepUpdate :: Type
-
-foreign import drepUpdate_votingCredential :: DrepUpdate -> Credential
-foreign import drepUpdate_anchor :: DrepUpdate -> Nullable Anchor
-foreign import drepUpdate_new :: Credential -> DrepUpdate
-foreign import drepUpdate_newWithAnchor :: Credential -> Anchor -> DrepUpdate
-foreign import drepUpdate_hasScriptCredentials :: DrepUpdate -> Boolean
-
-instance IsCsl DrepUpdate where
-  className _ = "DrepUpdate"
-
-instance IsBytes DrepUpdate
-instance IsJson DrepUpdate
-instance EncodeAeson DrepUpdate where
-  encodeAeson = cslToAeson
-
-instance DecodeAeson DrepUpdate where
-  decodeAeson = cslFromAeson
-
-instance Show DrepUpdate where
-  show = showViaJson
-
---------------------------------------------------------------------------------
--- Drep voting thresholds
-
-foreign import data DrepVotingThresholds :: Type
-
-foreign import drepVotingThresholds_new :: UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> UnitInterval -> DrepVotingThresholds
-foreign import drepVotingThresholds_newDefault :: DrepVotingThresholds
-foreign import drepVotingThresholds_setMotionNoConfidence :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setCommitteeNormal :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setCommitteeNoConfidence :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setUpdateConstitution :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setHardForkInitiation :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setPpNetworkGroup :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setPpEconomicGroup :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setPpTechnicalGroup :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setPpGovernanceGroup :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_setTreasuryWithdrawal :: DrepVotingThresholds -> UnitInterval -> Effect Unit
-foreign import drepVotingThresholds_motionNoConfidence :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_committeeNormal :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_committeeNoConfidence :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_updateConstitution :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_hardForkInitiation :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_ppNetworkGroup :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_ppEconomicGroup :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_ppTechnicalGroup :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_ppGovernanceGroup :: DrepVotingThresholds -> UnitInterval
-foreign import drepVotingThresholds_treasuryWithdrawal :: DrepVotingThresholds -> UnitInterval
-
-instance IsCsl DrepVotingThresholds where
-  className _ = "DrepVotingThresholds"
-
-instance IsBytes DrepVotingThresholds
-instance IsJson DrepVotingThresholds
-instance EncodeAeson DrepVotingThresholds where
-  encodeAeson = cslToAeson
-
-instance DecodeAeson DrepVotingThresholds where
-  decodeAeson = cslFromAeson
-
-instance Show DrepVotingThresholds where
-  show = showViaJson
 
 --------------------------------------------------------------------------------
 -- Ed25519 key hash
@@ -2167,6 +2227,7 @@ foreign import enterpriseAddress_new :: Number -> Credential -> EnterpriseAddres
 foreign import enterpriseAddress_paymentCred :: EnterpriseAddress -> Credential
 foreign import enterpriseAddress_toAddress :: EnterpriseAddress -> Address
 foreign import enterpriseAddress_fromAddress :: Address -> Nullable EnterpriseAddress
+foreign import enterpriseAddress_networkId :: EnterpriseAddress -> Number
 
 instance IsCsl EnterpriseAddress where
   className _ = "EnterpriseAddress"
@@ -2216,6 +2277,56 @@ instance DecodeAeson ExUnits where
 
 instance Show ExUnits where
   show = showViaJson
+
+--------------------------------------------------------------------------------
+-- Fixed block
+
+foreign import data FixedBlock :: Type
+
+foreign import fixedBlock_header :: FixedBlock -> Header
+foreign import fixedBlock_transactionBodies :: FixedBlock -> FixedTransactionBodies
+foreign import fixedBlock_transactionWitnessSets :: FixedBlock -> TransactionWitnessSets
+foreign import fixedBlock_auxiliaryDataSet :: FixedBlock -> AuxiliaryDataSet
+foreign import fixedBlock_invalidTransactions :: FixedBlock -> Uint32Array
+foreign import fixedBlock_blockHash :: FixedBlock -> BlockHash
+
+instance IsCsl FixedBlock where
+  className _ = "FixedBlock"
+
+--------------------------------------------------------------------------------
+-- Fixed transaction bodies
+
+foreign import data FixedTransactionBodies :: Type
+
+foreign import fixedTransactionBodies_new :: FixedTransactionBodies
+
+instance IsCsl FixedTransactionBodies where
+  className _ = "FixedTransactionBodies"
+
+instance IsListContainer FixedTransactionBodies FixedTransactionBody
+
+--------------------------------------------------------------------------------
+-- Fixed transaction body
+
+foreign import data FixedTransactionBody :: Type
+
+foreign import fixedTransactionBody_transactionBody :: FixedTransactionBody -> TransactionBody
+foreign import fixedTransactionBody_txHash :: FixedTransactionBody -> TransactionHash
+foreign import fixedTransactionBody_originalBytes :: FixedTransactionBody -> ByteArray
+
+instance IsCsl FixedTransactionBody where
+  className _ = "FixedTransactionBody"
+
+--------------------------------------------------------------------------------
+-- Fixed versioned block
+
+foreign import data FixedVersionedBlock :: Type
+
+foreign import fixedVersionedBlock_block :: FixedVersionedBlock -> FixedBlock
+foreign import fixedVersionedBlock_era :: FixedVersionedBlock -> BlockEra
+
+instance IsCsl FixedVersionedBlock where
+  className _ = "FixedVersionedBlock"
 
 --------------------------------------------------------------------------------
 -- General transaction metadata
@@ -2910,8 +3021,9 @@ instance Show NativeScript where
 foreign import data NativeScriptSource :: Type
 
 foreign import nativeScriptSource_new :: NativeScript -> NativeScriptSource
-foreign import nativeScriptSource_newRefInput :: ScriptHash -> TransactionInput -> NativeScriptSource
+foreign import nativeScriptSource_newRefInput :: ScriptHash -> TransactionInput -> Number -> NativeScriptSource
 foreign import nativeScriptSource_setRequiredSigners :: NativeScriptSource -> Ed25519KeyHashes -> Effect Unit
+foreign import nativeScriptSource_getRefScriptSize :: NativeScriptSource -> Nullable Number
 
 instance IsCsl NativeScriptSource where
   className _ = "NativeScriptSource"
@@ -3189,7 +3301,19 @@ instance DecodeAeson PlutusMap where
 instance Show PlutusMap where
   show = showViaBytes
 
-instance IsMapContainer PlutusMap PlutusData PlutusData
+instance IsMapContainer PlutusMap PlutusData PlutusMapValues
+
+--------------------------------------------------------------------------------
+-- Plutus map values
+
+foreign import data PlutusMapValues :: Type
+
+foreign import plutusMapValues_new :: PlutusMapValues
+
+instance IsCsl PlutusMapValues where
+  className _ = "PlutusMapValues"
+
+instance IsListContainer PlutusMapValues PlutusData
 
 --------------------------------------------------------------------------------
 -- Plutus script
@@ -3312,6 +3436,7 @@ foreign import pointerAddress_paymentCred :: PointerAddress -> Credential
 foreign import pointerAddress_stakePointer :: PointerAddress -> Pointer
 foreign import pointerAddress_toAddress :: PointerAddress -> Address
 foreign import pointerAddress_fromAddress :: Address -> Nullable PointerAddress
+foreign import pointerAddress_networkId :: PointerAddress -> Number
 
 instance IsCsl PointerAddress where
   className _ = "PointerAddress"
@@ -3558,8 +3683,8 @@ foreign import protocolParamUpdate_setMaxCollateralInputs :: ProtocolParamUpdate
 foreign import protocolParamUpdate_maxCollateralInputs :: ProtocolParamUpdate -> Nullable Number
 foreign import protocolParamUpdate_setPoolVotingThresholds :: ProtocolParamUpdate -> PoolVotingThresholds -> Effect Unit
 foreign import protocolParamUpdate_poolVotingThresholds :: ProtocolParamUpdate -> Nullable PoolVotingThresholds
-foreign import protocolParamUpdate_setDrepVotingThresholds :: ProtocolParamUpdate -> DrepVotingThresholds -> Effect Unit
-foreign import protocolParamUpdate_drepVotingThresholds :: ProtocolParamUpdate -> Nullable DrepVotingThresholds
+foreign import protocolParamUpdate_setDrepVotingThresholds :: ProtocolParamUpdate -> DRepVotingThresholds -> Effect Unit
+foreign import protocolParamUpdate_drepVotingThresholds :: ProtocolParamUpdate -> Nullable DRepVotingThresholds
 foreign import protocolParamUpdate_setMinCommitteeSize :: ProtocolParamUpdate -> Number -> Effect Unit
 foreign import protocolParamUpdate_minCommitteeSize :: ProtocolParamUpdate -> Nullable Number
 foreign import protocolParamUpdate_setCommitteeTermLimit :: ProtocolParamUpdate -> Number -> Effect Unit
@@ -3766,6 +3891,7 @@ foreign import rewardAddress_new :: Number -> Credential -> RewardAddress
 foreign import rewardAddress_paymentCred :: RewardAddress -> Credential
 foreign import rewardAddress_toAddress :: RewardAddress -> Address
 foreign import rewardAddress_fromAddress :: Address -> Nullable RewardAddress
+foreign import rewardAddress_networkId :: RewardAddress -> Number
 
 instance IsCsl RewardAddress where
   className _ = "RewardAddress"
@@ -3958,6 +4084,7 @@ foreign import scriptRef_isNativeScript :: ScriptRef -> Boolean
 foreign import scriptRef_isPlutusScript :: ScriptRef -> Boolean
 foreign import scriptRef_nativeScript :: ScriptRef -> Nullable NativeScript
 foreign import scriptRef_plutusScript :: ScriptRef -> Nullable PlutusScript
+foreign import scriptRef_toUnwrappedBytes :: ScriptRef -> ByteArray
 
 instance IsCsl ScriptRef where
   className _ = "ScriptRef"
@@ -4077,7 +4204,7 @@ foreign import data StakeDeregistration :: Type
 foreign import stakeDeregistration_stakeCredential :: StakeDeregistration -> Credential
 foreign import stakeDeregistration_coin :: StakeDeregistration -> Nullable BigNum
 foreign import stakeDeregistration_new :: Credential -> StakeDeregistration
-foreign import stakeDeregistration_newWithCoin :: Credential -> BigNum -> StakeDeregistration
+foreign import stakeDeregistration_newWithExplicitRefund :: Credential -> BigNum -> StakeDeregistration
 foreign import stakeDeregistration_hasScriptCredentials :: StakeDeregistration -> Boolean
 
 instance IsCsl StakeDeregistration where
@@ -4102,7 +4229,7 @@ foreign import data StakeRegistration :: Type
 foreign import stakeRegistration_stakeCredential :: StakeRegistration -> Credential
 foreign import stakeRegistration_coin :: StakeRegistration -> Nullable BigNum
 foreign import stakeRegistration_new :: Credential -> StakeRegistration
-foreign import stakeRegistration_newWithCoin :: Credential -> BigNum -> StakeRegistration
+foreign import stakeRegistration_newWithExplicitDeposit :: Credential -> BigNum -> StakeRegistration
 foreign import stakeRegistration_hasScriptCredentials :: StakeRegistration -> Boolean
 
 instance IsCsl StakeRegistration where
@@ -4950,13 +5077,13 @@ instance Show VoteRegistrationAndDelegation where
 
 foreign import data Voter :: Type
 
-foreign import voter_newConstitutionalCommitteeHotKey :: Credential -> Voter
-foreign import voter_newDrep :: Credential -> Voter
-foreign import voter_newStakingPool :: Ed25519KeyHash -> Voter
+foreign import voter_newConstitutionalCommitteeHotCredential :: Credential -> Voter
+foreign import voter_newDrepCredential :: Credential -> Voter
+foreign import voter_newStakePoolKeyHash :: Ed25519KeyHash -> Voter
 foreign import voter_kind :: Voter -> VoterKind
-foreign import voter_toConstitutionalCommitteeHotCred :: Voter -> Nullable Credential
-foreign import voter_toDrepCred :: Voter -> Nullable Credential
-foreign import voter_toStakingPoolKeyHash :: Voter -> Nullable Ed25519KeyHash
+foreign import voter_toConstitutionalCommitteeHotCredential :: Voter -> Nullable Credential
+foreign import voter_toDrepCredential :: Voter -> Nullable Credential
+foreign import voter_toStakePoolKeyHash :: Voter -> Nullable Ed25519KeyHash
 foreign import voter_hasScriptCredentials :: Voter -> Boolean
 foreign import voter_toKeyHash :: Voter -> Nullable Ed25519KeyHash
 
@@ -5126,52 +5253,36 @@ instance IsMapContainer Withdrawals RewardAddress BigNum
 -- enums
 
 --------------------------------------------------------------------------------
--- RedeemerTagKind
+-- GovernanceActionKind
 
-foreign import data RedeemerTagKind :: Type
+foreign import data GovernanceActionKind :: Type
 
-data RedeemerTagKindValues
-  = RedeemerTagKind_Spend
-  | RedeemerTagKind_Mint
-  | RedeemerTagKind_Cert
-  | RedeemerTagKind_Reward
-  | RedeemerTagKind_Vote
-  | RedeemerTagKind_VotingProposal
+data GovernanceActionKindValues
+  = GovernanceActionKind_ParameterChangeAction
+  | GovernanceActionKind_HardForkInitiationAction
+  | GovernanceActionKind_TreasuryWithdrawalsAction
+  | GovernanceActionKind_NoConfidenceAction
+  | GovernanceActionKind_UpdateCommitteeAction
+  | GovernanceActionKind_NewConstitutionAction
+  | GovernanceActionKind_InfoAction
 
-derive instance Generic RedeemerTagKindValues _
-instance IsCslEnum RedeemerTagKindValues RedeemerTagKind
-instance Show RedeemerTagKindValues where
+derive instance Generic GovernanceActionKindValues _
+instance IsCslEnum GovernanceActionKindValues GovernanceActionKind
+instance Show GovernanceActionKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- CoinSelectionStrategyCIP2
+-- CborContainerType
 
-foreign import data CoinSelectionStrategyCIP2 :: Type
+foreign import data CborContainerType :: Type
 
-data CoinSelectionStrategyCIP2Values
-  = CoinSelectionStrategyCIP2_LargestFirst
-  | CoinSelectionStrategyCIP2_RandomImprove
-  | CoinSelectionStrategyCIP2_LargestFirstMultiAsset
-  | CoinSelectionStrategyCIP2_RandomImproveMultiAsset
+data CborContainerTypeValues
+  = CborContainerType_Array
+  | CborContainerType_Map
 
-derive instance Generic CoinSelectionStrategyCIP2Values _
-instance IsCslEnum CoinSelectionStrategyCIP2Values CoinSelectionStrategyCIP2
-instance Show CoinSelectionStrategyCIP2Values where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- VoteKind
-
-foreign import data VoteKind :: Type
-
-data VoteKindValues
-  = VoteKind_No
-  | VoteKind_Yes
-  | VoteKind_Abstain
-
-derive instance Generic VoteKindValues _
-instance IsCslEnum VoteKindValues VoteKind
-instance Show VoteKindValues where
+derive instance Generic CborContainerTypeValues _
+instance IsCslEnum CborContainerTypeValues CborContainerType
+instance Show CborContainerTypeValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
@@ -5192,114 +5303,6 @@ instance Show VoterKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- RelayKind
-
-foreign import data RelayKind :: Type
-
-data RelayKindValues
-  = RelayKind_SingleHostAddr
-  | RelayKind_SingleHostName
-  | RelayKind_MultiHostName
-
-derive instance Generic RelayKindValues _
-instance IsCslEnum RelayKindValues RelayKind
-instance Show RelayKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- ScriptSchema
-
-foreign import data ScriptSchema :: Type
-
-data ScriptSchemaValues
-  = ScriptSchema_Wallet
-  | ScriptSchema_Node
-
-derive instance Generic ScriptSchemaValues _
-instance IsCslEnum ScriptSchemaValues ScriptSchema
-instance Show ScriptSchemaValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- GovernanceActionKind
-
-foreign import data GovernanceActionKind :: Type
-
-data GovernanceActionKindValues
-  = GovernanceActionKind_ParameterChangeAction
-  | GovernanceActionKind_HardForkInitiationAction
-  | GovernanceActionKind_TreasuryWithdrawalsAction
-  | GovernanceActionKind_NoConfidenceAction
-  | GovernanceActionKind_UpdateCommitteeAction
-  | GovernanceActionKind_NewConstitutionAction
-  | GovernanceActionKind_InfoAction
-
-derive instance Generic GovernanceActionKindValues _
-instance IsCslEnum GovernanceActionKindValues GovernanceActionKind
-instance Show GovernanceActionKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- AddressKind
-
-foreign import data AddressKind :: Type
-
-data AddressKindValues
-  = AddressKind_Base
-  | AddressKind_Pointer
-  | AddressKind_Enterprise
-  | AddressKind_Reward
-  | AddressKind_Byron
-  | AddressKind_Malformed
-
-derive instance Generic AddressKindValues _
-instance IsCslEnum AddressKindValues AddressKind
-instance Show AddressKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- PlutusDatumSchema
-
-foreign import data PlutusDatumSchema :: Type
-
-data PlutusDatumSchemaValues
-  = PlutusDatumSchema_BasicConversions
-  | PlutusDatumSchema_DetailedSchema
-
-derive instance Generic PlutusDatumSchemaValues _
-instance IsCslEnum PlutusDatumSchemaValues PlutusDatumSchema
-instance Show PlutusDatumSchemaValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- CredKind
-
-foreign import data CredKind :: Type
-
-data CredKindValues
-  = CredKind_Key
-  | CredKind_Script
-
-derive instance Generic CredKindValues _
-instance IsCslEnum CredKindValues CredKind
-instance Show CredKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- MIRKind
-
-foreign import data MIRKind :: Type
-
-data MIRKindValues
-  = MIRKind_ToOtherPot
-  | MIRKind_ToStakeCredentials
-
-derive instance Generic MIRKindValues _
-instance IsCslEnum MIRKindValues MIRKind
-instance Show MIRKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
 -- NetworkIdKind
 
 foreign import data NetworkIdKind :: Type
@@ -5314,62 +5317,19 @@ instance Show NetworkIdKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- CborContainerType
+-- CoinSelectionStrategyCIP2
 
-foreign import data CborContainerType :: Type
+foreign import data CoinSelectionStrategyCIP2 :: Type
 
-data CborContainerTypeValues
-  = CborContainerType_Array
-  | CborContainerType_Map
+data CoinSelectionStrategyCIP2Values
+  = CoinSelectionStrategyCIP2_LargestFirst
+  | CoinSelectionStrategyCIP2_RandomImprove
+  | CoinSelectionStrategyCIP2_LargestFirstMultiAsset
+  | CoinSelectionStrategyCIP2_RandomImproveMultiAsset
 
-derive instance Generic CborContainerTypeValues _
-instance IsCslEnum CborContainerTypeValues CborContainerType
-instance Show CborContainerTypeValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- MIRPot
-
-foreign import data MIRPot :: Type
-
-data MIRPotValues
-  = MIRPot_Reserves
-  | MIRPot_Treasury
-
-derive instance Generic MIRPotValues _
-instance IsCslEnum MIRPotValues MIRPot
-instance Show MIRPotValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- ScriptHashNamespace
-
-foreign import data ScriptHashNamespace :: Type
-
-data ScriptHashNamespaceValues
-  = ScriptHashNamespace_NativeScript
-  | ScriptHashNamespace_PlutusScript
-  | ScriptHashNamespace_PlutusScriptV2
-  | ScriptHashNamespace_PlutusScriptV3
-
-derive instance Generic ScriptHashNamespaceValues _
-instance IsCslEnum ScriptHashNamespaceValues ScriptHashNamespace
-instance Show ScriptHashNamespaceValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
--- LanguageKind
-
-foreign import data LanguageKind :: Type
-
-data LanguageKindValues
-  = LanguageKind_PlutusV1
-  | LanguageKind_PlutusV2
-  | LanguageKind_PlutusV3
-
-derive instance Generic LanguageKindValues _
-instance IsCslEnum LanguageKindValues LanguageKind
-instance Show LanguageKindValues where
+derive instance Generic CoinSelectionStrategyCIP2Values _
+instance IsCslEnum CoinSelectionStrategyCIP2Values CoinSelectionStrategyCIP2
+instance Show CoinSelectionStrategyCIP2Values where
   show = genericShow
 
 --------------------------------------------------------------------------------
@@ -5388,6 +5348,110 @@ data NativeScriptKindValues
 derive instance Generic NativeScriptKindValues _
 instance IsCslEnum NativeScriptKindValues NativeScriptKind
 instance Show NativeScriptKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- MIRPot
+
+foreign import data MIRPot :: Type
+
+data MIRPotValues
+  = MIRPot_Reserves
+  | MIRPot_Treasury
+
+derive instance Generic MIRPotValues _
+instance IsCslEnum MIRPotValues MIRPot
+instance Show MIRPotValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- RelayKind
+
+foreign import data RelayKind :: Type
+
+data RelayKindValues
+  = RelayKind_SingleHostAddr
+  | RelayKind_SingleHostName
+  | RelayKind_MultiHostName
+
+derive instance Generic RelayKindValues _
+instance IsCslEnum RelayKindValues RelayKind
+instance Show RelayKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- PlutusDatumSchema
+
+foreign import data PlutusDatumSchema :: Type
+
+data PlutusDatumSchemaValues
+  = PlutusDatumSchema_BasicConversions
+  | PlutusDatumSchema_DetailedSchema
+
+derive instance Generic PlutusDatumSchemaValues _
+instance IsCslEnum PlutusDatumSchemaValues PlutusDatumSchema
+instance Show PlutusDatumSchemaValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- CertificateKind
+
+foreign import data CertificateKind :: Type
+
+data CertificateKindValues
+  = CertificateKind_StakeRegistration
+  | CertificateKind_StakeDeregistration
+  | CertificateKind_StakeDelegation
+  | CertificateKind_PoolRegistration
+  | CertificateKind_PoolRetirement
+  | CertificateKind_GenesisKeyDelegation
+  | CertificateKind_MoveInstantaneousRewardsCert
+  | CertificateKind_CommitteeHotAuth
+  | CertificateKind_CommitteeColdResign
+  | CertificateKind_DRepDeregistration
+  | CertificateKind_DRepRegistration
+  | CertificateKind_DRepUpdate
+  | CertificateKind_StakeAndVoteDelegation
+  | CertificateKind_StakeRegistrationAndDelegation
+  | CertificateKind_StakeVoteRegistrationAndDelegation
+  | CertificateKind_VoteDelegation
+  | CertificateKind_VoteRegistrationAndDelegation
+
+derive instance Generic CertificateKindValues _
+instance IsCslEnum CertificateKindValues CertificateKind
+instance Show CertificateKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- DRepKind
+
+foreign import data DRepKind :: Type
+
+data DRepKindValues
+  = DRepKind_KeyHash
+  | DRepKind_ScriptHash
+  | DRepKind_AlwaysAbstain
+  | DRepKind_AlwaysNoConfidence
+
+derive instance Generic DRepKindValues _
+instance IsCslEnum DRepKindValues DRepKind
+instance Show DRepKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- ScriptHashNamespace
+
+foreign import data ScriptHashNamespace :: Type
+
+data ScriptHashNamespaceValues
+  = ScriptHashNamespace_NativeScript
+  | ScriptHashNamespace_PlutusScript
+  | ScriptHashNamespace_PlutusScriptV2
+  | ScriptHashNamespace_PlutusScriptV3
+
+derive instance Generic ScriptHashNamespaceValues _
+instance IsCslEnum ScriptHashNamespaceValues ScriptHashNamespace
+instance Show ScriptHashNamespaceValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
@@ -5425,35 +5489,6 @@ instance Show PlutusDataKindValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- CertificateKind
-
-foreign import data CertificateKind :: Type
-
-data CertificateKindValues
-  = CertificateKind_StakeRegistration
-  | CertificateKind_StakeDeregistration
-  | CertificateKind_StakeDelegation
-  | CertificateKind_PoolRegistration
-  | CertificateKind_PoolRetirement
-  | CertificateKind_GenesisKeyDelegation
-  | CertificateKind_MoveInstantaneousRewardsCert
-  | CertificateKind_CommitteeHotAuth
-  | CertificateKind_CommitteeColdResign
-  | CertificateKind_DrepDeregistration
-  | CertificateKind_DrepRegistration
-  | CertificateKind_DrepUpdate
-  | CertificateKind_StakeAndVoteDelegation
-  | CertificateKind_StakeRegistrationAndDelegation
-  | CertificateKind_StakeVoteRegistrationAndDelegation
-  | CertificateKind_VoteDelegation
-  | CertificateKind_VoteRegistrationAndDelegation
-
-derive instance Generic CertificateKindValues _
-instance IsCslEnum CertificateKindValues CertificateKind
-instance Show CertificateKindValues where
-  show = genericShow
-
---------------------------------------------------------------------------------
 -- MetadataJsonSchema
 
 foreign import data MetadataJsonSchema :: Type
@@ -5469,18 +5504,130 @@ instance Show MetadataJsonSchemaValues where
   show = genericShow
 
 --------------------------------------------------------------------------------
--- DRepKind
+-- VoteKind
 
-foreign import data DRepKind :: Type
+foreign import data VoteKind :: Type
 
-data DRepKindValues
-  = DRepKind_KeyHash
-  | DRepKind_ScriptHash
-  | DRepKind_AlwaysAbstain
-  | DRepKind_AlwaysNoConfidence
+data VoteKindValues
+  = VoteKind_No
+  | VoteKind_Yes
+  | VoteKind_Abstain
 
-derive instance Generic DRepKindValues _
-instance IsCslEnum DRepKindValues DRepKind
-instance Show DRepKindValues where
+derive instance Generic VoteKindValues _
+instance IsCslEnum VoteKindValues VoteKind
+instance Show VoteKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- LanguageKind
+
+foreign import data LanguageKind :: Type
+
+data LanguageKindValues
+  = LanguageKind_PlutusV1
+  | LanguageKind_PlutusV2
+  | LanguageKind_PlutusV3
+
+derive instance Generic LanguageKindValues _
+instance IsCslEnum LanguageKindValues LanguageKind
+instance Show LanguageKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- BlockEra
+
+foreign import data BlockEra :: Type
+
+data BlockEraValues
+  = BlockEra_Byron
+  | BlockEra_Shelley
+  | BlockEra_Allegra
+  | BlockEra_Mary
+  | BlockEra_Alonzo
+  | BlockEra_Babbage
+  | BlockEra_Conway
+  | BlockEra_Unknown
+
+derive instance Generic BlockEraValues _
+instance IsCslEnum BlockEraValues BlockEra
+instance Show BlockEraValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- ScriptSchema
+
+foreign import data ScriptSchema :: Type
+
+data ScriptSchemaValues
+  = ScriptSchema_Wallet
+  | ScriptSchema_Node
+
+derive instance Generic ScriptSchemaValues _
+instance IsCslEnum ScriptSchemaValues ScriptSchema
+instance Show ScriptSchemaValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- MIRKind
+
+foreign import data MIRKind :: Type
+
+data MIRKindValues
+  = MIRKind_ToOtherPot
+  | MIRKind_ToStakeCredentials
+
+derive instance Generic MIRKindValues _
+instance IsCslEnum MIRKindValues MIRKind
+instance Show MIRKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- RedeemerTagKind
+
+foreign import data RedeemerTagKind :: Type
+
+data RedeemerTagKindValues
+  = RedeemerTagKind_Spend
+  | RedeemerTagKind_Mint
+  | RedeemerTagKind_Cert
+  | RedeemerTagKind_Reward
+  | RedeemerTagKind_Vote
+  | RedeemerTagKind_VotingProposal
+
+derive instance Generic RedeemerTagKindValues _
+instance IsCslEnum RedeemerTagKindValues RedeemerTagKind
+instance Show RedeemerTagKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- CredKind
+
+foreign import data CredKind :: Type
+
+data CredKindValues
+  = CredKind_Key
+  | CredKind_Script
+
+derive instance Generic CredKindValues _
+instance IsCslEnum CredKindValues CredKind
+instance Show CredKindValues where
+  show = genericShow
+
+--------------------------------------------------------------------------------
+-- AddressKind
+
+foreign import data AddressKind :: Type
+
+data AddressKindValues
+  = AddressKind_Base
+  | AddressKind_Pointer
+  | AddressKind_Enterprise
+  | AddressKind_Reward
+  | AddressKind_Byron
+  | AddressKind_Malformed
+
+derive instance Generic AddressKindValues _
+instance IsCslEnum AddressKindValues AddressKind
+instance Show AddressKindValues where
   show = genericShow
 
