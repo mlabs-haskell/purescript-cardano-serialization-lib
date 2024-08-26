@@ -117,13 +117,15 @@ isListContainer (Class _ methods) = do
     getElement _ = Nothing
 
 isMapContainer :: Class -> Maybe (String, String, Bool)
-isMapContainer (Class _ methods) = do
+isMapContainer (Class name methods) = do
   guard $ all (`elem` methodNames) ["insert", "get", "len", "keys"]
   let kv = mapMaybe getKeyValue methods
-      isMultiMap = length (L.nub $ snd <$> kv) > 1
+      isMultiMap = name `elem` knownMultiMapContainers
   (keyType, valueType) <- listToMaybe kv
   pure (keyType, valueType, isMultiMap)
   where
+    knownMultiMapContainers = ["Mint", "PlutusMap"]
+
     methodNames = fun'name . method'fun <$> methods
 
     getKeyValue :: Method -> Maybe (String, String)

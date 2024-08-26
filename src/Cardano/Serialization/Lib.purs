@@ -3241,7 +3241,7 @@ instance DecodeAeson PlutusMap where
 instance Show PlutusMap where
   show = showViaBytes
 
-instance IsMapContainer PlutusMap PlutusData PlutusMapValues
+instance IsMultiMapContainer PlutusMap PlutusData PlutusMapValues
 
 --------------------------------------------------------------------------------
 -- Plutus map values
