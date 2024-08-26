@@ -55,6 +55,7 @@ unneededClasses =
   , "FixedTransaction"
   , "FixedBlock"
   , "FixedVersionedBlock"
+  , "BlockHash"
   ]
 
 neededFunctions :: [String]

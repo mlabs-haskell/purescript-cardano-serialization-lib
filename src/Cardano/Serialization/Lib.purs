@@ -77,8 +77,6 @@ module Cardano.Serialization.Lib
   , bip32PublicKey_asBytes
   , bip32PublicKey_toRawKey
   , bip32PublicKey_derive
-  , blockHash_toBech32
-  , blockHash_fromBech32
   , bootstrapWitness_vkey
   , bootstrapWitness_signature
   , bootstrapWitness_chainCode
@@ -885,7 +883,6 @@ module Cardano.Serialization.Lib
   , BigNum
   , Bip32PrivateKey
   , Bip32PublicKey
-  , BlockHash
   , BootstrapWitness
   , BootstrapWitnesses
   , ByronAddress
@@ -1490,27 +1487,6 @@ foreign import bip32PublicKey_derive :: Bip32PublicKey -> Number -> Bip32PublicK
 
 instance IsCsl Bip32PublicKey where
   className _ = "Bip32PublicKey"
-
---------------------------------------------------------------------------------
--- Block hash
-
-foreign import data BlockHash :: Type
-
-foreign import blockHash_toBech32 :: BlockHash -> String -> String
-foreign import blockHash_fromBech32 :: String -> Nullable BlockHash
-
-instance IsCsl BlockHash where
-  className _ = "BlockHash"
-
-instance IsBytes BlockHash
-instance EncodeAeson BlockHash where
-  encodeAeson = cslToAesonViaBytes
-
-instance DecodeAeson BlockHash where
-  decodeAeson = cslFromAesonViaBytes
-
-instance Show BlockHash where
-  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Bootstrap witness

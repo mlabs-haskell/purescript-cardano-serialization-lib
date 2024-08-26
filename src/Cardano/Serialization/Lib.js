@@ -149,12 +149,6 @@ export const bip32PublicKey_toRawKey = self => self.to_raw_key.bind(self)();
 export const bip32PublicKey_derive = self => index =>
   self.derive.bind(self)(index);
 
-// BlockHash
-export const blockHash_toBech32 = self => prefix =>
-  self.to_bech32.bind(self)(prefix);
-export const blockHash_fromBech32 = bech_str =>
-  errorableToPurs(CSL.BlockHash.from_bech32, bech_str);
-
 // BootstrapWitness
 export const bootstrapWitness_vkey = self => self.vkey.bind(self)();
 export const bootstrapWitness_signature = self => self.signature.bind(self)();
