@@ -254,18 +254,10 @@ module Cardano.Serialization.Lib
   , exUnits_mem
   , exUnits_steps
   , exUnits_new
-  , fixedBlock_header
-  , fixedBlock_transactionBodies
-  , fixedBlock_transactionWitnessSets
-  , fixedBlock_auxiliaryDataSet
-  , fixedBlock_invalidTransactions
-  , fixedBlock_blockHash
   , fixedTransactionBodies_new
   , fixedTransactionBody_transactionBody
   , fixedTransactionBody_txHash
   , fixedTransactionBody_originalBytes
-  , fixedVersionedBlock_block
-  , fixedVersionedBlock_era
   , generalTransactionMetadata_new
   , genesisDelegateHash_toBech32
   , genesisDelegateHash_fromBech32
@@ -925,10 +917,8 @@ module Cardano.Serialization.Lib
   , EnterpriseAddress
   , ExUnitPrices
   , ExUnits
-  , FixedBlock
   , FixedTransactionBodies
   , FixedTransactionBody
-  , FixedVersionedBlock
   , GeneralTransactionMetadata
   , GenesisDelegateHash
   , GenesisHash
@@ -2279,21 +2269,6 @@ instance Show ExUnits where
   show = showViaJson
 
 --------------------------------------------------------------------------------
--- Fixed block
-
-foreign import data FixedBlock :: Type
-
-foreign import fixedBlock_header :: FixedBlock -> Header
-foreign import fixedBlock_transactionBodies :: FixedBlock -> FixedTransactionBodies
-foreign import fixedBlock_transactionWitnessSets :: FixedBlock -> TransactionWitnessSets
-foreign import fixedBlock_auxiliaryDataSet :: FixedBlock -> AuxiliaryDataSet
-foreign import fixedBlock_invalidTransactions :: FixedBlock -> Uint32Array
-foreign import fixedBlock_blockHash :: FixedBlock -> BlockHash
-
-instance IsCsl FixedBlock where
-  className _ = "FixedBlock"
-
---------------------------------------------------------------------------------
 -- Fixed transaction bodies
 
 foreign import data FixedTransactionBodies :: Type
@@ -2316,17 +2291,6 @@ foreign import fixedTransactionBody_originalBytes :: FixedTransactionBody -> Byt
 
 instance IsCsl FixedTransactionBody where
   className _ = "FixedTransactionBody"
-
---------------------------------------------------------------------------------
--- Fixed versioned block
-
-foreign import data FixedVersionedBlock :: Type
-
-foreign import fixedVersionedBlock_block :: FixedVersionedBlock -> FixedBlock
-foreign import fixedVersionedBlock_era :: FixedVersionedBlock -> BlockEra
-
-instance IsCsl FixedVersionedBlock where
-  className _ = "FixedVersionedBlock"
 
 --------------------------------------------------------------------------------
 -- General transaction metadata

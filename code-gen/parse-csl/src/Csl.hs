@@ -53,6 +53,8 @@ unneededClasses =
     "Strings"
   , "PublicKeys"
   , "FixedTransaction"
+  , "FixedBlock"
+  , "FixedVersionedBlock"
   ]
 
 neededFunctions :: [String]

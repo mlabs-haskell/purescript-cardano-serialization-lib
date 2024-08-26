@@ -560,18 +560,6 @@ export const exUnits_mem = self => self.mem.bind(self)();
 export const exUnits_steps = self => self.steps.bind(self)();
 export const exUnits_new = mem => steps => CSL.ExUnits.new(mem, steps);
 
-// FixedBlock
-export const fixedBlock_header = self => self.header.bind(self)();
-export const fixedBlock_transactionBodies = self =>
-  self.transaction_bodies.bind(self)();
-export const fixedBlock_transactionWitnessSets = self =>
-  self.transaction_witness_sets.bind(self)();
-export const fixedBlock_auxiliaryDataSet = self =>
-  self.auxiliary_data_set.bind(self)();
-export const fixedBlock_invalidTransactions = self =>
-  self.invalid_transactions.bind(self)();
-export const fixedBlock_blockHash = self => self.block_hash.bind(self)();
-
 // FixedTransactionBodies
 export const fixedTransactionBodies_new = CSL.FixedTransactionBodies.new();
 
@@ -581,10 +569,6 @@ export const fixedTransactionBody_transactionBody = self =>
 export const fixedTransactionBody_txHash = self => self.tx_hash.bind(self)();
 export const fixedTransactionBody_originalBytes = self =>
   self.original_bytes.bind(self)();
-
-// FixedVersionedBlock
-export const fixedVersionedBlock_block = self => self.block.bind(self)();
-export const fixedVersionedBlock_era = self => self.era.bind(self)();
 
 // GeneralTransactionMetadata
 export const generalTransactionMetadata_new = () =>
