@@ -112,15 +112,15 @@ declare export function min_ada_for_output(
  * Receives a script JSON string
  * and returns a NativeScript.
  * Cardano Wallet and Node styles are supported.
- * 
+ *
  * * wallet: https://github.com/input-output-hk/cardano-wallet/blob/master/specifications/api/swagger.yaml
  * * node: https://github.com/input-output-hk/cardano-node/blob/master/doc/reference/simple-scripts.md
- * 
+ *
  * self_xpub is expected to be a Bip32PublicKey as hex-encoded bytes
  * @param {string} json
  * @param {string} self_xpub
  * @param {$Values<
-                typeof 
+                typeof
                 ScriptSchema>} schema
  * @returns {NativeScript}
  */
@@ -206,7 +206,7 @@ declare export function min_ref_script_fee(
 /**
  * @param {string} json
  * @param {$Values<
-                typeof 
+                typeof
                 PlutusDatumSchema>} schema
  * @returns {PlutusData}
  */
@@ -218,7 +218,7 @@ declare export function encode_json_str_to_plutus_datum(
 /**
  * @param {PlutusData} datum
  * @param {$Values<
-                typeof 
+                typeof
                 PlutusDatumSchema>} schema
  * @returns {string}
  */
@@ -246,7 +246,7 @@ declare export function decode_arbitrary_bytes_from_metadatum(
 /**
  * @param {string} json
  * @param {$Values<
-                typeof 
+                typeof
                 MetadataJsonSchema>} schema
  * @returns {TransactionMetadatum}
  */
@@ -258,7 +258,7 @@ declare export function encode_json_str_to_metadatum(
 /**
  * @param {TransactionMetadatum} metadatum
  * @param {$Values<
-                typeof 
+                typeof
                 MetadataJsonSchema>} schema
  * @returns {string}
  */
@@ -282,10 +282,62 @@ declare export var RedeemerTagKind: {|
 /**
  */
 
+declare export var CoinSelectionStrategyCIP2: {|
+  +LargestFirst: 0, // 0
+  +RandomImprove: 1, // 1
+  +LargestFirstMultiAsset: 2, // 2
+  +RandomImproveMultiAsset: 3, // 3
+|};
+
+/**
+ */
+
+declare export var VoteKind: {|
+  +No: 0, // 0
+  +Yes: 1, // 1
+  +Abstain: 2, // 2
+|};
+
+/**
+ */
+
+declare export var VoterKind: {|
+  +ConstitutionalCommitteeHotKeyHash: 0, // 0
+  +ConstitutionalCommitteeHotScriptHash: 1, // 1
+  +DRepKeyHash: 2, // 2
+  +DRepScriptHash: 3, // 3
+  +StakingPoolKeyHash: 4, // 4
+|};
+
+/**
+ */
+
 declare export var RelayKind: {|
   +SingleHostAddr: 0, // 0
   +SingleHostName: 1, // 1
   +MultiHostName: 2, // 2
+|};
+
+/**
+ * Used to choosed the schema for a script JSON string
+ */
+
+declare export var ScriptSchema: {|
+  +Wallet: 0, // 0
+  +Node: 1, // 1
+|};
+
+/**
+ */
+
+declare export var GovernanceActionKind: {|
+  +ParameterChangeAction: 0, // 0
+  +HardForkInitiationAction: 1, // 1
+  +TreasuryWithdrawalsAction: 2, // 2
+  +NoConfidenceAction: 3, // 3
+  +UpdateCommitteeAction: 4, // 4
+  +NewConstitutionAction: 5, // 5
+  +InfoAction: 6, // 6
 |};
 
 /**
@@ -320,12 +372,33 @@ declare export var PlutusDatumSchema: {|
 /**
  */
 
-declare export var VoterKind: {|
-  +ConstitutionalCommitteeHotKeyHash: 0, // 0
-  +ConstitutionalCommitteeHotScriptHash: 1, // 1
-  +DRepKeyHash: 2, // 2
-  +DRepScriptHash: 3, // 3
-  +StakingPoolKeyHash: 4, // 4
+declare export var CredKind: {|
+  +Key: 0, // 0
+  +Script: 1, // 1
+|};
+
+/**
+ */
+
+declare export var MIRKind: {|
+  +ToOtherPot: 0, // 0
+  +ToStakeCredentials: 1, // 1
+|};
+
+/**
+ */
+
+declare export var NetworkIdKind: {|
+  +Testnet: 0, // 0
+  +Mainnet: 1, // 1
+|};
+
+/**
+ */
+
+declare export var CborContainerType: {|
+  +Array: 0, // 0
+  +Map: 1, // 1
 |};
 
 /**
@@ -337,12 +410,17 @@ declare export var MIRPot: {|
 |};
 
 /**
+ * Each new language uses a different namespace for hashing its script
+ * This is because you could have a language where the same bytes have different semantics
+ * So this avoids scripts in different languages mapping to the same hash
+ * Note that the enum value here is different than the enum value for deciding the cost model of a script
  */
 
-declare export var VoteKind: {|
-  +No: 0, // 0
-  +Yes: 1, // 1
-  +Abstain: 2, // 2
+declare export var ScriptHashNamespace: {|
+  +NativeScript: 0, // 0
+  +PlutusScript: 1, // 1
+  +PlutusScriptV2: 2, // 2
+  +PlutusScriptV3: 3, // 3
 |};
 
 /**
@@ -355,35 +433,6 @@ declare export var LanguageKind: {|
 |};
 
 /**
- * Used to choosed the schema for a script JSON string
- */
-
-declare export var ScriptSchema: {|
-  +Wallet: 0, // 0
-  +Node: 1, // 1
-|};
-
-/**
- */
-
-declare export var CoinSelectionStrategyCIP2: {|
-  +LargestFirst: 0, // 0
-  +RandomImprove: 1, // 1
-  +LargestFirstMultiAsset: 2, // 2
-  +RandomImproveMultiAsset: 3, // 3
-|};
-
-/**
- */
-
-declare export var DRepKind: {|
-  +KeyHash: 0, // 0
-  +ScriptHash: 1, // 1
-  +AlwaysAbstain: 2, // 2
-  +AlwaysNoConfidence: 3, // 3
-|};
-
-/**
  */
 
 declare export var NativeScriptKind: {|
@@ -393,6 +442,28 @@ declare export var NativeScriptKind: {|
   +ScriptNOfK: 3, // 3
   +TimelockStart: 4, // 4
   +TimelockExpiry: 5, // 5
+|};
+
+/**
+ */
+
+declare export var TransactionMetadatumKind: {|
+  +MetadataMap: 0, // 0
+  +MetadataList: 1, // 1
+  +Int: 2, // 2
+  +Bytes: 3, // 3
+  +Text: 4, // 4
+|};
+
+/**
+ */
+
+declare export var PlutusDataKind: {|
+  +ConstrPlutusData: 0, // 0
+  +Map: 1, // 1
+  +List: 2, // 2
+  +Integer: 3, // 3
+  +Bytes: 4, // 4
 |};
 
 /**
@@ -421,44 +492,6 @@ declare export var CertificateKind: {|
 /**
  */
 
-declare export var NetworkIdKind: {|
-  +Testnet: 0, // 0
-  +Mainnet: 1, // 1
-|};
-
-/**
- */
-
-declare export var PlutusDataKind: {|
-  +ConstrPlutusData: 0, // 0
-  +Map: 1, // 1
-  +List: 2, // 2
-  +Integer: 3, // 3
-  +Bytes: 4, // 4
-|};
-
-/**
- */
-
-declare export var CredKind: {|
-  +Key: 0, // 0
-  +Script: 1, // 1
-|};
-
-/**
- */
-
-declare export var TransactionMetadatumKind: {|
-  +MetadataMap: 0, // 0
-  +MetadataList: 1, // 1
-  +Int: 2, // 2
-  +Bytes: 3, // 3
-  +Text: 4, // 4
-|};
-
-/**
- */
-
 declare export var MetadataJsonSchema: {|
   +NoConversions: 0, // 0
   +BasicConversions: 1, // 1
@@ -468,44 +501,11 @@ declare export var MetadataJsonSchema: {|
 /**
  */
 
-declare export var GovernanceActionKind: {|
-  +ParameterChangeAction: 0, // 0
-  +HardForkInitiationAction: 1, // 1
-  +TreasuryWithdrawalsAction: 2, // 2
-  +NoConfidenceAction: 3, // 3
-  +UpdateCommitteeAction: 4, // 4
-  +NewConstitutionAction: 5, // 5
-  +InfoAction: 6, // 6
-|};
-
-/**
- */
-
-declare export var MIRKind: {|
-  +ToOtherPot: 0, // 0
-  +ToStakeCredentials: 1, // 1
-|};
-
-/**
- */
-
-declare export var CborContainerType: {|
-  +Array: 0, // 0
-  +Map: 1, // 1
-|};
-
-/**
- * Each new language uses a different namespace for hashing its script
- * This is because you could have a language where the same bytes have different semantics
- * So this avoids scripts in different languages mapping to the same hash
- * Note that the enum value here is different than the enum value for deciding the cost model of a script
- */
-
-declare export var ScriptHashNamespace: {|
-  +NativeScript: 0, // 0
-  +PlutusScript: 1, // 1
-  +PlutusScriptV2: 2, // 2
-  +PlutusScriptV3: 3, // 3
+declare export var DRepKind: {|
+  +KeyHash: 0, // 0
+  +ScriptHash: 1, // 1
+  +AlwaysAbstain: 2, // 2
+  +AlwaysNoConfidence: 3, // 3
 |};
 
 /**
@@ -537,7 +537,7 @@ declare export class Address {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 AddressKind>}
  */
   kind(): $Values<typeof AddressKind>;
@@ -1957,7 +1957,7 @@ declare export class Certificate {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 CertificateKind>}
  */
   kind(): $Values<typeof CertificateKind>;
@@ -2716,7 +2716,7 @@ declare export class Credential {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 CredKind>}
  */
   kind(): $Values<typeof CredKind>;
@@ -3003,7 +3003,7 @@ declare export class DRep {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 DRepKind>}
  */
   kind(): $Values<typeof DRepKind>;
@@ -4275,7 +4275,7 @@ declare export class GovernanceAction {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 GovernanceActionKind>}
  */
   kind(): $Values<typeof GovernanceActionKind>;
@@ -5089,7 +5089,7 @@ declare export class Language {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 LanguageKind>}
  */
   kind(): $Values<typeof LanguageKind>;
@@ -5701,7 +5701,7 @@ declare export class MoveInstantaneousReward {
 
   /**
  * @param {$Values<
-                typeof 
+                typeof
                 MIRPot>} pot
  * @param {BigNum} amount
  * @returns {MoveInstantaneousReward}
@@ -5713,7 +5713,7 @@ declare export class MoveInstantaneousReward {
 
   /**
  * @param {$Values<
-                typeof 
+                typeof
                 MIRPot>} pot
  * @param {MIRToStakeCredentials} amounts
  * @returns {MoveInstantaneousReward}
@@ -5725,14 +5725,14 @@ declare export class MoveInstantaneousReward {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 MIRPot>}
  */
   pot(): $Values<typeof MIRPot>;
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 MIRKind>}
  */
   kind(): $Values<typeof MIRKind>;
@@ -6049,7 +6049,7 @@ declare export class NativeScript {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 NativeScriptKind>}
  */
   kind(): $Values<typeof NativeScriptKind>;
@@ -6237,7 +6237,7 @@ declare export class NetworkId {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 NetworkIdKind>}
  */
   kind(): $Values<typeof NetworkIdKind>;
@@ -6753,7 +6753,7 @@ declare export class PlutusData {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 PlutusDataKind>}
  */
   kind(): $Values<typeof PlutusDataKind>;
@@ -6785,7 +6785,7 @@ declare export class PlutusData {
 
   /**
  * @param {$Values<
-                typeof 
+                typeof
                 PlutusDatumSchema>} schema
  * @returns {string}
  */
@@ -6794,7 +6794,7 @@ declare export class PlutusData {
   /**
  * @param {string} json
  * @param {$Values<
-                typeof 
+                typeof
                 PlutusDatumSchema>} schema
  * @returns {PlutusData}
  */
@@ -8548,7 +8548,7 @@ declare export class RedeemerTag {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 RedeemerTagKind>}
  */
   kind(): $Values<typeof RedeemerTagKind>;
@@ -8685,7 +8685,7 @@ declare export class Relay {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 RelayKind>}
  */
   kind(): $Values<typeof RelayKind>;
@@ -10529,7 +10529,7 @@ declare export class TransactionBuilder {
  * inputs to cover the minimum fees. This does not, however, set the txbuilder's fee.
  * @param {TransactionUnspentOutputs} inputs
  * @param {$Values<
-                typeof 
+                typeof
                 CoinSelectionStrategyCIP2>} strategy
  */
   add_inputs_from(
@@ -10666,7 +10666,7 @@ declare export class TransactionBuilder {
   /**
  * @param {TransactionUnspentOutputs} inputs
  * @param {$Values<
-                typeof 
+                typeof
                 CoinSelectionStrategyCIP2>} strategy
  * @param {ChangeConfig} change_config
  * @returns {boolean}
@@ -10680,7 +10680,7 @@ declare export class TransactionBuilder {
   /**
  * @param {TransactionUnspentOutputs} inputs
  * @param {$Values<
-                typeof 
+                typeof
                 CoinSelectionStrategyCIP2>} strategy
  * @param {ChangeConfig} change_config
  * @param {BigNum} collateral_percentage
@@ -10859,7 +10859,7 @@ declare export class TransactionBuilder {
  * @param {BigNum} key
  * @param {string} val
  * @param {$Values<
-                typeof 
+                typeof
                 MetadataJsonSchema>} schema
  */
   add_json_metadatum_with_schema(
@@ -11457,7 +11457,7 @@ declare export class TransactionMetadatum {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 TransactionMetadatumKind>}
  */
   kind(): $Values<typeof TransactionMetadatumKind>;
@@ -11642,7 +11642,7 @@ declare export class TransactionOutput {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 CborContainerType> | void}
  */
   serialization_format(): $Values<typeof CborContainerType> | void;
@@ -13249,7 +13249,7 @@ declare export class Voter {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 VoterKind>}
  */
   kind(): $Values<typeof VoterKind>;
@@ -13438,7 +13438,7 @@ declare export class VotingProcedure {
 
   /**
  * @param {$Values<
-                typeof 
+                typeof
                 VoteKind>} vote
  * @returns {VotingProcedure}
  */
@@ -13446,7 +13446,7 @@ declare export class VotingProcedure {
 
   /**
  * @param {$Values<
-                typeof 
+                typeof
                 VoteKind>} vote
  * @param {Anchor} anchor
  * @returns {VotingProcedure}
@@ -13458,7 +13458,7 @@ declare export class VotingProcedure {
 
   /**
  * @returns {$Values<
-                typeof 
+                typeof
                 VoteKind>}
  */
   vote_kind(): $Values<typeof VoteKind>;
