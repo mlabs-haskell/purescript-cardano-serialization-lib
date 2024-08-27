@@ -124,7 +124,7 @@ isMapContainer (Class name methods) = do
   (keyType, valueType) <- listToMaybe kv
   pure (keyType, valueType, isMultiMap)
   where
-    knownMultiMapContainers = ["Mint", "PlutusMap"]
+    knownMultiMapContainers = ["PlutusMap"]
 
     methodNames = fun'name . method'fun <$> methods
 

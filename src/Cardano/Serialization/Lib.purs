@@ -2745,7 +2745,7 @@ instance DecodeAeson Mint where
 instance Show Mint where
   show = showViaJson
 
-instance IsMultiMapContainer Mint ScriptHash MintsAssets
+instance IsMapContainer Mint ScriptHash MintsAssets
 
 --------------------------------------------------------------------------------
 -- Mint assets
