@@ -65,7 +65,7 @@ export const _unpackMultiMapContainer = container => {
   const keys = _unpackListContainer(container.keys());
   const res = [];
   for (let key of keys) {
-    res.push({ key, value: _unpackListContainer(container.get(key)) });
+    res.push({ key, values: container.get(key) });
   }
   return res;
 };

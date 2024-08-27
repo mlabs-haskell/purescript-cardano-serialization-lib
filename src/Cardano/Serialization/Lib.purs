@@ -252,10 +252,6 @@ module Cardano.Serialization.Lib
   , exUnits_mem
   , exUnits_steps
   , exUnits_new
-  , fixedTransactionBodies_new
-  , fixedTransactionBody_transactionBody
-  , fixedTransactionBody_txHash
-  , fixedTransactionBody_originalBytes
   , generalTransactionMetadata_new
   , genesisDelegateHash_toBech32
   , genesisDelegateHash_fromBech32
@@ -914,8 +910,6 @@ module Cardano.Serialization.Lib
   , EnterpriseAddress
   , ExUnitPrices
   , ExUnits
-  , FixedTransactionBodies
-  , FixedTransactionBody
   , GeneralTransactionMetadata
   , GenesisDelegateHash
   , GenesisHash
@@ -1118,7 +1112,6 @@ import Cardano.Serialization.Lib.Internal
   , packMapContainer
   , packMapContainerFromMap
   , packMultiMapContainer
-  , packMultiMapContainerFromMap
   , unpackMapContainerToMapWith
   , unpackMapContainer
   , unpackMultiMapContainer
@@ -2243,30 +2236,6 @@ instance DecodeAeson ExUnits where
 
 instance Show ExUnits where
   show = showViaJson
-
---------------------------------------------------------------------------------
--- Fixed transaction bodies
-
-foreign import data FixedTransactionBodies :: Type
-
-foreign import fixedTransactionBodies_new :: FixedTransactionBodies
-
-instance IsCsl FixedTransactionBodies where
-  className _ = "FixedTransactionBodies"
-
-instance IsListContainer FixedTransactionBodies FixedTransactionBody
-
---------------------------------------------------------------------------------
--- Fixed transaction body
-
-foreign import data FixedTransactionBody :: Type
-
-foreign import fixedTransactionBody_transactionBody :: FixedTransactionBody -> TransactionBody
-foreign import fixedTransactionBody_txHash :: FixedTransactionBody -> TransactionHash
-foreign import fixedTransactionBody_originalBytes :: FixedTransactionBody -> ByteArray
-
-instance IsCsl FixedTransactionBody where
-  className _ = "FixedTransactionBody"
 
 --------------------------------------------------------------------------------
 -- General transaction metadata

@@ -80,4 +80,3 @@ spec = do
     it "Legacy output roundtrip" legacyOutputRoundtrip
     it "Plutus List Serialization CLI Compatibility"
       plutusListSerializationCliCompatibility
-
