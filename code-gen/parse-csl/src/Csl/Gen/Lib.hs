@@ -117,6 +117,7 @@ isListContainer (Class _ methods) = do
     getElement _ = Nothing
 
 isMapContainer :: Class -> Maybe (String, String, Bool)
+isMapContainer (Class "Mint" _) = Just ("ScriptHash", "MintsAssets", False)
 isMapContainer (Class name methods) = do
   guard $ all (`elem` methodNames) ["insert", "get", "len", "keys"]
   let kv = mapMaybe getKeyValue methods
@@ -131,14 +132,14 @@ isMapContainer (Class name methods) = do
     getKeyValue :: Method -> Maybe (String, String)
     getKeyValue method =
       case method of
-        Method _ (Fun "insert" [Arg _ keyType, Arg _ valueType] _) ->
-          Just (keyType, valueType)
         Method _ (Fun "get" [Arg _ keyType] valueType) ->
           Just
             ( keyType
             , fromMaybe valueType $
                 L.stripSuffix " | void" valueType
             )
+        Method _ (Fun "insert" [Arg _ keyType, Arg _ valueType] _) ->
+          Just (keyType, valueType)
         _ ->
           Nothing
 
