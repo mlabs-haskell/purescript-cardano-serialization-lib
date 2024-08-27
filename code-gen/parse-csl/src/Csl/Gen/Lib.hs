@@ -131,6 +131,8 @@ isMapContainer (Class name methods) = do
     getKeyValue :: Method -> Maybe (String, String)
     getKeyValue method =
       case method of
+        Method _ (Fun "insert" [Arg _ keyType, Arg _ valueType] _) ->
+          Just (keyType, valueType)
         Method _ (Fun "get" [Arg _ keyType] valueType) ->
           Just
             ( keyType
