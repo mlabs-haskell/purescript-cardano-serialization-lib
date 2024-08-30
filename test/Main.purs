@@ -29,7 +29,7 @@ import Test.Spec.Assertions (shouldEqual)
 import Test.Spec.Reporter.Console (consoleReporter)
 import Test.Spec.Runner (runSpec)
 
--- Note: most of the tests should be place at `mlabs-haskell/purescript-cardano-types`,
+-- Note: most of the tests should be placed at `mlabs-haskell/purescript-cardano-types`,
 -- where proper roundtrip tests can be performed.
 
 main :: Effect Unit
@@ -80,4 +80,3 @@ spec = do
     it "Legacy output roundtrip" legacyOutputRoundtrip
     it "Plutus List Serialization CLI Compatibility"
       plutusListSerializationCliCompatibility
-

@@ -26,7 +26,6 @@ import Cardano.Serialization.Lib.Internal
   , packMapContainer
   , packMapContainerFromMap
   , packMultiMapContainer
-  , packMultiMapContainerFromMap
   , unpackMapContainerToMapWith
   , unpackMapContainer
   , unpackMultiMapContainer
@@ -41,7 +40,7 @@ import Cardano.Serialization.Lib.Internal
   ) as X
 import Aeson (class DecodeAeson, class EncodeAeson)
 import Data.ByteArray (ByteArray)
-import Data.Generic.Rep (class Generic) 
+import Data.Generic.Rep (class Generic)
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable)
 import Data.Show.Generic (genericShow)

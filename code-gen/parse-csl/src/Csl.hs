@@ -43,6 +43,7 @@ unneededClasses =
   , "WithdrawalsBuilder"
   , -- block data, not needed for `ps-cardano-types`
     "Block"
+  , "VersionedBlock"
   , "Header"
   , "HeaderBody"
   , "TransactionBodies"
@@ -52,6 +53,11 @@ unneededClasses =
     "Strings"
   , "PublicKeys"
   , "FixedTransaction"
+  , "FixedBlock"
+  , "FixedVersionedBlock"
+  , "BlockHash"
+  , "FixedTransactionBodies"
+  , "FixedTransactionBody"
   ]
 
 neededFunctions :: [String]
@@ -63,6 +69,7 @@ neededFunctions =
   , "hash_script_data"
   , "min_script_fee"
   , "min_fee"
+  , "min_ref_script_fee"
   , "make_vkey_witness"
   ]
 

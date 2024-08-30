@@ -74,58 +74,50 @@ unpackListContainer = _unpackListContainer
 foreign import _packListContainer :: forall c e. Boolean -> String -> Array e -> c
 foreign import _unpackListContainer :: forall c e. c -> Array e
 
-class IsMultiMapContainer (c :: Type) (k :: Type) (v :: Type) | c -> k, c -> v
+class IsMultiMapContainer (c :: Type) (k :: Type) (vs :: Type) | c -> k, c -> vs
 
 packMultiMapContainer
-  :: forall c k v
-   . IsMultiMapContainer c k v
+  :: forall c k vs
+   . IsMultiMapContainer c k vs
   => IsCsl c
-  => Array (k /\ v)
+  => Array (k /\ vs)
   -> c
 packMultiMapContainer = map toKeyValues >>> _packMapContainer false (className (Proxy :: Proxy c))
   where
   toKeyValues (Tuple key value) = { key, value }
 
 packMultiMapContainerWithClone
-  :: forall c k v
-   . IsMultiMapContainer c k v
+  :: forall c k vs
+   . IsMultiMapContainer c k vs
   => IsCsl c
-  => Array (k /\ v)
+  => Array (k /\ vs)
   -> c
 packMultiMapContainerWithClone = map toKeyValues >>> _packMapContainer true (className (Proxy :: Proxy c))
   where
   toKeyValues (Tuple key value) = { key, value }
 
-packMultiMapContainerFromMap
-  :: forall c k v
-   . IsMultiMapContainer c k v
-  => IsCsl c
-  => IsCsl k
-  => IsCsl v
-  => Map k v
-  -> c
-packMultiMapContainerFromMap = packMultiMapContainer <<< Map.toUnfoldable
-
 unpackMultiMapContainer
-  :: forall c k v
-   . IsMultiMapContainer c k v
+  :: forall c k vs
+   . IsMultiMapContainer c k vs
   => c
-  -> Array (k /\ (Array v))
+  -> Array (k /\ vs)
 unpackMultiMapContainer = _unpackMultiMapContainer >>> map fromKV
   where
-  fromKV { key, value } = key /\ value
+  fromKV { key, values } = key /\ values
 
 unpackMultiMapContainerToMapWith
-  :: forall c k v k1 v1
-   . IsMultiMapContainer c k v
+  :: forall c k vs k1 v1
+   . IsMultiMapContainer c k vs
   => Ord k1
   => (k -> k1)
-  -> (Array v -> v1)
+  -> (vs -> Array v1)
   -> c
   -> Map k1 v1
-unpackMultiMapContainerToMapWith mapKey mapValue container =
+unpackMultiMapContainerToMapWith mapKey mapValues container =
   unpackMultiMapContainer container
-    # map (mapKey *** mapValue) >>> Map.fromFoldable
+    # map (mapKey *** mapValues)
+    # flip bind (\(k /\ vs) -> vs >>= pure <<< Tuple k)
+    # Map.fromFoldable
 
 class IsMapContainer (c :: Type) (k :: Type) (v :: Type) | c -> k, c -> v
 
@@ -193,9 +185,9 @@ foreign import _unpackMapContainer
   -> Array { key :: k, value :: v }
 
 foreign import _unpackMultiMapContainer
-  :: forall c k v
+  :: forall c k vs
    . c
-  -> Array { key :: k, value :: Array v }
+  -> Array { key :: k, values :: vs }
 
 -- Aeson
 
