@@ -6,6 +6,8 @@ This is a code-generated wrapper for `@mlabs-haskell/cardano-serialization-lib-g
 
 Most likely you would want to use [`purescript-cardano-types`](https://github.com/mlabs-haskell/purescript-cardano-types) - that library provides a nice purely-functional interface on top of these raw bindings.
 
+`purescript-cardano-serialization-lib` is almost unusable on its own, e.g. see [#11](https://github.com/mlabs-haskell/purescript-cardano-serialization-lib/issues/11).
+
 ## How this library works
 
 Library ports the [CSL api](https://github.com/Emurgo/cardano-serialization-lib/blob/master/rust/pkg/cardano_serialization_lib.js.flow).
