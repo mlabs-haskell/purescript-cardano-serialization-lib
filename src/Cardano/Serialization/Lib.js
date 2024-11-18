@@ -554,6 +554,15 @@ export const exUnits_mem = self => self.mem.bind(self)();
 export const exUnits_steps = self => self.steps.bind(self)();
 export const exUnits_new = mem => steps => CSL.ExUnits.new(mem, steps);
 
+// FixedTxWitnessesSet
+export const fixedTxWitnessesSet_txWitnessesSet = self =>
+  self.tx_witnesses_set.bind(self)();
+export const fixedTxWitnessesSet_addVkeyWitness = self => vkey_witness => () =>
+  self.add_vkey_witness.bind(self)(vkey_witness);
+export const fixedTxWitnessesSet_addBootstrapWitness =
+  self => bootstrap_witness => () =>
+    self.add_bootstrap_witness.bind(self)(bootstrap_witness);
+
 // GeneralTransactionMetadata
 export const generalTransactionMetadata_new = () =>
   CSL.GeneralTransactionMetadata.new();
@@ -938,6 +947,8 @@ export const plutusData_asInteger = self => self.as_integer.bind(self)();
 export const plutusData_asBytes = self => self.as_bytes.bind(self)();
 export const plutusData_fromAddress = address =>
   CSL.PlutusData.from_address(address);
+export const plutusData_asAddress = self => network =>
+  self.as_address.bind(self)(network);
 
 // PlutusList
 export const plutusList_new = () => CSL.PlutusList.new();
@@ -1325,6 +1336,8 @@ export const redeemerTag_kind = self => self.kind.bind(self)();
 
 // Redeemers
 export const redeemers_new = () => CSL.Redeemers.new();
+export const redeemers_getContainerType = self =>
+  self.get_container_type.bind(self)();
 export const redeemers_totalExUnits = self => self.total_ex_units.bind(self)();
 
 // Relay
@@ -1929,6 +1942,9 @@ export const votingProposal_new =
 
 // VotingProposals
 export const votingProposals_new = CSL.VotingProposals.new();
+export const votingProposals_contains = self => elem =>
+  self.contains.bind(self)(elem);
+export const votingProposals_toOption = self => self.to_option.bind(self)();
 
 // Withdrawals
 export const withdrawals_new = () => CSL.Withdrawals.new();
@@ -1943,7 +1959,6 @@ export const makeVkeyWitness = tx_body_hash => sk =>
   CSL.make_vkey_witness(tx_body_hash, sk);
 export const hashAuxiliaryData = auxiliary_data =>
   CSL.hash_auxiliary_data(auxiliary_data);
-export const hashTransaction = tx_body => CSL.hash_transaction(tx_body);
 export const hashPlutusData = plutus_data => CSL.hash_plutus_data(plutus_data);
 export const hashScriptData = redeemers => cost_models => datums =>
   CSL.hash_script_data(redeemers, cost_models, datums);

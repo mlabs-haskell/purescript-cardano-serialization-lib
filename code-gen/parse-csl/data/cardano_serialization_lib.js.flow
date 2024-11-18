@@ -18,6 +18,70 @@ declare export function create_send_all(
 ): TransactionBatchList;
 
 /**
+ * @param {Uint8Array} bytes
+ * @returns {TransactionMetadatum}
+ */
+declare export function encode_arbitrary_bytes_as_metadatum(
+  bytes: Uint8Array
+): TransactionMetadatum;
+
+/**
+ * @param {TransactionMetadatum} metadata
+ * @returns {Uint8Array}
+ */
+declare export function decode_arbitrary_bytes_from_metadatum(
+  metadata: TransactionMetadatum
+): Uint8Array;
+
+/**
+ * @param {string} json
+ * @param {$Values<
+                typeof 
+                MetadataJsonSchema>} schema
+ * @returns {TransactionMetadatum}
+ */
+declare export function encode_json_str_to_metadatum(
+  json: string,
+  schema: $Values<typeof MetadataJsonSchema>
+): TransactionMetadatum;
+
+/**
+ * @param {TransactionMetadatum} metadatum
+ * @param {$Values<
+                typeof 
+                MetadataJsonSchema>} schema
+ * @returns {string}
+ */
+declare export function decode_metadatum_to_json_str(
+  metadatum: TransactionMetadatum,
+  schema: $Values<typeof MetadataJsonSchema>
+): string;
+
+/**
+ * @param {string} password
+ * @param {string} salt
+ * @param {string} nonce
+ * @param {string} data
+ * @returns {string}
+ */
+declare export function encrypt_with_password(
+  password: string,
+  salt: string,
+  nonce: string,
+  data: string
+): string;
+
+/**
+ * @param {string} password
+ * @param {string} data
+ * @returns {string}
+ */
+declare export function decrypt_with_password(
+  password: string,
+  data: string
+): string;
+
+/**
  * @param {Transaction} tx
  * @param {LinearFee} linear_fee
  * @returns {BigNum}
@@ -53,6 +117,30 @@ declare export function min_ref_script_fee(
   total_ref_scripts_size: number,
   ref_script_coins_per_byte: UnitInterval
 ): BigNum;
+
+/**
+ * @param {string} json
+ * @param {$Values<
+                typeof 
+                PlutusDatumSchema>} schema
+ * @returns {PlutusData}
+ */
+declare export function encode_json_str_to_plutus_datum(
+  json: string,
+  schema: $Values<typeof PlutusDatumSchema>
+): PlutusData;
+
+/**
+ * @param {PlutusData} datum
+ * @param {$Values<
+                typeof 
+                PlutusDatumSchema>} schema
+ * @returns {string}
+ */
+declare export function decode_plutus_datum_to_json_str(
+  datum: PlutusData,
+  schema: $Values<typeof PlutusDatumSchema>
+): string;
 
 /**
  * @param {TransactionHash} tx_body_hash
@@ -95,14 +183,6 @@ declare export function make_vkey_witness(
 declare export function hash_auxiliary_data(
   auxiliary_data: AuxiliaryData
 ): AuxiliaryDataHash;
-
-/**
- * @param {TransactionBody} tx_body
- * @returns {TransactionHash}
- */
-declare export function hash_transaction(
-  tx_body: TransactionBody
-): TransactionHash;
 
 /**
  * @param {PlutusData} plutus_data
@@ -161,15 +241,15 @@ declare export function min_ada_for_output(
  * Receives a script JSON string
  * and returns a NativeScript.
  * Cardano Wallet and Node styles are supported.
- *
+ * 
  * * wallet: https://github.com/input-output-hk/cardano-wallet/blob/master/specifications/api/swagger.yaml
  * * node: https://github.com/input-output-hk/cardano-node/blob/master/doc/reference/simple-scripts.md
- *
+ * 
  * self_xpub is expected to be a Bip32PublicKey as hex-encoded bytes
  * @param {string} json
  * @param {string} self_xpub
  * @param {$Values<
-                typeof
+                typeof 
                 ScriptSchema>} schema
  * @returns {NativeScript}
  */
@@ -180,141 +260,51 @@ declare export function encode_json_str_to_native_script(
 ): NativeScript;
 
 /**
- * @param {string} password
- * @param {string} salt
- * @param {string} nonce
- * @param {string} data
- * @returns {string}
+ * Returns the state of the transaction sets.
+ * If all sets have a tag, it returns AllSetsHaveTag.
+ * If all sets have no tag, it returns AllSetsHaveNoTag.
+ * If there is a mix of tagged and untagged sets, it returns MixedSets.
+ * This function is useful for checking if a transaction might be signed by a hardware wallet.
+ * And for checking which parameter should be used in a hardware wallet api.
+ * WARNING this function will be deleted after all tags for set types will be mandatory. Approx after next hf
+ * @param {Uint8Array} tx_bytes
+ * @returns {$Values<
+                typeof 
+                TransactionSetsState>}
  */
-declare export function encrypt_with_password(
-  password: string,
-  salt: string,
-  nonce: string,
-  data: string
-): string;
-
-/**
- * @param {string} password
- * @param {string} data
- * @returns {string}
- */
-declare export function decrypt_with_password(
-  password: string,
-  data: string
-): string;
-
-/**
- * @param {string} json
- * @param {$Values<
-                typeof
-                PlutusDatumSchema>} schema
- * @returns {PlutusData}
- */
-declare export function encode_json_str_to_plutus_datum(
-  json: string,
-  schema: $Values<typeof PlutusDatumSchema>
-): PlutusData;
-
-/**
- * @param {PlutusData} datum
- * @param {$Values<
-                typeof
-                PlutusDatumSchema>} schema
- * @returns {string}
- */
-declare export function decode_plutus_datum_to_json_str(
-  datum: PlutusData,
-  schema: $Values<typeof PlutusDatumSchema>
-): string;
-
-/**
- * @param {Uint8Array} bytes
- * @returns {TransactionMetadatum}
- */
-declare export function encode_arbitrary_bytes_as_metadatum(
-  bytes: Uint8Array
-): TransactionMetadatum;
-
-/**
- * @param {TransactionMetadatum} metadata
- * @returns {Uint8Array}
- */
-declare export function decode_arbitrary_bytes_from_metadatum(
-  metadata: TransactionMetadatum
-): Uint8Array;
-
-/**
- * @param {string} json
- * @param {$Values<
-                typeof
-                MetadataJsonSchema>} schema
- * @returns {TransactionMetadatum}
- */
-declare export function encode_json_str_to_metadatum(
-  json: string,
-  schema: $Values<typeof MetadataJsonSchema>
-): TransactionMetadatum;
-
-/**
- * @param {TransactionMetadatum} metadatum
- * @param {$Values<
-                typeof
-                MetadataJsonSchema>} schema
- * @returns {string}
- */
-declare export function decode_metadatum_to_json_str(
-  metadatum: TransactionMetadatum,
-  schema: $Values<typeof MetadataJsonSchema>
-): string;
+declare export function has_transaction_set_tag(
+  tx_bytes: Uint8Array
+): $Values<typeof TransactionSetsState>;
 
 /**
  */
 
-declare export var GovernanceActionKind: {|
-  +ParameterChangeAction: 0, // 0
-  +HardForkInitiationAction: 1, // 1
-  +TreasuryWithdrawalsAction: 2, // 2
-  +NoConfidenceAction: 3, // 3
-  +UpdateCommitteeAction: 4, // 4
-  +NewConstitutionAction: 5, // 5
-  +InfoAction: 6, // 6
+declare export var MIRKind: {|
+  +ToOtherPot: 0, // 0
+  +ToStakeCredentials: 1, // 1
 |};
 
 /**
  */
 
-declare export var CborContainerType: {|
-  +Array: 0, // 0
-  +Map: 1, // 1
+declare export var MetadataJsonSchema: {|
+  +NoConversions: 0, // 0
+  +BasicConversions: 1, // 1
+  +DetailedSchema: 2, // 2
 |};
 
 /**
  */
 
-declare export var VoterKind: {|
-  +ConstitutionalCommitteeHotKeyHash: 0, // 0
-  +ConstitutionalCommitteeHotScriptHash: 1, // 1
-  +DRepKeyHash: 2, // 2
-  +DRepScriptHash: 3, // 3
-  +StakingPoolKeyHash: 4, // 4
-|};
-
-/**
- */
-
-declare export var NetworkIdKind: {|
-  +Testnet: 0, // 0
-  +Mainnet: 1, // 1
-|};
-
-/**
- */
-
-declare export var CoinSelectionStrategyCIP2: {|
-  +LargestFirst: 0, // 0
-  +RandomImprove: 1, // 1
-  +LargestFirstMultiAsset: 2, // 2
-  +RandomImproveMultiAsset: 3, // 3
+declare export var BlockEra: {|
+  +Byron: 0, // 0
+  +Shelley: 1, // 1
+  +Allegra: 2, // 2
+  +Mary: 3, // 3
+  +Alonzo: 4, // 4
+  +Babbage: 5, // 5
+  +Conway: 6, // 6
+  +Unknown: 7, // 7
 |};
 
 /**
@@ -332,35 +322,18 @@ declare export var NativeScriptKind: {|
 /**
  */
 
-declare export var MIRPot: {|
-  +Reserves: 0, // 0
-  +Treasury: 1, // 1
+declare export var LanguageKind: {|
+  +PlutusV1: 0, // 0
+  +PlutusV2: 1, // 1
+  +PlutusV3: 2, // 2
 |};
 
 /**
  */
 
-declare export var RelayKind: {|
-  +SingleHostAddr: 0, // 0
-  +SingleHostName: 1, // 1
-  +MultiHostName: 2, // 2
-|};
-
-/**
- * JSON <-> PlutusData conversion schemas.
- * Follows ScriptDataJsonSchema in cardano-cli defined at:
- * https://github.com/input-output-hk/cardano-node/blob/master/cardano-api/src/Cardano/Api/ScriptData.hs#L254
- *
- * All methods here have the following restrictions due to limitations on dependencies:
- * * JSON numbers above u64::MAX (positive) or below i64::MIN (negative) will throw errors
- * * Hex strings for bytes don't accept odd-length (half-byte) strings.
- *      cardano-cli seems to support these however but it seems to be different than just 0-padding
- *      on either side when tested so proceed with caution
- */
-
-declare export var PlutusDatumSchema: {|
-  +BasicConversions: 0, // 0
-  +DetailedSchema: 1, // 1
+declare export var CborSetType: {|
+  +Tagged: 0, // 0
+  +Untagged: 1, // 1
 |};
 
 /**
@@ -389,36 +362,22 @@ declare export var CertificateKind: {|
 /**
  */
 
-declare export var DRepKind: {|
-  +KeyHash: 0, // 0
-  +ScriptHash: 1, // 1
-  +AlwaysAbstain: 2, // 2
-  +AlwaysNoConfidence: 3, // 3
-|};
-
-/**
- * Each new language uses a different namespace for hashing its script
- * This is because you could have a language where the same bytes have different semantics
- * So this avoids scripts in different languages mapping to the same hash
- * Note that the enum value here is different than the enum value for deciding the cost model of a script
- */
-
-declare export var ScriptHashNamespace: {|
-  +NativeScript: 0, // 0
-  +PlutusScript: 1, // 1
-  +PlutusScriptV2: 2, // 2
-  +PlutusScriptV3: 3, // 3
+declare export var GovernanceActionKind: {|
+  +ParameterChangeAction: 0, // 0
+  +HardForkInitiationAction: 1, // 1
+  +TreasuryWithdrawalsAction: 2, // 2
+  +NoConfidenceAction: 3, // 3
+  +UpdateCommitteeAction: 4, // 4
+  +NewConstitutionAction: 5, // 5
+  +InfoAction: 6, // 6
 |};
 
 /**
  */
 
-declare export var TransactionMetadatumKind: {|
-  +MetadataMap: 0, // 0
-  +MetadataList: 1, // 1
-  +Int: 2, // 2
-  +Bytes: 3, // 3
-  +Text: 4, // 4
+declare export var CborContainerType: {|
+  +Array: 0, // 0
+  +Map: 1, // 1
 |};
 
 /**
@@ -435,15 +394,6 @@ declare export var PlutusDataKind: {|
 /**
  */
 
-declare export var MetadataJsonSchema: {|
-  +NoConversions: 0, // 0
-  +BasicConversions: 1, // 1
-  +DetailedSchema: 2, // 2
-|};
-
-/**
- */
-
 declare export var VoteKind: {|
   +No: 0, // 0
   +Yes: 1, // 1
@@ -453,24 +403,10 @@ declare export var VoteKind: {|
 /**
  */
 
-declare export var LanguageKind: {|
-  +PlutusV1: 0, // 0
-  +PlutusV2: 1, // 1
-  +PlutusV3: 2, // 2
-|};
-
-/**
- */
-
-declare export var BlockEra: {|
-  +Byron: 0, // 0
-  +Shelley: 1, // 1
-  +Allegra: 2, // 2
-  +Mary: 3, // 3
-  +Alonzo: 4, // 4
-  +Babbage: 5, // 5
-  +Conway: 6, // 6
-  +Unknown: 7, // 7
+declare export var RelayKind: {|
+  +SingleHostAddr: 0, // 0
+  +SingleHostName: 1, // 1
+  +MultiHostName: 2, // 2
 |};
 
 /**
@@ -485,9 +421,30 @@ declare export var ScriptSchema: {|
 /**
  */
 
-declare export var MIRKind: {|
-  +ToOtherPot: 0, // 0
-  +ToStakeCredentials: 1, // 1
+declare export var VoterKind: {|
+  +ConstitutionalCommitteeHotKeyHash: 0, // 0
+  +ConstitutionalCommitteeHotScriptHash: 1, // 1
+  +DRepKeyHash: 2, // 2
+  +DRepScriptHash: 3, // 3
+  +StakingPoolKeyHash: 4, // 4
+|};
+
+/**
+ */
+
+declare export var DRepKind: {|
+  +KeyHash: 0, // 0
+  +ScriptHash: 1, // 1
+  +AlwaysAbstain: 2, // 2
+  +AlwaysNoConfidence: 3, // 3
+|};
+
+/**
+ */
+
+declare export var CredKind: {|
+  +Key: 0, // 0
+  +Script: 1, // 1
 |};
 
 /**
@@ -505,9 +462,52 @@ declare export var RedeemerTagKind: {|
 /**
  */
 
-declare export var CredKind: {|
-  +Key: 0, // 0
-  +Script: 1, // 1
+declare export var TransactionMetadatumKind: {|
+  +MetadataMap: 0, // 0
+  +MetadataList: 1, // 1
+  +Int: 2, // 2
+  +Bytes: 3, // 3
+  +Text: 4, // 4
+|};
+
+/**
+ * Each new language uses a different namespace for hashing its script
+ * This is because you could have a language where the same bytes have different semantics
+ * So this avoids scripts in different languages mapping to the same hash
+ * Note that the enum value here is different than the enum value for deciding the cost model of a script
+ */
+
+declare export var ScriptHashNamespace: {|
+  +NativeScript: 0, // 0
+  +PlutusScript: 1, // 1
+  +PlutusScriptV2: 2, // 2
+  +PlutusScriptV3: 3, // 3
+|};
+
+/**
+ * JSON <-> PlutusData conversion schemas.
+ * Follows ScriptDataJsonSchema in cardano-cli defined at:
+ * https://github.com/input-output-hk/cardano-node/blob/master/cardano-api/src/Cardano/Api/ScriptData.hs#L254
+ *
+ * All methods here have the following restrictions due to limitations on dependencies:
+ * * JSON numbers above u64::MAX (positive) or below i64::MIN (negative) will throw errors
+ * * Hex strings for bytes don't accept odd-length (half-byte) strings.
+ *      cardano-cli seems to support these however but it seems to be different than just 0-padding
+ *      on either side when tested so proceed with caution
+ */
+
+declare export var PlutusDatumSchema: {|
+  +BasicConversions: 0, // 0
+  +DetailedSchema: 1, // 1
+|};
+
+/**
+ */
+
+declare export var TransactionSetsState: {|
+  +AllSetsHaveTag: 0, // 0
+  +AllSetsHaveNoTag: 1, // 1
+  +MixedSets: 2, // 2
 |};
 
 /**
@@ -520,6 +520,32 @@ declare export var AddressKind: {|
   +Reward: 3, // 3
   +Byron: 4, // 4
   +Malformed: 5, // 5
+|};
+
+/**
+ */
+
+declare export var MIRPot: {|
+  +Reserves: 0, // 0
+  +Treasury: 1, // 1
+|};
+
+/**
+ */
+
+declare export var CoinSelectionStrategyCIP2: {|
+  +LargestFirst: 0, // 0
+  +RandomImprove: 1, // 1
+  +LargestFirstMultiAsset: 2, // 2
+  +RandomImproveMultiAsset: 3, // 3
+|};
+
+/**
+ */
+
+declare export var NetworkIdKind: {|
+  +Testnet: 0, // 0
+  +Mainnet: 1, // 1
 |};
 
 /**
@@ -551,7 +577,7 @@ declare export class Address {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 AddressKind>}
  */
   kind(): $Values<typeof AddressKind>;
@@ -1790,10 +1816,10 @@ declare export class BootstrapWitnesses {
   /**
    * Add a new `BootstrapWitness` to the set.
    * Returns `true` if the element was not already present in the set.
-   * @param {BootstrapWitness} elem
+   * @param {BootstrapWitness} witness
    * @returns {boolean}
    */
-  add(elem: BootstrapWitness): boolean;
+  add(witness: BootstrapWitness): boolean;
 }
 /**
  */
@@ -2057,7 +2083,7 @@ declare export class Certificate {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 CertificateKind>}
  */
   kind(): $Values<typeof CertificateKind>;
@@ -2835,7 +2861,7 @@ declare export class Credential {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 CredKind>}
  */
   kind(): $Values<typeof CredKind>;
@@ -2945,10 +2971,10 @@ declare export class Credentials {
   /**
    * Add a new `Credential` to the set.
    * Returns `true` if the element was not already present in the set.
-   * @param {Credential} elem
+   * @param {Credential} credential
    * @returns {boolean}
    */
-  add(elem: Credential): boolean;
+  add(credential: Credential): boolean;
 }
 /**
  */
@@ -3131,7 +3157,7 @@ declare export class DRep {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 DRepKind>}
  */
   kind(): $Values<typeof DRepKind>;
@@ -3720,10 +3746,10 @@ declare export class Ed25519KeyHashes {
   /**
    * Add a new `Ed25519KeyHash` to the set.
    * Returns `true` if the element was not already present in the set.
-   * @param {Ed25519KeyHash} elem
+   * @param {Ed25519KeyHash} keyhash
    * @returns {boolean}
    */
-  add(elem: Ed25519KeyHash): boolean;
+  add(keyhash: Ed25519KeyHash): boolean;
 
   /**
    * @param {Ed25519KeyHash} elem
@@ -4030,6 +4056,12 @@ declare export class FixedTransaction {
   ): FixedTransaction;
 
   /**
+   * @param {Uint8Array} raw_body
+   * @returns {FixedTransaction}
+   */
+  static new_from_body_bytes(raw_body: Uint8Array): FixedTransaction;
+
+  /**
    * @returns {TransactionBody}
    */
   body(): TransactionBody;
@@ -4045,6 +4077,9 @@ declare export class FixedTransaction {
   set_body(raw_body: Uint8Array): void;
 
   /**
+   * We do not recommend using this function, since it might lead to script integrity hash.
+   * The only purpose of this struct is to sign the transaction from third-party sources.
+   * Use `.sign_and_add_vkey_signature` or `.sign_and_add_icarus_bootstrap_signature` or `.sign_and_add_daedalus_bootstrap_signature` instead.
    * @param {Uint8Array} raw_witness_set
    */
   set_witness_set(raw_witness_set: Uint8Array): void;
@@ -4083,6 +4118,44 @@ declare export class FixedTransaction {
    * @returns {Uint8Array | void}
    */
   raw_auxiliary_data(): Uint8Array | void;
+
+  /**
+   * @returns {TransactionHash}
+   */
+  transaction_hash(): TransactionHash;
+
+  /**
+   * @param {Vkeywitness} vkey_witness
+   */
+  add_vkey_witness(vkey_witness: Vkeywitness): void;
+
+  /**
+   * @param {BootstrapWitness} bootstrap_witness
+   */
+  add_bootstrap_witness(bootstrap_witness: BootstrapWitness): void;
+
+  /**
+   * @param {PrivateKey} private_key
+   */
+  sign_and_add_vkey_signature(private_key: PrivateKey): void;
+
+  /**
+   * @param {ByronAddress} addr
+   * @param {Bip32PrivateKey} private_key
+   */
+  sign_and_add_icarus_bootstrap_signature(
+    addr: ByronAddress,
+    private_key: Bip32PrivateKey
+  ): void;
+
+  /**
+   * @param {ByronAddress} addr
+   * @param {LegacyDaedalusPrivateKey} private_key
+   */
+  sign_and_add_daedalus_bootstrap_signature(
+    addr: ByronAddress,
+    private_key: LegacyDaedalusPrivateKey
+  ): void;
 }
 /**
  * Warning: This is experimental and may be removed or changed in the future.
@@ -4158,6 +4231,42 @@ declare export class FixedTransactionBody {
   original_bytes(): Uint8Array;
 }
 /**
+ * A set of witnesses for a transaction.
+ * Keeps original bytes to allow for safe roundtrip serialization.
+ * That helps to avoid incorrect script data hash after adding a  vkey or bootstrap witness.
+ * You can add a vkey witness or a bootstrap witness to the set.
+ * Or get TransactionWitnessSet to read fields.
+ */
+declare export class FixedTxWitnessesSet {
+  free(): void;
+
+  /**
+   * @returns {TransactionWitnessSet}
+   */
+  tx_witnesses_set(): TransactionWitnessSet;
+
+  /**
+   * @param {Vkeywitness} vkey_witness
+   */
+  add_vkey_witness(vkey_witness: Vkeywitness): void;
+
+  /**
+   * @param {BootstrapWitness} bootstrap_witness
+   */
+  add_bootstrap_witness(bootstrap_witness: BootstrapWitness): void;
+
+  /**
+   * @returns {Uint8Array}
+   */
+  to_bytes(): Uint8Array;
+
+  /**
+   * @param {Uint8Array} data
+   * @returns {FixedTxWitnessesSet}
+   */
+  static from_bytes(data: Uint8Array): FixedTxWitnessesSet;
+}
+/**
  * Warning: This is experimental and may be removed in the future.
  */
 declare export class FixedVersionedBlock {
@@ -4182,7 +4291,7 @@ declare export class FixedVersionedBlock {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 BlockEra>}
  */
   era(): $Values<typeof BlockEra>;
@@ -4569,7 +4678,7 @@ declare export class GovernanceAction {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 GovernanceActionKind>}
  */
   kind(): $Values<typeof GovernanceActionKind>;
@@ -5383,7 +5492,7 @@ declare export class Language {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 LanguageKind>}
  */
   kind(): $Values<typeof LanguageKind>;
@@ -5995,7 +6104,7 @@ declare export class MoveInstantaneousReward {
 
   /**
  * @param {$Values<
-                typeof
+                typeof 
                 MIRPot>} pot
  * @param {BigNum} amount
  * @returns {MoveInstantaneousReward}
@@ -6007,7 +6116,7 @@ declare export class MoveInstantaneousReward {
 
   /**
  * @param {$Values<
-                typeof
+                typeof 
                 MIRPot>} pot
  * @param {MIRToStakeCredentials} amounts
  * @returns {MoveInstantaneousReward}
@@ -6019,14 +6128,14 @@ declare export class MoveInstantaneousReward {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 MIRPot>}
  */
   pot(): $Values<typeof MIRPot>;
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 MIRKind>}
  */
   kind(): $Values<typeof MIRKind>;
@@ -6343,7 +6452,7 @@ declare export class NativeScript {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 NativeScriptKind>}
  */
   kind(): $Values<typeof NativeScriptKind>;
@@ -6538,7 +6647,7 @@ declare export class NetworkId {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 NetworkIdKind>}
  */
   kind(): $Values<typeof NetworkIdKind>;
@@ -7054,7 +7163,7 @@ declare export class PlutusData {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 PlutusDataKind>}
  */
   kind(): $Values<typeof PlutusDataKind>;
@@ -7086,7 +7195,7 @@ declare export class PlutusData {
 
   /**
  * @param {$Values<
-                typeof
+                typeof 
                 PlutusDatumSchema>} schema
  * @returns {string}
  */
@@ -7095,7 +7204,7 @@ declare export class PlutusData {
   /**
  * @param {string} json
  * @param {$Values<
-                typeof
+                typeof 
                 PlutusDatumSchema>} schema
  * @returns {PlutusData}
  */
@@ -7109,6 +7218,12 @@ declare export class PlutusData {
    * @returns {PlutusData}
    */
   static from_address(address: Address): PlutusData;
+
+  /**
+   * @param {NetworkInfo} network
+   * @returns {Address}
+   */
+  as_address(network: NetworkInfo): Address;
 }
 /**
  */
@@ -8883,7 +8998,7 @@ declare export class RedeemerTag {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 RedeemerTagKind>}
  */
   kind(): $Values<typeof RedeemerTagKind>;
@@ -8953,6 +9068,14 @@ declare export class Redeemers {
   add(elem: Redeemer): void;
 
   /**
+ * WARNING: This function will be removed in after next hard fork
+ * @returns {$Values<
+                typeof 
+                CborContainerType>}
+ */
+  get_container_type(): $Values<typeof CborContainerType>;
+
+  /**
    * @returns {ExUnits}
    */
   total_ex_units(): ExUnits;
@@ -9020,7 +9143,7 @@ declare export class Relay {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 RelayKind>}
  */
   kind(): $Values<typeof RelayKind>;
@@ -10877,7 +11000,7 @@ declare export class TransactionBuilder {
  * inputs to cover the minimum fees. This does not, however, set the txbuilder's fee.
  * @param {TransactionUnspentOutputs} inputs
  * @param {$Values<
-                typeof
+                typeof 
                 CoinSelectionStrategyCIP2>} strategy
  */
   add_inputs_from(
@@ -11014,7 +11137,7 @@ declare export class TransactionBuilder {
   /**
  * @param {TransactionUnspentOutputs} inputs
  * @param {$Values<
-                typeof
+                typeof 
                 CoinSelectionStrategyCIP2>} strategy
  * @param {ChangeConfig} change_config
  * @returns {boolean}
@@ -11028,7 +11151,7 @@ declare export class TransactionBuilder {
   /**
  * @param {TransactionUnspentOutputs} inputs
  * @param {$Values<
-                typeof
+                typeof 
                 CoinSelectionStrategyCIP2>} strategy
  * @param {ChangeConfig} change_config
  * @param {BigNum} collateral_percentage
@@ -11083,6 +11206,11 @@ declare export class TransactionBuilder {
    * @param {BigNum} fee
    */
   set_fee(fee: BigNum): void;
+
+  /**
+   * @param {BigNum} fee
+   */
+  set_min_fee(fee: BigNum): void;
 
   /**
    * !!! DEPRECATED !!!
@@ -11207,7 +11335,7 @@ declare export class TransactionBuilder {
  * @param {BigNum} key
  * @param {string} val
  * @param {$Values<
-                typeof
+                typeof 
                 MetadataJsonSchema>} schema
  */
   add_json_metadatum_with_schema(
@@ -11748,11 +11876,10 @@ declare export class TransactionInputs {
   /**
    * Add a new `TransactionInput` to the set.
    * Returns `true` if the element was not already present in the set.
-   * Note that the `TransactionInput` is added to the set only if it is not already present.
-   * @param {TransactionInput} elem
+   * @param {TransactionInput} input
    * @returns {boolean}
    */
-  add(elem: TransactionInput): boolean;
+  add(input: TransactionInput): boolean;
 
   /**
    * @returns {TransactionInputs | void}
@@ -11818,7 +11945,7 @@ declare export class TransactionMetadatum {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 TransactionMetadatumKind>}
  */
   kind(): $Values<typeof TransactionMetadatumKind>;
@@ -12003,7 +12130,7 @@ declare export class TransactionOutput {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 CborContainerType> | void}
  */
   serialization_format(): $Values<typeof CborContainerType> | void;
@@ -13265,7 +13392,7 @@ declare export class VersionedBlock {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 BlockEra>}
  */
   era(): $Values<typeof BlockEra>;
@@ -13472,10 +13599,10 @@ declare export class Vkeywitnesses {
   /**
    * Add a new `Vkeywitness` to the set.
    * Returns `true` if the element was not already present in the set.
-   * @param {Vkeywitness} elem
+   * @param {Vkeywitness} witness
    * @returns {boolean}
    */
-  add(elem: Vkeywitness): boolean;
+  add(witness: Vkeywitness): boolean;
 }
 /**
  */
@@ -13680,7 +13807,7 @@ declare export class Voter {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 VoterKind>}
  */
   kind(): $Values<typeof VoterKind>;
@@ -13869,7 +13996,7 @@ declare export class VotingProcedure {
 
   /**
  * @param {$Values<
-                typeof
+                typeof 
                 VoteKind>} vote
  * @returns {VotingProcedure}
  */
@@ -13877,7 +14004,7 @@ declare export class VotingProcedure {
 
   /**
  * @param {$Values<
-                typeof
+                typeof 
                 VoteKind>} vote
  * @param {Anchor} anchor
  * @returns {VotingProcedure}
@@ -13889,7 +14016,7 @@ declare export class VotingProcedure {
 
   /**
  * @returns {$Values<
-                typeof
+                typeof 
                 VoteKind>}
  */
   vote_kind(): $Values<typeof VoteKind>;
@@ -14160,12 +14287,23 @@ declare export class VotingProposals {
   get(index: number): VotingProposal;
 
   /**
-   * Add a proposal to the set of proposals
-   * Returns true if the proposal was added, false if it was already present
+   * Add a new `VotingProposal` to the set.
+   * Returns `true` if the element was not already present in the set.
    * @param {VotingProposal} proposal
    * @returns {boolean}
    */
   add(proposal: VotingProposal): boolean;
+
+  /**
+   * @param {VotingProposal} elem
+   * @returns {boolean}
+   */
+  contains(elem: VotingProposal): boolean;
+
+  /**
+   * @returns {VotingProposals | void}
+   */
+  to_option(): VotingProposals | void;
 }
 /**
  */
@@ -14343,28 +14481,26 @@ export type NativeScriptJSON =
       TimelockExpiry: TimelockExpiryJSON,
       ...
     };
-export type NativeScriptsJSON = NativeScriptJSON[];
-export type PlutusScriptsJSON = string[];
 export interface AuxiliaryDataJSON {
   metadata?: {
     [k: string]: string,
   } | null;
-  native_scripts?: NativeScriptsJSON | null;
-  plutus_scripts?: PlutusScriptsJSON | null;
+  native_scripts?: NativeScriptJSON[] | null;
+  plutus_scripts?: string[] | null;
   prefer_alonzo_format: boolean;
 }
 export interface ScriptPubkeyJSON {
   addr_keyhash: string;
 }
 export interface ScriptAllJSON {
-  native_scripts: NativeScriptsJSON;
+  native_scripts: NativeScriptJSON[];
 }
 export interface ScriptAnyJSON {
-  native_scripts: NativeScriptsJSON;
+  native_scripts: NativeScriptJSON[];
 }
 export interface ScriptNOfKJSON {
   n: number;
-  native_scripts: NativeScriptsJSON;
+  native_scripts: NativeScriptJSON[];
 }
 export interface TimelockStartJSON {
   slot: string;
@@ -14985,9 +15121,9 @@ export interface ConstitutionJSON {
 }
 export interface TransactionWitnessSetJSON {
   bootstraps?: BootstrapWitnessJSON[] | null;
-  native_scripts?: NativeScriptsJSON | null;
+  native_scripts?: NativeScriptJSON[] | null;
   plutus_data?: PlutusListJSON | null;
-  plutus_scripts?: PlutusScriptsJSON | null;
+  plutus_scripts?: string[] | null;
   redeemers?: RedeemerJSON[] | null;
   vkeys?: VkeywitnessJSON[] | null;
 }
@@ -15146,8 +15282,10 @@ export type LanguageKindJSON = "PlutusV1" | "PlutusV2" | "PlutusV3";
 export type LanguagesJSON = LanguageJSON[];
 export type MIRToStakeCredentialsJSON = StakeToCoinJSON[];
 export type MintsAssetsJSON = MintAssetsJSON[];
+export type NativeScriptsJSON = NativeScriptJSON[];
 export type NetworkIdKindJSON = "Testnet" | "Mainnet";
 export type PlutusScriptJSON = string;
+export type PlutusScriptsJSON = string[];
 export type PoolMetadataHashJSON = string;
 export interface ProposedProtocolParameterUpdatesJSON {
   [k: string]: ProtocolParamUpdateJSON;
