@@ -52,7 +52,6 @@ unneededClasses =
   , -- Types that are not parts of a Transaction and are not needed
     "Strings"
   , "PublicKeys"
-  , "FixedTransaction"
   , "FixedBlock"
   , "FixedVersionedBlock"
   , "BlockHash"

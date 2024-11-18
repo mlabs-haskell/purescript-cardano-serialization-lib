@@ -252,6 +252,26 @@ module Cardano.Serialization.Lib
   , exUnits_mem
   , exUnits_steps
   , exUnits_new
+  , fixedTransaction_new
+  , fixedTransaction_newWithAuxiliary
+  , fixedTransaction_newFromBodyBytes
+  , fixedTransaction_body
+  , fixedTransaction_rawBody
+  , fixedTransaction_setBody
+  , fixedTransaction_setWitnessSet
+  , fixedTransaction_witnessSet
+  , fixedTransaction_rawWitnessSet
+  , fixedTransaction_setIsValid
+  , fixedTransaction_isValid
+  , fixedTransaction_setAuxiliaryData
+  , fixedTransaction_auxiliaryData
+  , fixedTransaction_rawAuxiliaryData
+  , fixedTransaction_transactionHash
+  , fixedTransaction_addVkeyWitness
+  , fixedTransaction_addBootstrapWitness
+  , fixedTransaction_signAndAddVkeySignature
+  , fixedTransaction_signAndAddIcarusBootstrapSignature
+  , fixedTransaction_signAndAddDaedalusBootstrapSignature
   , fixedTxWitnessesSet_txWitnessesSet
   , fixedTxWitnessesSet_addVkeyWitness
   , fixedTxWitnessesSet_addBootstrapWitness
@@ -916,6 +936,7 @@ module Cardano.Serialization.Lib
   , EnterpriseAddress
   , ExUnitPrices
   , ExUnits
+  , FixedTransaction
   , FixedTxWitnessesSet
   , GeneralTransactionMetadata
   , GenesisDelegateHash
@@ -2243,6 +2264,45 @@ instance DecodeAeson ExUnits where
 
 instance Show ExUnits where
   show = showViaJson
+
+--------------------------------------------------------------------------------
+-- Fixed transaction
+
+foreign import data FixedTransaction :: Type
+
+foreign import fixedTransaction_new :: ByteArray -> ByteArray -> Boolean -> FixedTransaction
+foreign import fixedTransaction_newWithAuxiliary :: ByteArray -> ByteArray -> ByteArray -> Boolean -> FixedTransaction
+foreign import fixedTransaction_newFromBodyBytes :: ByteArray -> FixedTransaction
+foreign import fixedTransaction_body :: FixedTransaction -> TransactionBody
+foreign import fixedTransaction_rawBody :: FixedTransaction -> ByteArray
+foreign import fixedTransaction_setBody :: FixedTransaction -> ByteArray -> Effect Unit
+foreign import fixedTransaction_setWitnessSet :: FixedTransaction -> ByteArray -> Effect Unit
+foreign import fixedTransaction_witnessSet :: FixedTransaction -> TransactionWitnessSet
+foreign import fixedTransaction_rawWitnessSet :: FixedTransaction -> ByteArray
+foreign import fixedTransaction_setIsValid :: FixedTransaction -> Boolean -> Effect Unit
+foreign import fixedTransaction_isValid :: FixedTransaction -> Boolean
+foreign import fixedTransaction_setAuxiliaryData :: FixedTransaction -> ByteArray -> Effect Unit
+foreign import fixedTransaction_auxiliaryData :: FixedTransaction -> Nullable AuxiliaryData
+foreign import fixedTransaction_rawAuxiliaryData :: FixedTransaction -> Nullable ByteArray
+foreign import fixedTransaction_transactionHash :: FixedTransaction -> TransactionHash
+foreign import fixedTransaction_addVkeyWitness :: FixedTransaction -> Vkeywitness -> Effect Unit
+foreign import fixedTransaction_addBootstrapWitness :: FixedTransaction -> BootstrapWitness -> Effect Unit
+foreign import fixedTransaction_signAndAddVkeySignature :: FixedTransaction -> PrivateKey -> Nullable Unit
+foreign import fixedTransaction_signAndAddIcarusBootstrapSignature :: FixedTransaction -> ByronAddress -> Bip32PrivateKey -> Nullable Unit
+foreign import fixedTransaction_signAndAddDaedalusBootstrapSignature :: FixedTransaction -> ByronAddress -> LegacyDaedalusPrivateKey -> Nullable Unit
+
+instance IsCsl FixedTransaction where
+  className _ = "FixedTransaction"
+
+instance IsBytes FixedTransaction
+instance EncodeAeson FixedTransaction where
+  encodeAeson = cslToAesonViaBytes
+
+instance DecodeAeson FixedTransaction where
+  decodeAeson = cslFromAesonViaBytes
+
+instance Show FixedTransaction where
+  show = showViaBytes
 
 --------------------------------------------------------------------------------
 -- Fixed tx witnesses set
